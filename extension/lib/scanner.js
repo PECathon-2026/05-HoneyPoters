@@ -94,7 +94,8 @@ export const PII_TYPES = {
   API_KEY: 'API_KEY',
   JWT_TOKEN: 'JWT_TOKEN',
   PASSPORT: 'PASSPORT',
-  DRIVING_LICENSE: 'DRIVING_LICENSE'
+  DRIVING_LICENSE: 'DRIVING_LICENSE',
+  PROMPT_INJECTION: 'PROMPT_INJECTION'
 };
 
 export const SEVERITY = {
@@ -123,7 +124,7 @@ export const PII_RULES = [
     label: 'JWT / Bearer Auth Token',
     severity: SEVERITY.CRITICAL,
     replacementToken: '[REDACTED: AUTH_TOKEN]',
-    pattern: /\beyJ[a-zA-Z0-9_-]{10,}\.eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\b/g,
+    pattern: /\beyJ[a-zA-Z0-9_-]{6,}\.eyJ[a-zA-Z0-9_-]{6,}\.[a-zA-Z0-9_-]{4,}\b/g,
     validate: (match) => !match.startsWith('[REDACTED:')
   },
   {
@@ -359,6 +360,38 @@ export function maskSensitiveValue(value, type) {
       if (str.length <= 4) return '****';
       return `${str.slice(0, 2)}****${str.slice(-2)}`;
   }
+}
+
+// ============================================================================
+// 3.5 Prompt Injection & Adversarial Pattern Detection
+// ============================================================================
+
+export const PROMPT_INJECTION_PATTERNS = [
+  /(?:ignore\s+(?:all\s+)?previous\s+instructions|disregard\s+(?:all\s+)?prior\s+rules)/i,
+  /(?:reveal|output|display|show|leak)\s+(?:the\s+)?(?:system\s+prompt|raw\s+credentials|unredacted\s+data|original\s+secrets)/i,
+  /(?:bypass|override)\s+(?:safety|privacy|redaction|guardrails)/i,
+  /(?:unmask|decode|reconstruct)\s+(?:the\s+)?\[?REDACTED:[^\]\n]+\]?/i,
+  /(?:DAN\s+mode|jailbreak|developer\s+mode\s+enabled)/i
+];
+
+/**
+ * Checks for prompt injection and adversarial unmasking attempts
+ * @param {string} text
+ * @returns {{ detected: boolean, matches: Array<string> }}
+ */
+export function detectPromptInjection(text) {
+  if (typeof text !== 'string') return { detected: false, matches: [] };
+  const matches = [];
+  for (const pat of PROMPT_INJECTION_PATTERNS) {
+    const match = text.match(pat);
+    if (match) {
+      matches.push(match[0]);
+    }
+  }
+  return {
+    detected: matches.length > 0,
+    matches
+  };
 }
 
 // ============================================================================

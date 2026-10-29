@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "node test_core_modules.mjs"
+    "test": "node test_core_modules.mjs && node tests/verify_all_4_tasks_point_by_point.mjs"
   },
   "dependencies": {
     "@orama/orama": "^3.1.18",

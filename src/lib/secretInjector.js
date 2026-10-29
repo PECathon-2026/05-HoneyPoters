@@ -257,8 +257,86 @@ export function injectIntoDOM(elementOrSelector, tokenOrSecret, options = {}) {
 }
 
 // ============================================================================
-// 4. Autonomous AI Action Execution Bridge
+// 4. Autonomous AI Action Execution Bridge & Safety Validation
 // ============================================================================
+
+const DANGEROUS_TARGET_PATTERNS = [
+  /<script/i,
+  /<iframe/i,
+  /<object/i,
+  /<embed/i,
+  /javascript:/i,
+  /vbscript:/i,
+  /data:text\/html/i,
+  /on\w+\s*=/i
+];
+
+/**
+ * Validates proposed AI actions to reject invalid targets or unsafe operations.
+ * @param {Object} action
+ * @param {Object} [options={}]
+ * @returns {{ valid: boolean, error?: string }}
+ */
+export function validateProposedAction(action, options = {}) {
+  if (!action || typeof action !== 'object') {
+    return { valid: false, error: 'Invalid action object' };
+  }
+
+  const actionType = (action.type || action.action || 'FILL_FORM').toUpperCase();
+  const allowedActions = ['FILL', 'FILL_FIELD', 'AUTOTYPE', 'BATCH_FILL', 'FILL_FORM', 'SUBMIT_FORM', 'CLICK', 'SUBMIT'];
+  if (!allowedActions.includes(actionType)) {
+    return { valid: false, error: `Unsupported or prohibited AI action type: "${actionType}"` };
+  }
+
+  // Collect selectors to validate
+  const selectors = [];
+  if (action.selector) selectors.push(action.selector);
+  if (action.field) selectors.push(action.field);
+  if (Array.isArray(action.fields)) {
+    action.fields.forEach(f => {
+      if (f.selector) selectors.push(f.selector);
+      if (f.id) selectors.push(`#${f.id}`);
+    });
+  }
+
+  for (const sel of selectors) {
+    if (typeof sel !== 'string') continue;
+    for (const pat of DANGEROUS_TARGET_PATTERNS) {
+      if (pat.test(sel)) {
+        return { valid: false, error: `Rejected unsafe operation: target selector contains hazardous pattern "${sel}"` };
+      }
+    }
+  }
+
+  return { valid: true };
+}
+
+/**
+ * Determines if an action is sensitive or irreversible, requiring explicit user approval
+ * @param {Object} action
+ * @returns {boolean}
+ */
+export function requiresUserApproval(action) {
+  if (!action || typeof action !== 'object') return false;
+  if (action.requireApproval === true) return true;
+
+  const actionType = (action.type || action.action || '').toUpperCase();
+  const irreversibleTypes = ['SUBMIT', 'SUBMIT_FORM', 'DELETE', 'PURGE', 'TRANSFER_FUNDS', 'PAYMENT', 'PURCHASE'];
+  if (irreversibleTypes.includes(actionType)) return true;
+
+  // Check for critical financial tokens
+  const tokensToCheck = [];
+  if (action.token) tokensToCheck.push(action.token);
+  if (Array.isArray(action.fields)) {
+    action.fields.forEach(f => {
+      if (f.token) tokensToCheck.push(f.token);
+    });
+  }
+
+  const criticalTokens = ['[REDACTED: CARD_NUMBER]', '[REDACTED: CVV]', '[REDACTED: PASSCODE]', '[REDACTED: OTP]'];
+  const hasCritical = tokensToCheck.some(t => criticalTokens.includes(t));
+  return hasCritical && (actionType.includes('SUBMIT') || action.requiresConfirmation === true);
+}
 
 /**
  * Executes structured autonomous AI agent browser actions (fill, submit, type)
@@ -276,7 +354,32 @@ export function executeAIAction(action, options = {}) {
   const startTime = typeof performance !== 'undefined' ? performance.now() : Date.now();
 
   if (!action || typeof action !== 'object') {
-    return { success: false, error: 'Invalid AI action payload supplied' };
+    return { success: false, error: 'Invalid AI action payload supplied', zeroCloudLeakageConfirmed: true };
+  }
+
+  // 1. Validate proposed action and reject invalid targets / unsafe operations
+  const validation = validateProposedAction(action, options);
+  if (!validation.valid) {
+    return {
+      success: false,
+      error: validation.error,
+      status: 'REJECTED_UNSAFE_OPERATION',
+      actionType: action.type || action.action,
+      zeroCloudLeakageConfirmed: true
+    };
+  }
+
+  // 2. User approval check for sensitive or irreversible actions
+  const needsApproval = action.requireApproval === true || (options.enforceUserApproval && requiresUserApproval(action));
+  if (needsApproval && action.userApproved !== true) {
+    return {
+      success: false,
+      status: 'PENDING_USER_APPROVAL',
+      requiresApproval: true,
+      error: 'Sensitive or irreversible action requires explicit user approval before execution.',
+      actionType: action.type || action.action,
+      zeroCloudLeakageConfirmed: true
+    };
   }
 
   const results = [];
