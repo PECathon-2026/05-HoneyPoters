@@ -472,3 +472,30 @@ The automated double-verification test suite (`tests/verify_phase3_part3.mjs`) v
   - Validated CSV spreadsheet formatting and header alignment.
 
 ---
+
+
+### [Phase 2 / Stability Fix]: Vite Dev Server & Recharts 3.x React-Is Shim (`src/lib/reactIsShim.js`)
+
+#### 1. What is it? (Kya Hai)
+`reactIsShim.js` is a lightweight, zero-dependency ECMAScript Module (ESM) shim that exports all standard React element and type inspection functions (`isFragment`, `isElement`, `typeOf`, `ForwardRef`, `Memo`, `Suspense`, etc.) required by Recharts 3.x in React 19 / Vite development environments.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Vite ESM Dev Server Compatibility**: The upstream `react-is` package uses a dynamic CommonJS export pattern (`if (process.env.NODE_ENV === 'production') ...`) which prevented Vite/esbuild from discovering named exports during dev bundling, triggering a fatal browser exception (`Uncaught SyntaxError: ... does not provide an export named 'isFragment'`) and rendering a blank white screen on `localhost:5173`.
+- **Zero Overhead**: Provides pure ESM exports mapped to standard React symbols (`Symbol.for('react.fragment')`, etc.), completely resolving the Recharts import resolution issue without altering production build characteristics.
+- **Glassmorphic Theme Cohesion**: Reset the default Vite `index.css` `#root` styling to a full-screen dark container (`#020617`, slate-950) so all glassmorphic components render edge-to-edge.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **ESM Symbol Matching**: Implements `isFragment`, `isElement`, `typeOf`, etc., using native React 18/19 symbols (`Symbol.for('react.fragment')`).
+2. **Vite Alias Interception**: Configured in `vite.config.js`:
+   ```javascript
+   resolve: {
+     alias: {
+       'react-is': path.resolve(__dirname, 'src/lib/reactIsShim.js')
+     }
+   }
+   ```
+3. **Double Verification**: Both `npm run build` and headless Chrome DOM dump confirm 100% component mounting and rendering with zero console errors.
+
+#### 4. Verification & Testing Evidence
+- **Build Pass**: `npm run build` generated production bundle in 517ms without Rollup errors.
+- **Dev Render Pass**: Headless Chrome rendered 116+ KB of DOM containing `PrivacyLens Shield Gateway`, `SHIELD IS ENGAGED`, `Payload Diff & Gatekeeper Inspector`, `Privacy Health Index`, `Visual Redaction Studio`, and `Agentic Playground`.
