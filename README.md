@@ -104,8 +104,8 @@
 | ↳ Part 4 | BroadcastChannel IPC & Diff Inspector (`PayloadDiffInspector.jsx`) | 🟢 **Verified & Pushed** | Side-by-side Payload Diff + Fail-Closed Alert |
 | **Phase 3** | **Multimodal Visual Redaction & Agentic Interceptor** | 🟡 In Progress | 2x Verification Loop |
 | ↳ Part 1 | Multimodal Visual Redaction Studio (`VisualRedactionStudio.jsx`) | 🟢 **Verified & Pushed** | Offscreen Canvas + Solid #000000 Blackouts |
-| ↳ Part 2 | Autonomous Agentic Form Playground (`AgenticPlayground.jsx`) | ⚪ In Progress | Interactive DOM Interceptor + Agent Simulation |
-| ↳ Part 3 | Forensic Audit Trail & Compliance Exporter (`AuditForensics.jsx`) | ⚪ Scheduled | Tamper-Proof Audit + JSON/CSV Export |
+| ↳ Part 2 | Autonomous Agentic Form Playground (`AgenticPlayground.jsx`) | 🟢 **Verified & Pushed** | Interactive DOM Interceptor + Agent Simulation |
+| ↳ Part 3 | Forensic Audit Trail & Compliance Exporter (`AuditForensics.jsx`) | ⚪ In Progress | Tamper-Proof Audit + JSON/CSV Export |
 | ↳ Part 4 | Jury Showcase & Live Leak Benchmark (`JuryShowcase.jsx`) | ⚪ Scheduled | Competitive Matrix + 1-Click Jury Demo |
 | **Phase 4** | **Jury Showcase, Live Benchmark & Presentation** | ⚪ Scheduled | Pitch Deck + Live Leak Benchmark |
 

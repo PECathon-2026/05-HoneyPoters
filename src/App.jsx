@@ -1,6 +1,6 @@
 /**
  * PrivacyLens — Main Application Container
- * Integrated Shield Dashboard, Payload Diff Inspector, Privacy Analytics, and Visual Redaction Studio
+ * Integrated Shield Dashboard, Payload Diff Inspector, Visual Studio, Agentic Playground, and Analytics
  * Team 05-HoneyPoters — PECathon 2026 (PS-004)
  */
 
@@ -9,10 +9,11 @@ import ShieldDashboard from './components/ShieldDashboard';
 import PayloadDiffInspector from './components/PayloadDiffInspector';
 import PrivacyAnalytics from './components/PrivacyAnalytics';
 import VisualRedactionStudio from './components/VisualRedactionStudio';
+import AgenticPlayground from './components/AgenticPlayground';
 import { usePrivacyLensIPC } from './hooks/usePrivacyLensIPC';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'diff' | 'analytics' | 'visual' | 'shield'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'diff' | 'playground' | 'visual' | 'analytics' | 'shield'
 
   const {
     shieldActive,
@@ -61,12 +62,12 @@ export function App() {
           </button>
           <button
             type="button"
-            onClick={() => setActiveTab('diff')}
+            onClick={() => setActiveTab('playground')}
             className={`px-3 py-1 rounded-lg font-medium transition ${
-              activeTab === 'diff' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+              activeTab === 'playground' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Payload Diff
+            Agentic Playground
           </button>
           <button
             type="button"
@@ -76,6 +77,15 @@ export function App() {
             }`}
           >
             Visual Studio
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('diff')}
+            className={`px-3 py-1 rounded-lg font-medium transition ${
+              activeTab === 'diff' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Payload Diff
           </button>
           <button
             type="button"
@@ -114,16 +124,20 @@ export function App() {
           />
         )}
 
+        {(activeTab === 'overview' || activeTab === 'playground') && (
+          <AgenticPlayground onSimulateIntercept={simulateIntercept} />
+        )}
+
+        {(activeTab === 'overview' || activeTab === 'visual') && (
+          <VisualRedactionStudio />
+        )}
+
         {(activeTab === 'overview' || activeTab === 'diff') && (
           <PayloadDiffInspector
             latestIntercept={latestIntercept}
             events={events}
             securityMode={securityMode}
           />
-        )}
-
-        {(activeTab === 'overview' || activeTab === 'visual') && (
-          <VisualRedactionStudio />
         )}
 
         {(activeTab === 'overview' || activeTab === 'analytics') && (

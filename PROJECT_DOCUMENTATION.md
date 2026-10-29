@@ -407,3 +407,35 @@ The automated double-verification test suite (`tests/verify_phase3_part1.mjs`) v
   - Validated standard Gemini Vision payload structure with base64 image part and `image/png` MIME type.
 
 ---
+
+### [Phase 3 - Part 2]: Autonomous Agentic Form Playground (`src/components/AgenticPlayground.jsx`)
+
+#### 1. What is it? (Kya Hai)
+`AgenticPlayground.jsx` is PrivacyLens's interactive browser session simulator and autonomous AI agent defense workbench. It simulates a live secure banking onboarding portal (`https://secure-portal.pec-bank.in/customer-kyc`) equipped with Indian KYC and financial fields (Aadhaar, PAN, Cards, Passwords, Contact details). It demonstrates in real time how autonomous AI browser agents (crawlers, automation bots, web copilots) attempting to extract the page DOM are transparently intercepted and sanitized before cloud dispatch.
+
+#### 2. Why is it used? (Kyu Hai)
+- **The Rise of Autonomous AI Browser Agents**: Modern browser automation agents (e.g. MultiOn, Claude Computer Use, OpenAI Operator) routinely extract entire DOM tree snapshots and form input states to perform tasks. When they do so, unencrypted user credentials (passwords, payment cards, national IDs) are sent directly to cloud LLM prompts.
+- **Real-Time Visual Defense Feedback**: Users and evaluators can watch floating shield badges (`🛡️ Protected [AADHAAR]`, `🛡️ Protected [PASSWORD]`) dynamically attach to input fields as they type or autofill test profiles.
+- **Side-by-Side "Direct Leak vs Shield" Benchmark**: Provides an undeniable proof-of-defense comparison: clicking "Simulate Direct Leak" shows all 8 raw credentials exposed, whereas "Extract with PrivacyLens Shield" sanitizes all 8 fields into zero-leak semantic tokens.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Simulated Browser Window & Live KYC Form**:
+   - Features a mock URL navigation bar and realistic input fields for Full Name, UIDAI Aadhaar, PAN, Payment Card, CVV, Password, Mobile, and Email.
+   - Includes 1-click test profile autofill buttons (*Rahul Sharma* and *Priya Patel*).
+2. **Real-Time Input Field Badge Detection (`getFieldBadge`)**:
+   - Queries `scanText()` on input values. If a password field or sensitive PII pattern is entered, renders an animated floating badge next to the input label.
+3. **Autonomous Agent Extraction Simulation (`handleRunAgentExtraction`)**:
+   - **Mode A (With Shield)**: Captures the agent DOM string, passes it through `sanitizeText()`, stores the audit entry, and displays the sanitized output in a cyan-accented terminal.
+   - **Mode B (Direct Leak)**: Displays the catastrophic failure mode in an amber/red warning terminal showing unredacted passwords, card numbers, and Aadhaar numbers exposed to the cloud.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_phase3_part2.mjs`) verified:
+- **Structural Integrity**: Validated component exports, mock profile schemas, and seamless mounting in `App.jsx`.
+- **Pass 1 - Protected Agentic DOM Interception**:
+  - Agent DOM snapshot containing 7 sensitive fields was intercepted and sanitized into verified semantic tokens (`[REDACTED: AADHAAR]`, `[REDACTED: PAN]`, `[REDACTED: CARD_NUMBER]`, `[REDACTED: PASSCODE]`).
+  - Zero raw secrets traversed the interceptor.
+- **Pass 2 - Direct Leak vs Shield Comparison**:
+  - Unprotected mode verified to contain active leaks.
+  - Real-time field badge detection confirmed for passwords and Aadhaar values.
+
+---
