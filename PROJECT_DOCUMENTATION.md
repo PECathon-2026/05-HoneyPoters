@@ -46,4 +46,46 @@ PrivacyLens acts as a transparent, client-side safety shield placed immediately 
 
 ## Phase 1 - Local Foundation & Core Engines
 
-<!-- Phase 1 Parts will be documented here following the strict template -->
+### [Phase 1 - Part 1]: Local Regex & Algorithmic Scanner (`src/lib/scanner.js`)
+
+#### 1. What is it? (Kya Hai)
+`scanner.js` is PrivacyLens's deterministic edge inspection engine. It performs zero-latency, client-side identification and redaction of structured Personally Identifiable Information (PII), sensitive financial instruments, credentials, and DOM input elements. It combines specialized regular expressions with algorithmic checksum verifiers (Verhoeff for UIDAI Aadhaar and MOD-10 Luhn for global payment cards). Additionally, it houses the DOM Attribute Inspector to query sensitive live browser form fields before form submission or web agent automation.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Problem Statement Alignment (PS-004)**: When browser extensions or autonomous AI agents read web page content, prompt queries, or clipboard data, user credentials and Indian national IDs (Aadhaar, PAN) are frequently bundled in the payload. Sending these in plaintext to external LLM servers violates data protection standards (DPDP Act 2023, GDPR).
+- **False-Positive Mitigation**: Naive regex engines often misclassify random 16-digit timestamps or 12-digit order numbers as credit cards or Aadhaar numbers. By implementing algorithmic checks (`validateVerhoeff` and `validateLuhn`), PrivacyLens eliminates false positives while guaranteeing real PII is never missed.
+- **Fail-Closed Guarantee**: The engine performs post-sanitization leak verification (`isSafe: boolean`). If an unredacted residual fragment remains, downstream API dispatch is blocked immediately.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Algorithmic Validation**:
+   - **Verhoeff Algorithm**: Implements UIDAI dihedral group $D_5$ permutations (`VERHOEFF_D` multiplication table and `VERHOEFF_P` permutation table) to validate the 12th checksum digit of Indian Aadhaar numbers.
+   - **Luhn Algorithm (MOD-10)**: Doubling alternate digits from right to left, subtracting 9 if $\ge 10$, and verifying the total sum modulo 10 equals 0.
+2. **Regex Matchers**:
+   - **PAN**: `\b([A-Z]{5}\d{4}[A-Z])\b` (case-insensitive, accommodating both official entity codes and mock test data).
+   - **Payment Cards**: `\b(?:\d{4}[-\s]?){3}\d{4}\b|\b(?:\d{4}[-\s]?){2}\d{4}[-\s]?\d{3}\b|\b\d{13,19}\b` validated through Luhn.
+   - **Aadhaar**: `\b([2-9]\d{3}[\s-]?\d{4}[\s-]?\d{4})\b(?!\s*[- ]?\d{4})` (ensures 16-digit cards are not partially parsed as 12-digit Aadhaar).
+   - **Indian Phone**: `(?:(?:\+91|91|0)[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b`.
+   - **Emails & Credentials**: RFC email regex, Gemini keys (`AIza[0-9A-Za-z\-_]{35}`), OpenAI keys (`sk-...`), AWS credentials (`AKIA...`), and plaintext passwords (`password="..."`).
+3. **Semantic Token Substitution (`sanitizeText`)**:
+   - Sorts detected threats by position and length.
+   - Replaces matched strings with semantic tokens: `[REDACTED: AADHAAR]`, `[REDACTED: PAN]`, `[REDACTED: CARD_NUMBER]`, `[REDACTED: PASSCODE]`, etc.
+   - Re-scans the sanitized output. If `residualThreats.length === 0`, sets `isSafe: true`.
+4. **DOM Inspection Helper (`scanDOM`)**:
+   - Queries `input, textarea, select, [contenteditable="true"]`.
+   - Inspects `type="password"`, `autocomplete="cc-number"`, and sensitive keywords (`cvv`, `otp`, `aadhaar`, `pin`, `pan`) across `id`, `name`, `data-*`, and `placeholder`.
+   - Computes screen coordinates (`getBoundingClientRect()`) and outputs pre-formatted `redactionBoxes` ready for canvas visual masking.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_part1.mjs`) verified:
+- Structural integrity of exports: `validateVerhoeff`, `validateLuhn`, `scanText`, `sanitizeText`, `scanDOM`.
+- Synthetic attack vectors passed:
+  - Vector 1: Indian PAN (`ABCDE1234F`) -> `[REDACTED: PAN]`, `isSafe: true`.
+  - Vector 2: Indian Aadhaar (`2345 6789 0124`) -> `[REDACTED: AADHAAR]`, `isSafe: true`.
+  - Vector 3: Payment Card with Luhn (`4242 4242 4242 4242`) -> `[REDACTED: CARD_NUMBER]`, `isSafe: true`.
+  - Vector 4: Email address (`accounts.payable@startup.co.in`) -> `[REDACTED: EMAIL]`, `isSafe: true`.
+  - Vector 5: Indian mobile (`+91 98765 43210`) -> `[REDACTED: PHONE_NUMBER]`, `isSafe: true`.
+  - Vector 6: Password & OTP (`password="mySecretP@ssw0rd99"`) -> `[REDACTED: PASSCODE]`, `isSafe: true`.
+  - Vector 7: Cloud API key (`AIzaSy...`) -> `[REDACTED: API_KEY]`, `isSafe: true`.
+  - Graceful fallback in non-browser Node environments.
+
+---
