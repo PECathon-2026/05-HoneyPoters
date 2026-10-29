@@ -5,6 +5,7 @@
  */
 
 import { scanDOM, scanText, sanitizeText, PII_TYPES } from './lib/scanner.js';
+import { executeAIAction, injectIntoDOM, defaultSecretVault } from './lib/secretInjector.js';
 
 export const CHANNEL_NAME = 'privacylens_channel';
 
@@ -192,6 +193,9 @@ class PrivacyLensContentScript {
     if (message.type === 'SCAN_PAGE_REQUEST') {
       const result = this.scanPage();
       this.broadcast('DOM_SCAN_RESPONSE', result);
+    } else if (message.type === 'EXECUTE_AI_ACTION') {
+      const result = executeAIAction(message.payload);
+      this.broadcast('AI_ACTION_EXECUTED', result);
     }
   }
 

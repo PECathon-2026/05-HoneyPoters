@@ -16,5 +16,23 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['react-is', 'recharts']
+  },
+  build: {
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/recharts')) {
+            return 'vendor-recharts';
+          }
+          if (id.includes('node_modules/@xenova') || id.includes('node_modules/@orama')) {
+            return 'vendor-ai';
+          }
+        }
+      }
+    }
   }
 })

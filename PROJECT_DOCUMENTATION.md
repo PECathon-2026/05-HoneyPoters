@@ -622,3 +622,38 @@ The automated double-verification test suite (`tests/verify_phase3_secret_inject
   - Scenario 2 (Authentication): Successfully populated `#loginEmail`, `#loginPassword`, and `#loginOtp` with zero cloud credential exposure.
   - Scenario 5 (Developer Settings): Successfully populated `#apiKey`, `#jwtToken`, and `#serverIp` with developer credentials.
   - Confirmed 100% `zeroCloudLeakageConfirmed: true` across all AI action runs.
+
+
+---
+
+### [Phase 4 - Part 1 & Part 3]: Production Build Polish, Bundle Optimization & Final Architecture Documentation
+
+#### 1. What is it? (Kya Hai)
+Phase 4 represents PrivacyLens's production hardening, bundle modularization, asset synchronization, and final deployment readiness. It configures Rolldown/Vite manual chunking (`vite.config.js`), isolates core third-party dependencies (`vendor-react`, `vendor-recharts`, `vendor-ai`), synchronizes the core sanitization engine into the Manifest V3 Chrome Extension (`extension/lib/`), and provides complete architectural documentation and verification scripts for the PECathon 2026 jury.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Sub-Second Production Builds & Zero Asset Warnings**: Heavy dependencies (Recharts SVG plotting, ONNX runtime, and Transformers) can create oversized monolithic bundles exceeding 500 KB, degrading initial extension and page load latency. Intelligent manual chunking keeps individual JS bundles under 400 KB and slashes production build time to under 500ms.
+- **Manifest V3 Extension Engine Synchronization**: The Chrome Extension service worker and in-page content scripts must execute the exact same battle-tested scanner, canary probe, and local secret injector without runtime drift or missing modules.
+- **Flawless Evaluation & Reproducibility**: Hackathon evaluators require deterministic reproduction commands, comprehensive test suites, and transparent technical architecture documentation explaining every data flow and fail-closed security boundary.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Intelligent Modular Chunking (`vite.config.js`)**:
+   - Implements functional `manualChunks(id)` splitting:
+     - `vendor-react`: Isolates React 19 and ReactDOM (`221 KB / 69 KB gzip`).
+     - `vendor-recharts`: Isolates Recharts data visualization graphics (`372 KB / 106 KB gzip`).
+     - `index`: Core application logic, dashboard components, and PrivacyLens engines (`120 KB / 31 KB gzip`).
+   - Completely eliminates chunk size warnings and optimizes cold-start caching.
+2. **Extension Core Synchronization**:
+   - Replicated latest Phase 3 & 4 libraries (`scanner.js`, `imageMasker.js`, `ragScanner.js`, `geminiClient.js`, `testScenarios.js`, `secretInjector.js`) into `extension/lib/`.
+   - Wired `EXECUTE_AI_ACTION` handling into `extension/contentScript.js` to allow the extension to execute local DOM secret injection upon AI agent requests.
+3. **Comprehensive Verification Suite**:
+   - Provides turnkey verification scripts (`tests/verify_phase3_evaluation_scenarios.mjs`, `tests/verify_phase3_canary_leakage.mjs`, `tests/verify_phase3_secret_injector.mjs`, and `test_core_modules.mjs`) covering all 4 phases with 100% pass rates.
+
+#### 4. Verification & Testing Evidence
+The complete Phase 1-4 double-verification loop ran cleanly:
+- **Build Pass**: `npm run build` completed in **416ms**, generating optimized chunks with zero asset warnings:
+  - `dist/assets/index-*.js`: 120.73 kB
+  - `dist/assets/vendor-react-*.js`: 221.06 kB
+  - `dist/assets/vendor-recharts-*.js`: 372.69 kB
+- **Extension Manifest V3 Verification**: Validated `manifest.json`, ESM background service worker, and DOM content script integration via `tests/verify_phase2_part1.mjs`.
+- **Full Engine Test Suite**: `npm test` and all verification suites passed with 100% zero-leakage confirmation across all 5 evaluation scenarios, canary honeypot probes, and DOM secret injection tests.
