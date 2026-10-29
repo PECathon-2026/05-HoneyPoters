@@ -89,3 +89,40 @@ The automated double-verification test suite (`tests/verify_part1.mjs`) verified
   - Graceful fallback in non-browser Node environments.
 
 ---
+
+### [Phase 1 - Part 2]: HTML5 Canvas Visual Masker (`src/lib/imageMasker.js`)
+
+#### 1. What is it? (Kya Hai)
+`imageMasker.js` is PrivacyLens's client-side visual obfuscation engine. It operates offscreen using an HTML5 `<canvas>` (or `OffscreenCanvas`) to process screenshots, web page snapshots, and image files before they are transmitted to multimodal AI models. It accepts an array of target coordinate bounding boxes `[{ x, y, width, height, label }]` (derived either from `scanDOM` or user selections) and paints solid `#000000` blackout rectangles over those areas.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Multimodal Privacy Leaks**: In modern multimodal agentic workflows (e.g. Gemini 1.5/2.0 Flash vision), agents capture the entire browser viewport or desktop screen. Even if text prompts are sanitized, the screenshot itself contains sensitive fields (unmasked passwords, bank balances, credit card numbers, customer Aadhaar card photos).
+- **Zero Raw Pixel Cloud Leakage**: Performing visual redaction on an offscreen canvas in client RAM ensures that sensitive pixels are permanently destroyed and replaced with pure black pixels before the base64 payload is generated. No external image-processing server is involved.
+- **Visual Auditability**: Rather than blurring (which can be inverted using deconvolution AI attacks), solid blackout rectangles provide complete information destruction while rendering clear semantic labels (`[REDACTED: PASSWORD]`) so the vision model understands that content was intentionally suppressed.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Source Loading (`loadImageSource`)**:
+   - Ingests multiple source types: HTML Image elements, Canvas elements, Blobs, Files, and base64 data URLs.
+   - Converts input into a decoded raster image in memory.
+2. **Offscreen Canvas Initialization (`createOffscreenCanvas`)**:
+   - Spawns an offscreen canvas matching the exact natural dimensions of the source image.
+   - Renders the clean background image onto the 2D canvas context.
+3. **Bounding Box Clamping & Blackout Painting (`applyBlackouts`)**:
+   - Applies safety padding (`padding: 4px`) to enclose input field borders and text baselines.
+   - Mathematically clamps all coordinates: $x \ge 0$, $y \ge 0$, $w \le \text{canvasWidth} - x$, $h \le \text{canvasHeight} - y$.
+   - Fills the region with solid `#000000`.
+   - Draws a subtle `#38BDF8` 1px border indicating a verified PrivacyLens boundary.
+   - Centers a high-contrast monospaced badge text (e.g. `[REDACTED: CARD_NUMBER]`).
+4. **Sanitized Payload Generation (`maskImage`)**:
+   - Converts the modified canvas to a clean sanitized base64 data URL (`image/png` or `image/jpeg`).
+   - Strips metadata and exports `{ sanitizedBase64, width, height, masksCount, timestamp }`.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_part2.mjs`) verified:
+- Configuration validation: `DEFAULT_MASK_OPTIONS.blackoutColor === '#000000'`.
+- Canvas Math & Clamping verification:
+  - Synthetic 2D context dry-run executed against normal coordinates, negative offsets ($x = -10$), and oversized boundaries ($x = 900, w = 200$ on 1000px width).
+  - All 3 blackout rectangles were verified to execute `fillRect` with pure `#000000` fill and strictly clamped coordinates.
+- SVG simulation verified: `generateMockRedactedSVG` correctly generates valid SVG data URLs with embedded blackout boxes for test harnesses and pitch presentations.
+
+---
