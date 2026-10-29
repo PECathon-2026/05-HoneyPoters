@@ -100,8 +100,8 @@
 | **Phase 2** | **Extension Gateway & Interactive React Dashboard** | 🟡 In Progress | 2x Verification Loop |
 | ↳ Part 1 | Chrome Extension Gateway & Service Worker (`extension/`) | 🟢 **Verified & Pushed** | Manifest V3 + BroadcastChannel + DOM Scan |
 | ↳ Part 2 | Glassmorphic React Dashboard UI (`ShieldDashboard.jsx`) | 🟢 **Verified & Pushed** | Tailwind CSS + Active Threat Ticker + Attack Tester |
-| ↳ Part 3 | Live Recharts Analytics (`PrivacyAnalytics.jsx`) | ⚪ In Progress | Requests vs Threats + Category Breakdown |
-| ↳ Part 4 | BroadcastChannel IPC & Diff Inspector (`PayloadDiffInspector.jsx`) | ⚪ Scheduled | Side-by-side Payload Diff + Fail-Closed Alert |
+| ↳ Part 3 | Live Recharts Analytics (`PrivacyAnalytics.jsx`) | 🟢 **Verified & Pushed** | Time-Series Area + Category Bar + Health Gauge |
+| ↳ Part 4 | BroadcastChannel IPC & Diff Inspector (`PayloadDiffInspector.jsx`) | ⚪ In Progress | Side-by-side Payload Diff + Fail-Closed Alert |
 | **Phase 3** | **Interactive Security Dashboard & Real-Time Telemetry** | ⚪ Scheduled | React 19 + Tailwind v4 UI |
 | **Phase 4** | **Jury Showcase, Live Benchmark & Presentation** | ⚪ Scheduled | Pitch Deck + Live Leak Benchmark |
 

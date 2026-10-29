@@ -298,3 +298,38 @@ The automated double-verification test suite (`tests/verify_phase2_part2.mjs`) v
   - BroadcastChannel IPC verified: sent and received `REQUEST_SANITIZED` messages over `privacylens_channel`.
 
 ---
+
+### [Phase 2 - Part 3]: Live Recharts Analytics & Privacy Health Index (`PrivacyAnalytics.jsx`)
+
+#### 1. What is it? (Kya Hai)
+`PrivacyAnalytics.jsx` is PrivacyLens's data visualization and compliance telemetry component powered by `recharts`. It renders live gradient area charts tracking requests versus neutralized threats, granular bar charts classifying detected PII categories (Aadhaar, PAN, Payment Cards, Passwords, Contacts), and an interactive SVG Privacy Health Index radial gauge (0 to 100).
+
+#### 2. Why is it used? (Kyu Hai)
+- **Macro-Telemetry & Trend Auditing**: While the event ticker presents micro-level transactions, security officers and evaluators need macro-level trends over time. The time-series area chart visualizes request spikes versus intercepted threats.
+- **Categorical Risk Breakdown**: Indian regulations (UIDAI Aadhaar Act, DPDP Act 2023) and global banking standards (PCI-DSS) impose distinct penalties for different credential leaks. Categorical distribution makes it immediately clear what types of sensitive data users are inadvertently exposing.
+- **Real-Time Privacy Health Metric**: Condenses complex multi-factor client state into a single, intuitive Privacy Health Index score (Grade A+ at 100/100 when Shield is active, immediately dropping to <50 if bypassed).
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Dynamic Privacy Health Index Gauge (SVG Radial Meter)**:
+   - Evaluates client shield posture: when active with 100% Zero Leakage, sets score to 100 (Grade A+ Fortified).
+   - Dynamically calculates SVG `strokeDashoffset` ($C = 2\pi r \approx 440\text{px}$) with color transitions (Emerald for $\ge 90$, Amber for $70-89$, Red for $<70$).
+   - Displays real-time compliance indicators: DPDP Act 2023 status, Zero Cloud Leakage ratio ($100.0\%$), and average gatekeeper latency ($<12\text{ms}$).
+2. **Requests vs Neutralized Threats AreaChart**:
+   - Renders 3 gradient-filled area layers: Outbound AI Requests (Cyan), Neutralized Threats (Emerald), and Hard Aborts (Red).
+   - Uses `ResponsiveContainer`, `CartesianGrid`, and monospaced glassmorphic `CustomChartTooltip`.
+3. **PII Threat Distribution BarChart**:
+   - Categorizes threats into 6 primary buckets: Aadhaar (UIDAI), Income Tax PAN, Payment Cards (Visa/Mastercard), Passwords & API Keys, Contact & Emails, and Contextual Secrets.
+   - Styled with custom rounded bar heads (`radius={[6, 6, 0, 0]}`) and distinct cyber-defense palette.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_phase2_part3.mjs`) verified:
+- **Structural Integrity**: Validated Recharts components, gradient definitions, and responsive container layout without build errors.
+- **Pass 1 - Telemetry & Category Math**:
+  - Time-series progression verified across 6 timeline intervals.
+  - Category distribution aggregation verified across Aadhaar, PAN, Cards, and Passwords.
+- **Pass 2 - Health Index Gauge & Compliance Math**:
+  - Active Shield score confirmed at 100/100 (Grade A+).
+  - Inactive Shield score confirmed at 38/100 (Compromised/Bypassed).
+  - SVG radial stroke dashoffset verified ($0\text{px}$ offset when full, $>200\text{px}$ offset when degraded).
+
+---
