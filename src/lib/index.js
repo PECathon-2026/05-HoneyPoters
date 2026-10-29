@@ -8,3 +8,4 @@ export * from './imageMasker.js';
 export * from './ragScanner.js';
 export * from './geminiClient.js';
 export * from './testScenarios.js';
+export * from './secretInjector.js';

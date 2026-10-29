@@ -583,3 +583,42 @@ The automated double-verification test suite (`tests/verify_phase3_canary_leakag
   - Validated dynamic threshold tuning (`tunedSimilarityThreshold: 0.35`, `policyUpgradedTo: 'FAIL_CLOSED_STRICT'`).
   - Verified re-sanitization purged the leak completely (`isGuaranteedSafe: true`).
   - Verified Client-Side Hard Abort alert was created and broadcasted with audit record status `FAIL_CLOSED_BLOCKED`.
+
+
+---
+
+### [Phase 3 - Part 3]: Local Secret Injection Helper / DOM Automation Bridge (`src/lib/secretInjector.js`)
+
+#### 1. What is it? (Kya Hai)
+`secretInjector.js` is PrivacyLens's local DOM automation bridge and ephemeral in-memory secret vault (`LocalSecretVault`). It bridges the gap between client-side privacy protection and autonomous AI browser agent automation: while external cloud models (Gemini, Claude, GPT-4) reason and issue actions purely using sanitized semantic tokens (`[REDACTED: CARD_NUMBER]`, `[REDACTED: PASSCODE]`, `[REDACTED: SHIPPING_ADDRESS]`), the local secret injector maps these placeholder tokens back to local browser RAM secrets and automatically populates the target DOM input fields during local AI action execution.
+
+#### 2. Why is it used? (Kyu Hai)
+- **The Core Paradox of AI Browser Agents**: If an AI agent cannot fill passwords or credit cards on web forms, it cannot complete real-world tasks (e.g. checkout, login). However, if the user gives the AI agent real passwords and credit cards, sensitive credentials leak to cloud LLM logs and third-party APIs.
+- **Solving the Paradox with Zero Cloud Leakage**: PrivacyLens allows AI agents to plan and issue instructions globally on semantic tokens (*"Fill `#cardNumber` with `[REDACTED: CARD_NUMBER]`"*), while the local client-side Chrome Extension resolves and injects the actual secrets into the DOM locally. Real credentials never leave browser RAM.
+- **Ephemeral RAM Security (Zero Persistence)**: Secrets in `LocalSecretVault` reside only in volatile memory with configurable TTLs (e.g., 15 minutes) and are automatically purged upon session completion or tab closure.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **LocalSecretVault (`LocalSecretVault`)**:
+   - Stores `token -> secret` pairings in volatile memory.
+   - Provides `register()`, `registerFromThreats()` (directly ingests threat outputs from `sanitizeText()`), `resolve()`, `has()`, and `purgeExpired()`.
+2. **Reverse De-Tokenization (`detokenizeText`)**:
+   - Replaces schema tokens in AI command strings with local RAM secrets for local execution.
+3. **DOM Automation & Input Synchronization (`injectIntoDOM`)**:
+   - Targets DOM input elements (`HTMLInputElement`, `HTMLTextAreaElement`, `contenteditable`).
+   - Sets values using reactive framework prototype setters (`HTMLInputElement.prototype.value`) and dispatches synthetic `input` and `change` events so React, Vue, and Angular forms detect changes.
+4. **Autonomous AI Action Dispatcher (`executeAIAction`)**:
+   - Processes action commands (`FILL`, `BATCH_FILL`, `FILL_FORM`, `SUBMIT_FORM`), auto-populating fields and generating a tamper-proof execution receipt confirming zero cloud leakage.
+5. **Evaluation Scenarios Integration (`populateScenarioSecrets`, `simulateAIScenarioAutofill`)**:
+   - Seamlessly integrates with the 5 official PDF evaluation scenarios (`ecommerce_checkout`, `authentication`, `developer_settings`), automating form autofill testing.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_phase3_secret_injector.mjs`) ran twice with zero errors:
+- **Pass 1 - Ephemeral RAM Vault Operations**:
+  - Registered direct secrets and extracted threat objects from `sanitizeText()`.
+  - Validated instant token resolution (`[REDACTED: CARD_NUMBER]` -> `4242 4242 4242 4242`).
+  - Validated string de-tokenization (`detokenizeText`).
+- **Pass 2 - Autonomous AI Action & Scenario DOM Autofill**:
+  - Scenario 1 (E-Commerce Checkout): Successfully populated `#cardNumber`, `#cardCvv`, and `#shippingAddress` in the DOM from RAM tokens.
+  - Scenario 2 (Authentication): Successfully populated `#loginEmail`, `#loginPassword`, and `#loginOtp` with zero cloud credential exposure.
+  - Scenario 5 (Developer Settings): Successfully populated `#apiKey`, `#jwtToken`, and `#serverIp` with developer credentials.
+  - Confirmed 100% `zeroCloudLeakageConfirmed: true` across all AI action runs.
