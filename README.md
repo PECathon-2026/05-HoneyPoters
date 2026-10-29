@@ -173,6 +173,9 @@ node tests/verify_phase3_secret_injector.mjs
 
 # Run Extension Popup Storage Persistence & Favicon verification test
 node tests/verify_popup_and_favicon.mjs
+
+# Run UI Refactor (Themes, Dedicated Routing & Mobile Responsiveness) test
+node tests/verify_ui_refactor.mjs
 ```
 
 ### 3. Start Vite Development Server

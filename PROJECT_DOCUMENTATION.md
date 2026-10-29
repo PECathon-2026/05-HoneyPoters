@@ -662,4 +662,9 @@ The complete Phase 1-4 double-verification loop ran cleanly:
   - Active broadcast propagation (`SHIELD_TOGGLED`) across background service worker, open tabs (`contentScript.js`), and React dashboard (`BroadcastChannel`).
   - Interceptors fail-open/bypass when shield is toggled OFF and clear in-page badges.
   - Crisp glassmorphic Shield SVG logo (`public/favicon.svg`), 512x512 app logo (`public/logo.png`), and extension icons (`extension/icons/icon16.png`, `icon48.png`, `icon128.png`) configured in `manifest.json` and `index.html`.
+- **UI Refactor, Themes & Dedicated Navigation**: Verified via `tests/verify_ui_refactor.mjs`:
+  - Theme Engine (`ThemeContext`) with dynamic switching between Deep Dark Mode (`#020617` / `#090d16`) and warm Beige-White Light Mode (`#fdfbf7` / `#f5f0eb`), Sun/Moon navbar toggle, and `localStorage` persistence.
+  - Dedicated Home Page (`HomePage.jsx`) with Value Proposition hero, live Master Shield toggle & KPI metrics bar, and 4 Primary Navigation Cards (`/analytics`, `/diff`, `/scenarios`, `/audit`).
+  - Dedicated page routing eliminating the crowded single-page layout.
+  - Mobile & multi-aspect ratio responsiveness from 320px mobile to 4K desktop with responsive Tailwind breakpoints (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`, `w-full overflow-x-auto` for tables and charts).
 - **Full Engine Test Suite**: `npm test` and all verification suites passed with 100% zero-leakage confirmation across all 5 evaluation scenarios, canary honeypot probes, and DOM secret injection tests.
