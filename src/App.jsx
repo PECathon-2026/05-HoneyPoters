@@ -1,6 +1,6 @@
 /**
  * PrivacyLens — Main Application Container
- * Integrated Shield Dashboard, Payload Diff Inspector, Visual Studio, Agentic Playground, and Analytics
+ * Integrated Shield Dashboard, Payload Diff Inspector, Visual Studio, Agentic Playground, Audit Forensics, and Analytics
  * Team 05-HoneyPoters — PECathon 2026 (PS-004)
  */
 
@@ -10,10 +10,11 @@ import PayloadDiffInspector from './components/PayloadDiffInspector';
 import PrivacyAnalytics from './components/PrivacyAnalytics';
 import VisualRedactionStudio from './components/VisualRedactionStudio';
 import AgenticPlayground from './components/AgenticPlayground';
+import AuditForensics from './components/AuditForensics';
 import { usePrivacyLensIPC } from './hooks/usePrivacyLensIPC';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'diff' | 'playground' | 'visual' | 'analytics' | 'shield'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'diff' | 'playground' | 'visual' | 'forensics' | 'analytics' | 'shield'
 
   const {
     shieldActive,
@@ -50,7 +51,7 @@ export function App() {
         </div>
 
         {/* Tab Controls */}
-        <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-xl p-1 text-xs">
+        <div className="flex flex-wrap items-center gap-1 bg-slate-900 border border-slate-800 rounded-xl p-1 text-xs">
           <button
             type="button"
             onClick={() => setActiveTab('overview')}
@@ -86,6 +87,15 @@ export function App() {
             }`}
           >
             Payload Diff
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('forensics')}
+            className={`px-3 py-1 rounded-lg font-medium transition ${
+              activeTab === 'forensics' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Audit Forensics
           </button>
           <button
             type="button"
@@ -137,6 +147,14 @@ export function App() {
             latestIntercept={latestIntercept}
             events={events}
             securityMode={securityMode}
+          />
+        )}
+
+        {(activeTab === 'overview' || activeTab === 'forensics') && (
+          <AuditForensics
+            events={events}
+            onClearEvents={clearEvents}
+            stats={stats}
           />
         )}
 

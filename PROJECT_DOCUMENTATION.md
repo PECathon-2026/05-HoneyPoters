@@ -439,3 +439,36 @@ The automated double-verification test suite (`tests/verify_phase3_part2.mjs`) v
   - Real-time field badge detection confirmed for passwords and Aadhaar values.
 
 ---
+
+### [Phase 3 - Part 3]: Forensic Audit Trail & Compliance Exporter (`src/components/AuditForensics.jsx`)
+
+#### 1. What is it? (Kya Hai)
+`AuditForensics.jsx` is PrivacyLens's tamper-evident forensic audit ledger and regulatory compliance reporting module. It maintains a searchable, filterable in-memory transaction log of every intercepted request, fail-closed block, and clean dispatch. It includes an interactive deep-dive inspection drawer and 1-click exporters producing standard CSV spreadsheets and JSON compliance reports structured for India's Digital Personal Data Protection (DPDP) Act 2023 and EU GDPR Article 30 records of processing activities.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Legal & Regulatory Accountability**: The DPDP Act 2023 mandates that data fiduciaries maintain rigorous logs proving personal data was not leaked to third-party sub-processors or foreign cloud models. The audit ledger provides timestamped, immutable proof of client-side suppression.
+- **Zero Raw Secret Persistence in RAM**: Standard logging systems frequently introduce secondary security vulnerabilities by persisting unmasked passwords and credit card numbers in logs. PrivacyLens enforces a strict zero-leak audit policy: only masked placeholders (`XXXX-XXXX-0124`, `AB*****4F`) and redacted semantic tokens are recorded.
+- **Auditor & Jury Usability**: Compliance officers and evaluators can instantly filter records by status (`ALL`, `SANITIZED`, `BLOCKED`, `CLEAN`), search by transaction ID or URL, and export audit trails with 1 click.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Searchable & Filterable Table**:
+   - Offers real-time substring search across Transaction ID, prompt content, target URL, and status.
+   - Status filters toggle instantly between Sanitized dispatches, Hard Aborts, and Clean requests.
+2. **One-Click Compliance Exporters**:
+   - **CSV Export (`handleExportCSV`)**: Generates tabular datasets with fields: `Timestamp`, `Transaction_ID`, `Target_URL`, `Status`, `Threat_Count`, `Latency_ms`, and `Sanitized_Safe`.
+   - **JSON Export (`handleExportJSON`)**: Generates structured reports containing metadata headers (`compliance_standard: 'India DPDP Act 2023 & EU GDPR Article 30'`), total counts, and full transaction records.
+3. **Transaction Deep-Dive Modal**:
+   - Clicking any audit row opens a focused inspection modal displaying full transaction metadata, pre-flight checks, processing latency, and tamper-proof verification seal.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_phase3_part3.mjs`) verified:
+- **Structural Integrity**: Validated component exports, CSV/JSON exporters, and seamless integration in `App.jsx`.
+- **Pass 1 - Ledger Filtering & Zero Raw Secret Persistence**:
+  - Filter by status (`BLOCKED`, `SANITIZED`) confirmed.
+  - Substring search confirmed.
+  - Verified that audit records retain zero raw Aadhaar or PAN values in memory.
+- **Pass 2 - Compliance Export Data Formatting**:
+  - Validated DPDP Act 2023 / GDPR Article 30 JSON report structure.
+  - Validated CSV spreadsheet formatting and header alignment.
+
+---
