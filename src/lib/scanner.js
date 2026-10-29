@@ -87,6 +87,10 @@ export const PII_TYPES = {
   PHONE_NUMBER: 'PHONE_NUMBER',
   EMAIL: 'EMAIL',
   PASSWORD: 'PASSWORD',
+  OTP: 'OTP',
+  IP_ADDRESS: 'IP_ADDRESS',
+  SHIPPING_ADDRESS: 'SHIPPING_ADDRESS',
+  PRIVATE_CHAT_LOG: 'PRIVATE_CHAT_LOG',
   API_KEY: 'API_KEY',
   JWT_TOKEN: 'JWT_TOKEN',
   PASSPORT: 'PASSPORT',
@@ -111,7 +115,7 @@ export const PII_RULES = [
     severity: SEVERITY.CRITICAL,
     replacementToken: '[REDACTED: API_KEY]',
     // Matches Google/Gemini keys (AIza...), OpenAI keys (sk-...), AWS keys (AKIA...), GitHub tokens
-    pattern: /\b(?:AIza[0-9A-Za-z\-_]{35}|sk-[a-zA-Z0-9]{20,}|AKIA[0-9A-Z]{16}|(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{36,})\b/g,
+    pattern: /\b(?:AIza[0-9A-Za-z\-_]{35}|sk-(?:proj-)?[a-zA-Z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{36,})\b/g,
     validate: (match) => !match.startsWith('[REDACTED:')
   },
   {
@@ -121,6 +125,20 @@ export const PII_RULES = [
     replacementToken: '[REDACTED: AUTH_TOKEN]',
     pattern: /\beyJ[a-zA-Z0-9_-]{10,}\.eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\b/g,
     validate: (match) => !match.startsWith('[REDACTED:')
+  },
+  {
+    type: PII_TYPES.OTP,
+    label: '6-Digit One-Time Password (OTP)',
+    severity: SEVERITY.CRITICAL,
+    replacementToken: '[REDACTED: OTP]',
+    // Matches 6-digit OTPs in SMS / auth contexts e.g. OTP: 749201, verification code 492018
+    pattern: /(?:(?:^|[^\w])(?:otp|one[- ]time[- ](?:code|password)|verification[- ]code|2fa[- ]code|security[- ]code)\s*[:=]?\s*["']?(\d{6})["']?|\b(?:your\s+(?:otp|verification\s+code)\s+is\s+)(\d{6})\b)/gi,
+    captureGroupIndex: 1,
+    validate: (match) => {
+      if (!match) return false;
+      const clean = match.replace(/\D/g, '');
+      return clean.length === 6 && !match.startsWith('[REDACTED:');
+    }
   },
   {
     type: PII_TYPES.CARD_NUMBER,
@@ -150,12 +168,44 @@ export const PII_RULES = [
     severity: SEVERITY.CRITICAL,
     replacementToken: '[REDACTED: PASSCODE]',
     // Supports quoted or unquoted password/pin/otp patterns
-    pattern: /(?:password|passwd|pwd|passcode|secret|pin|otp)\s*[:=]\s*(?:["']([^"']+)["']|([^\s"'`]+))/gi,
+    pattern: /(?:password|passwd|pwd|passcode|secret|pin)\s*[:=]\s*(?:["']([^"']+)["']|([^\s"'`]+))/gi,
     captureGroupIndex: 1, // Will test group 1 or 2 in extraction
     validate: (match) => {
       if (!match) return false;
       const trimmed = match.trim();
       return !trimmed.startsWith('[REDACTED:');
+    }
+  },
+  {
+    type: PII_TYPES.IP_ADDRESS,
+    label: 'IP Address (IPv4/IPv6)',
+    severity: SEVERITY.HIGH,
+    replacementToken: '[REDACTED: IP_ADDRESS]',
+    // Matches IPv4 addresses (0.0.0.0 to 255.255.255.255) and standard IPv6 addresses
+    pattern: /\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\b|\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/g,
+    validate: (match) => {
+      if (!match || match.startsWith('[REDACTED:')) return false;
+      const parts = match.split('.');
+      if (parts.length === 4) {
+        return parts.every(p => {
+          const n = Number(p);
+          return !isNaN(n) && n >= 0 && n <= 255;
+        });
+      }
+      return match.includes(':');
+    }
+  },
+  {
+    type: PII_TYPES.SHIPPING_ADDRESS,
+    label: 'Shipping & Delivery Address',
+    severity: SEVERITY.HIGH,
+    replacementToken: '[REDACTED: SHIPPING_ADDRESS]',
+    // Matches labeled addresses or multi-part street/city/state/PIN addresses
+    pattern: /(?:(?:shipping|delivery|billing|home|office)?\s*address\s*[:=]\s*|\b(?:ship\s+to|deliver\s+to)\s*[:=]?\s*)([^\n\r,]+(?:,[^\n\r,]+){1,5}(?:[,\s]+\b\d{5,6}\b)?)|(?:\b(?:Flat|Apt|Apartment|Suite|Unit|House|Plot|H\.No\.?|#)\s*\d{1,5}[A-Za-z]?[\s,]+(?:[A-Za-z0-9\s,.-]+)(?:Street|St\.?|Road|Rd\.?|Avenue|Ave\.?|Lane|Ln\.?|Drive|Dr\.?|Boulevard|Blvd\.?|Nagar|Colony|Sector|Phase|Floor|Marg|Cross)[\s,]+(?:[A-Za-z\s,.-]+)(?:[A-Za-z\s]+)?(?:\b\d{5,6}\b|\b[A-Z]{2}\s+\d{5}\b))/gi,
+    captureGroupIndex: 1,
+    validate: (match) => {
+      if (!match || match.startsWith('[REDACTED:')) return false;
+      return match.trim().length >= 10;
     }
   },
   {
@@ -183,16 +233,29 @@ export const PII_RULES = [
     validate: (match) => !match.startsWith('[REDACTED:')
   },
   {
+    type: PII_TYPES.PRIVATE_CHAT_LOG,
+    label: 'Private Chat Log / Confidential Inquiry',
+    severity: SEVERITY.HIGH,
+    replacementToken: '[REDACTED: PRIVATE_CHAT_LOG]',
+    // Matches private customer conversation inquiries or transcript lines
+    pattern: /(?:(?:\[?(?:Customer|User|Client|Patient|Caller)\]?\s*[:\-]\s*|\b(?:private\s+chat|customer\s+note|support\s+log|chat\s+transcript)\s*[:=]\s*)(["']?[^"'\n\r]+["']?))/gi,
+    captureGroupIndex: 1,
+    validate: (match) => {
+      if (!match || match.startsWith('[REDACTED:')) return false;
+      return match.trim().length >= 8;
+    }
+  },
+  {
     type: PII_TYPES.PHONE_NUMBER,
-    label: 'Indian Mobile / Phone Number',
+    label: 'Phone / Mobile Number',
     severity: SEVERITY.MEDIUM,
     replacementToken: '[REDACTED: PHONE_NUMBER]',
-    // Starts with +91, 91, 0, or direct 10-digit starting with 6-9
-    pattern: /(?:(?:\+91|91|0)[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b/g,
+    // Starts with +91, 91, 0, or direct 10-digit starting with 6-9, or US/Intl format (+1 (555) 234-5678)
+    pattern: /(?:(?:\+91|91|0)[\s-]?)?[6-9]\d{4}[\s-]?\d{5}\b|(?:\+?1[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b/g,
     validate: (match) => {
       if (match.startsWith('[REDACTED:')) return false;
       const clean = match.replace(/\D/g, '');
-      return clean.length === 10 || (clean.length === 12 && clean.startsWith('91'));
+      return clean.length === 10 || clean.length === 11 || (clean.length === 12 && clean.startsWith('91'));
     }
   },
   {
@@ -271,6 +334,26 @@ export function maskSensitiveValue(value, type) {
         return `+91 ${clean.slice(-10, -7)}****${clean.slice(-2)}`;
       }
       return '+91 **********';
+    }
+    case PII_TYPES.OTP: {
+      return `***${str.slice(-2)}`;
+    }
+    case PII_TYPES.IP_ADDRESS: {
+      const parts = str.split('.');
+      if (parts.length === 4) {
+        return `${parts[0]}.${parts[1]}.*.*`;
+      }
+      return `${str.slice(0, 4)}:****:****`;
+    }
+    case PII_TYPES.SHIPPING_ADDRESS: {
+      const parts = str.split(',');
+      if (parts.length >= 2) {
+        return `${parts[0].trim()}, ***, ${parts[parts.length - 1].trim()}`;
+      }
+      return `${str.slice(0, 10)}... [ADDRESS]`;
+    }
+    case PII_TYPES.PRIVATE_CHAT_LOG: {
+      return `[Private conversation: ${str.slice(0, 12)}... (${str.length} chars)]`;
     }
     default:
       if (str.length <= 4) return '****';
@@ -452,7 +535,8 @@ const SENSITIVE_ATTR_KEYWORDS = [
   'secret', 'token', 'auth', 'cvv', 'cvc',
   'pin', 'otp', 'aadhaar', 'aadhar', 'pan',
   'ssn', 'card', 'credit', 'debit', 'cc-number',
-  'private', 'apikey', 'api-key'
+  'private', 'apikey', 'api-key', 'address',
+  'shipping', 'ip-address', 'ipaddress'
 ];
 
 /**
@@ -524,6 +608,9 @@ export function scanDOM(rootNode) {
             if (keyword.includes('pan')) category = PII_TYPES.PAN;
             else if (keyword.includes('aadhaar') || keyword.includes('aadhar')) category = PII_TYPES.AADHAAR;
             else if (keyword.includes('card') || keyword.includes('cvv')) category = PII_TYPES.CARD_NUMBER;
+            else if (keyword.includes('address') || keyword.includes('shipping')) category = PII_TYPES.SHIPPING_ADDRESS;
+            else if (keyword.includes('otp')) category = PII_TYPES.OTP;
+            else if (keyword.includes('ip')) category = PII_TYPES.IP_ADDRESS;
             else category = PII_TYPES.PASSWORD;
             break;
           }

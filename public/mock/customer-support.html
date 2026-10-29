@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Customer Support Chat — PrivacyLens Scenario #3</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
+    .card { max-width: 520px; margin: 0 auto; background: #1e293b; border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    h2 { margin-top: 0; color: #10b981; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
+    .badge { font-size: 0.75rem; background: #059669; color: white; padding: 2px 8px; border-radius: 4px; font-weight: normal; }
+    .chat-box { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 1rem; min-height: 220px; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem; }
+    .msg { padding: 0.6rem 0.8rem; border-radius: 8px; max-width: 85%; }
+    .agent { background: #334155; align-self: flex-start; color: #e2e8f0; }
+    .customer { background: #065f46; border: 1px solid #10b981; align-self: flex-end; color: #ecfdf5; }
+    .input-row { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    input { flex: 1; background: #0f172a; border: 1px solid #475569; color: #f8fafc; padding: 0.6rem 0.8rem; border-radius: 6px; }
+    .btn { background: #10b981; color: #0f172a; border: none; padding: 0.6rem 1rem; font-weight: bold; border-radius: 6px; cursor: pointer; }
+    .security-note { font-size: 0.75rem; color: #64748b; margin-top: 1rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>
+      💬 Customer Support Helpdesk
+      <span class="badge">Scenario #3</span>
+    </h2>
+    <p style="font-size: 0.85rem; color: #94a3b8;">Simulates live support chat containing mobile contact numbers and confidential conversation disclosures.</p>
+
+    <div class="chat-box" id="chatThread">
+      <div class="msg agent">
+        <strong>Agent:</strong> Hello! Welcome to PECathon Support. Please verify your phone number and describe your issue.
+      </div>
+      <div class="msg customer">
+        <strong>Customer Contact Phone:</strong> +91 98765 43210
+      </div>
+      <div class="msg customer">
+        <strong>Customer Alternate Phone:</strong> +1 (555) 234-5678
+      </div>
+      <div class="msg customer">
+        <strong>Customer:</strong> I am inquiring regarding private dispute #99482 because I was billed twice during my hospitalization surgery.
+      </div>
+      <div class="msg agent">
+        <strong>Agent:</strong> Thank you, our billing team is reviewing your ticket now.
+      </div>
+    </div>
+
+    <form class="input-row" onsubmit="event.preventDefault();">
+      <input type="text" id="chatInput" placeholder="Type a message or provide phone number..." value="Customer: Alternate phone is +1 (555) 234-5678" />
+      <button type="submit" class="btn">Send</button>
+    </form>
+
+    <div class="security-note">
+      🛡️ PrivacyLens Protected: Filters sensitive health disputes and phone numbers before conversational AI transcripts export to cloud CRM.
+    </div>
+  </div>
+</body>
+</html>

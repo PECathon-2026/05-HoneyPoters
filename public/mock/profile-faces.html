@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Video & Profile Faces — PrivacyLens Scenario #4</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
+    .card { max-width: 540px; margin: 0 auto; background: #1e293b; border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; }
+    h2 { margin-top: 0; color: #f59e0b; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .badge { font-size: 0.75rem; background: #d97706; color: white; padding: 2px 8px; border-radius: 4px; font-weight: normal; }
+    .canvas-container { position: relative; width: 440px; height: 320px; margin: 1rem auto; background: #020617; border-radius: 8px; border: 2px dashed #f59e0b; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    canvas { display: block; }
+    .face-box { position: absolute; border: 2px solid #ef4444; background: rgba(239, 68, 68, 0.15); pointer-events: none; border-radius: 4px; }
+    .face-label { position: absolute; top: -18px; left: 0; background: #ef4444; color: white; font-size: 9px; font-family: monospace; padding: 1px 4px; border-radius: 2px; }
+    .btn-row { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; }
+    .btn { background: #f59e0b; color: #0f172a; border: none; padding: 0.6rem 1rem; font-weight: bold; border-radius: 6px; cursor: pointer; }
+    .btn-outline { background: transparent; border: 1px solid #f59e0b; color: #f59e0b; }
+    .security-note { font-size: 0.75rem; color: #64748b; margin-top: 1rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>
+      📹 Video Stream & Profile Avatar
+      <span class="badge">Scenario #4</span>
+    </h2>
+    <p style="font-size: 0.85rem; color: #94a3b8;">Simulates profile camera feed with coordinate bounding box blackout on human facial landmarks.</p>
+
+    <div class="canvas-container">
+      <canvas id="profileCanvas" width="440" height="320"></canvas>
+      <div class="face-box" style="left: 140px; top: 60px; width: 160px; height: 160px;">
+        <span class="face-label">DETECTED_FACE_01 [COORDS: 140,60,160,160]</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="btnApplyBlackout" onclick="applyBlackout()">Apply Solid #000000 Blackout</button>
+      <button class="btn btn-outline" onclick="resetCanvas()">Reset Original Face</button>
+    </div>
+
+    <div class="security-note">
+      🛡️ PrivacyLens Offscreen Canvas: Replaces detected facial bounding coordinates with solid non-invertible blackouts before sending multimodal screenshot to Gemini Vision.
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('profileCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resetCanvas() {
+      // Draw background
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw simulated human avatar
+      ctx.fillStyle = '#fde68a';
+      ctx.beginPath();
+      ctx.arc(220, 140, 60, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Eyes
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.arc(200, 130, 8, 0, Math.PI * 2);
+      ctx.arc(240, 130, 8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Smile
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(220, 150, 24, 0.2 * Math.PI, 0.8 * Math.PI);
+      ctx.stroke();
+
+      // Body / Shoulders
+      ctx.fillStyle = '#0284c7';
+      ctx.beginPath();
+      ctx.ellipse(220, 280, 100, 60, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function applyBlackout() {
+      // Solid non-invertible blackout
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(136, 56, 168, 168);
+
+      // Security seal
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(136, 56, 168, 168);
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 11px monospace';
+      ctx.fillText('[REDACTED: PROFILE_FACE]', 146, 145);
+    }
+
+    resetCanvas();
+  </script>
+</body>
+</html>

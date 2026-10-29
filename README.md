@@ -102,11 +102,11 @@
 | ↳ Part 2 | Glassmorphic React Dashboard UI (`ShieldDashboard.jsx`) | 🟢 **Verified & Pushed** | Tailwind CSS + Active Threat Ticker + Attack Tester |
 | ↳ Part 3 | Live Recharts Analytics (`PrivacyAnalytics.jsx`) | 🟢 **Verified & Pushed** | Time-Series Area + Category Bar + Health Gauge |
 | ↳ Part 4 | BroadcastChannel IPC & Diff Inspector (`PayloadDiffInspector.jsx`) | 🟢 **Verified & Pushed** | Side-by-side Payload Diff + Fail-Closed Alert |
-| **Phase 3** | **Multimodal Visual Redaction & Agentic Interceptor** | 🟡 In Progress | 2x Verification Loop |
-| ↳ Part 1 | Multimodal Visual Redaction Studio (`VisualRedactionStudio.jsx`) | 🟢 **Verified & Pushed** | Offscreen Canvas + Solid #000000 Blackouts |
-| ↳ Part 2 | Autonomous Agentic Form Playground (`AgenticPlayground.jsx`) | 🟢 **Verified & Pushed** | Interactive DOM Interceptor + Agent Simulation |
-| ↳ Part 3 | Forensic Audit Trail & Compliance Exporter (`AuditForensics.jsx`) | 🟢 **Verified & Pushed** | Tamper-Proof Audit + JSON/CSV Export |
-| ↳ Part 4 | Jury Showcase & Live Leak Benchmark (`JuryShowcase.jsx`) | ⚪ In Progress | Competitive Matrix + 1-Click Jury Demo |
+| **Phase 3** | **Evaluation Scenarios, Synthetic Benchmarks & Secret Injector** | 🟡 In Progress | 2x Verification Loop |
+| ↳ Part 1 | 5 Official PDF Evaluation Scenarios (`testScenarios.js` & `EvaluationScenarios.jsx`) | 🟢 **Verified & Pushed** | E-commerce + Auth + Support + Faces + Dev Settings (100% Pass) |
+| ↳ Part 2 | Automated Synthetic Canary Testing & Re-Sanitization (`geminiClient.js`) | ⚪ Next Up | Canary Honeypot Injections + Dynamic Threshold Tuning |
+| ↳ Part 3 | Local Secret Injection Helper & DOM Bridge (`secretInjector.js`) | ⚪ Scheduled | Semantic Token RAM Mapping + DOM Autofill |
+
 | **Phase 4** | **Jury Showcase, Live Benchmark & Presentation** | ⚪ Scheduled | Pitch Deck + Live Leak Benchmark |
 
 ---

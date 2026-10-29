@@ -11,6 +11,7 @@ import PrivacyAnalytics from './components/PrivacyAnalytics';
 import VisualRedactionStudio from './components/VisualRedactionStudio';
 import AgenticPlayground from './components/AgenticPlayground';
 import AuditForensics from './components/AuditForensics';
+import EvaluationScenarios from './components/EvaluationScenarios';
 import { usePrivacyLensIPC } from './hooks/usePrivacyLensIPC';
 
 export function App() {
@@ -60,6 +61,15 @@ export function App() {
             }`}
           >
             Full Overview
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('scenarios')}
+            className={`px-3 py-1 rounded-lg font-medium transition ${
+              activeTab === 'scenarios' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Evaluation Scenarios
           </button>
           <button
             type="button"
@@ -132,6 +142,10 @@ export function App() {
             onClearEvents={clearEvents}
             onResetStats={resetStats}
           />
+        )}
+
+        {(activeTab === 'overview' || activeTab === 'scenarios') && (
+          <EvaluationScenarios />
         )}
 
         {(activeTab === 'overview' || activeTab === 'playground') && (

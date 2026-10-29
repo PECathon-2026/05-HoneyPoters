@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Developer Settings — PrivacyLens Scenario #5</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
+    .card { max-width: 620px; margin: 0 auto; background: #1e293b; border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    h2 { margin-top: 0; color: #06b6d4; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
+    .badge { font-size: 0.75rem; background: #0891b2; color: white; padding: 2px 8px; border-radius: 4px; font-weight: normal; }
+    .field { margin-bottom: 1rem; }
+    label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.35rem; font-weight: 500; }
+    input, textarea { width: 100%; box-sizing: border-box; background: #0f172a; border: 1px solid #475569; color: #f8fafc; padding: 0.6rem 0.8rem; border-radius: 6px; font-family: monospace; font-size: 0.85rem; }
+    input:focus, textarea:focus { outline: none; border-color: #06b6d4; }
+    .btn { background: #06b6d4; color: #0f172a; border: none; padding: 0.75rem 1.25rem; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 1rem; }
+    .security-note { font-size: 0.75rem; color: #64748b; margin-top: 1rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>
+      ⚙️ Developer Cloud Settings & Keys
+      <span class="badge">Scenario #5</span>
+    </h2>
+    <p style="font-size: 0.85rem; color: #94a3b8;">Simulates developer production config containing Cloud API keys, JWT bearer tokens, and internal server IPs.</p>
+
+    <form id="devSettingsForm" onsubmit="event.preventDefault();">
+      <div class="field">
+        <label for="geminiKey">Google Gemini API Key</label>
+        <input type="text" id="geminiKey" name="gemini_key" value="AIzaSyD9876543210abcdefghijklmnop123456" />
+      </div>
+
+      <div class="field">
+        <label for="openaiKey">OpenAI API Key (Backup)</label>
+        <input type="text" id="openaiKey" name="openai_key" value="sk-proj-abc1234567890abcdef1234567890abcdef" />
+      </div>
+
+      <div class="field">
+        <label for="jwtBearer">JWT Master Auth Bearer Token</label>
+        <textarea id="jwtBearer" name="jwt_token" rows="2">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlByYW5hdiBQdXNoeWEiLCJpYXQiOjE1MTYyMzkwMjJ9.X8bVwA5E12F6gHjKlMnOpQrStUvWxYz0123456789ab</textarea>
+      </div>
+
+      <div class="field">
+        <label for="serverIp">Primary Production Server IPv4</label>
+        <input type="text" id="serverIp" name="server_ip" value="192.168.1.100" />
+      </div>
+
+      <div class="field">
+        <label for="gatewayIp">Public Edge Gateway IPv4</label>
+        <input type="text" id="gatewayIp" name="gateway_ip" value="203.0.113.195" />
+      </div>
+
+      <button type="submit" class="btn">Save & Synchronize Config</button>
+    </form>
+
+    <div class="security-note">
+      🛡️ PrivacyLens Protected: Zero API keys or internal network topology data leak to cloud LLMs or browser copilot logs.
+    </div>
+  </div>
+</body>
+</html>
