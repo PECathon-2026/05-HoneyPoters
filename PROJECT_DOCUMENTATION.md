@@ -167,3 +167,43 @@ The automated double-verification test suite (`tests/verify_part3.mjs`) verified
   - Dynamic rule injection passed: Custom rule `PROJECT_ZEUS_CODENAME` successfully registered, indexed in Orama, and intercepted on query.
 
 ---
+
+### [Phase 1 - Part 4]: Fail-Closed Safety Proxy (`src/lib/geminiClient.js`)
+
+#### 1. What is it? (Kya Hai)
+`geminiClient.js` is the central security orchestrator and outbound gateway of PrivacyLens. It exposes `sanitizeAndSendToGemini` (and alias `generateContentSafe`), which serves as a fail-closed client-side wrapper around the Google Gemini 1.5 Flash API (`generateContent`). It chains `scanner.js`, `ragScanner.js`, and `imageMasker.js` into an unbroken pre-flight sanitization pipeline, runs a strict residual leakage verification check, and executes a **Hard Network Abort** if any sensitive data cannot be definitively proven safe.
+
+#### 2. Why is it used? (Kyu Hai)
+- **The Fail-Closed Paradigm**: In computer security, systems are either "fail-open" (if an error or ambiguity occurs, traffic is allowed through) or "fail-closed" (if any security doubt exists, traffic is completely blocked). AI browser tools that fail open create severe catastrophic privacy breaches. PrivacyLens guarantees fail-closed execution: if tokenization, regex matching, or RAG fails, the request is terminated in memory and zero bytes are transmitted to Google's cloud servers.
+- **Multimodal Unification**: Real-world generative AI prompts often contain both text instructions and captured viewport screenshots. `geminiClient.js` unifies text sanitization with visual canvas blackouts in a single transaction before payload construction.
+- **Client-Side Tamper-Proof Telemetry**: Maintains a local audit trail (in client RAM and `localStorage`) tracking threat counts, model names, latency, and status (`BLOCKED`, `SANITIZED_AND_FORWARDED`, `CLEAN_DISPATCH`). Raw sensitive data is permanently omitted from audit logs to maintain zero local credential leakage.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Pre-Flight Pipeline Execution (`sanitizeAndSendToGemini`)**:
+   - **Step 1 (Deterministic PII)**: Executes `scanner.sanitizeText(prompt)` to strip credit cards, Aadhaar, PAN, passwords, and API keys.
+   - **Step 2 (Contextual PII)**: Ingests the output of Step 1 and passes it through `ragScanner.sanitizeContextualText()` to redact medical diagnoses, enterprise staging secrets, and financial balances.
+   - **Step 3 (Visual Masking)**: Inspects attached image objects. If bounding boxes are specified (via `scanDOM` or user selection), runs `imageMasker.maskImage()` offscreen to replace sensitive coordinates with solid `#000000` blackouts.
+2. **Fail-Closed Hard Network Abort Boundary**:
+   - **A. Strict Mode Policy (`FAIL_CLOSED_STRICT`)**: If any deterministic or contextual threat is found, instantly throws `PrivacyLensSecurityError`, logs an audit entry, and aborts before `fetch()`.
+   - **B. Critical Credential Check (`blockOnCritical`)**: If plaintext passwords or API keys are detected, blocks forwarding.
+   - **C. Residual Leak Verification**: Runs `scanner.scanText()` on the final sanitized payload. If residual PII is detected, triggers an immediate hard abort (`RESIDUAL_LEAK_FAIL_CLOSED`).
+3. **Cloud Dispatch (Google Gemini API)**:
+   - Packages safe text parts and sanitized base64 visual parts into standard Gemini `{ contents: [{ role: 'user', parts: [...] }] }` payload format.
+   - If an API key is absent (offline demo mode), generates an instant local simulated safe response for pitch presentation.
+   - If an API key is present, issues `fetch()` to `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`.
+4. **Event Bus Broadcasting**:
+   - Emits real-time events (`AUDIT_LOG_CREATED`) via `addSecurityEventListener()`, enabling UI components and dashboard toasts to react immediately without polling.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_part4.mjs`) verified:
+- Dual-layer sanitization pipeline passed: Complex multi-vector prompt containing both Aadhaar (`2345 6789 0124`) and medical diagnosis (*"clinical diagnosis confirms acute chronic kidney disease failure"*) was sanitized into:
+  `Patient KYC Aadhaar [REDACTED: AADHAAR]. [REDACTED: MEDICAL_RECORD]`
+  with zero raw numbers or disease names leaked.
+- Fail-Closed Hard Abort verified: Prompt with `password="superSecretPass123"` in `FAIL_CLOSED_STRICT` mode threw `PrivacyLensSecurityError` with code `PRIVACYLENS_FAIL_CLOSED_BLOCKED` and message `[PrivacyLens Gatekeeper] Request HARD-ABORTED`.
+- Clean dispatch verified: Clean query (*"Explain how distributed consensus works in Raft protocol"*) passed cleanly through with `CLEAN_DISPATCH` status.
+- Local audit telemetry verified:
+  - Recorded 3 requests, 1 blocked, 1 sanitized, 1 clean dispatch.
+  - Zero Leakage Rate calculated at **100%**.
+  - Real-time subscriber listener received all 3 dispatched security events.
+
+---
