@@ -94,8 +94,8 @@
 | :--- | :--- | :---: | :---: |
 | **Phase 1** | **Local Foundation & Core Engines** | 🟡 *In Progress* | Automated 2x Suite |
 | ↳ Part 1 | Local Regex & Algorithmic Scanner (`scanner.js`) | 🟢 **Verified & Pushed** | Verhoeff + Luhn + 8 PII Types Tested |
-| ↳ Part 2 | HTML5 Canvas Visual Redactor (`imageMasker.js`) | 🟡 *In Progress* | Offscreen Canvas + Blackouts Tested |
-| ↳ Part 3 | In-Browser Contextual RAG Engine (`ragScanner.js`) | ⚪ Queued | MiniLM + Orama In-Memory Vector Search |
+| ↳ Part 2 | HTML5 Canvas Visual Redactor (`imageMasker.js`) | 🟢 **Verified & Pushed** | Offscreen Canvas + Blackouts Tested |
+| ↳ Part 3 | In-Browser Contextual RAG Engine (`ragScanner.js`) | 🟡 *In Progress* | MiniLM + Orama In-Memory Vector Search |
 | ↳ Part 4 | Fail-Closed Safety Proxy (`geminiClient.js`) | ⚪ Queued | Residual Leak Hard-Abort + Gemini Dispatch |
 | **Phase 2** | **Agentic Workflow & Browser Interceptor** | ⚪ Scheduled | Extension / Proxy Hook |
 | **Phase 3** | **Interactive Security Dashboard & Real-Time Telemetry** | ⚪ Scheduled | React 19 + Tailwind v4 UI |
