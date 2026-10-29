@@ -15,7 +15,22 @@ class PrivacyLensContentScript {
     this.detectedElements = new Map();
     this.badgeElements = new Map();
     this.isListening = false;
+    this.shieldActive = true;
+    this.initStorage();
     this.initChannel();
+  }
+
+  initStorage() {
+    if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      chrome.storage.local.get(['shieldEnabled'], (res) => {
+        if (res && typeof res.shieldEnabled === 'boolean') {
+          this.shieldActive = res.shieldEnabled;
+          if (!this.shieldActive) {
+            this.clearAllBadges();
+          }
+        }
+      });
+    }
   }
 
   initChannel() {
@@ -62,6 +77,10 @@ class PrivacyLensContentScript {
    * @returns {{ hasSensitiveFields: boolean, sensitiveElements: Array, redactionBoxes: Array }}
    */
   scanPage(rootNode) {
+    if (!this.shieldActive) {
+      return { hasSensitiveFields: false, sensitiveElements: [], redactionBoxes: [], bypassed: true };
+    }
+
     const root = rootNode || (typeof document !== 'undefined' ? document : null);
     if (!root) {
       return { hasSensitiveFields: false, sensitiveElements: [], redactionBoxes: [] };
@@ -95,6 +114,7 @@ class PrivacyLensContentScript {
     this.isListening = true;
 
     const handleInput = (event) => {
+      if (!this.shieldActive) return;
       const target = event.target;
       if (!target || !['INPUT', 'TEXTAREA'].includes(target.tagName)) return;
 
@@ -134,6 +154,7 @@ class PrivacyLensContentScript {
 
     // Intercept form submissions
     doc.addEventListener('submit', (event) => {
+      if (!this.shieldActive) return;
       const form = event.target;
       if (!form) return;
 
@@ -187,10 +208,28 @@ class PrivacyLensContentScript {
     }
   }
 
+  clearAllBadges() {
+    this.badgeElements.forEach((badge, element) => {
+      element.classList?.remove('privacylens-protected-input', 'privacylens-critical-input');
+      if (badge && badge.parentNode) {
+        badge.parentNode.removeChild(badge);
+      }
+    });
+    this.badgeElements.clear();
+  }
+
   handleChannelMessage(message) {
     if (!message || message.source === 'CONTENT_SCRIPT') return;
 
-    if (message.type === 'SCAN_PAGE_REQUEST') {
+    if (message.type === 'SHIELD_TOGGLED') {
+      const active = typeof message.payload?.active === 'boolean'
+        ? message.payload.active
+        : (message.payload?.shieldActive !== false);
+      this.shieldActive = active;
+      if (!this.shieldActive) {
+        this.clearAllBadges();
+      }
+    } else if (message.type === 'SCAN_PAGE_REQUEST') {
       const result = this.scanPage();
       this.broadcast('DOM_SCAN_RESPONSE', result);
     } else if (message.type === 'EXECUTE_AI_ACTION') {
@@ -206,10 +245,7 @@ class PrivacyLensContentScript {
       } catch (e) {}
       this.channel = null;
     }
-    this.badgeElements.forEach((badge) => {
-      if (badge && badge.parentNode) badge.parentNode.removeChild(badge);
-    });
-    this.badgeElements.clear();
+    this.clearAllBadges();
     this.isListening = false;
   }
 }
@@ -232,9 +268,18 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   // Handle Chrome runtime messages
   if (typeof chrome !== 'undefined' && chrome.runtime?.onMessage) {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      if (request.action === 'SCAN_PAGE') {
+      if (request.action === 'SHIELD_TOGGLED') {
+        const active = typeof request.active === 'boolean' ? request.active : true;
+        contentScriptInstance.shieldActive = active;
+        if (!active) {
+          contentScriptInstance.clearAllBadges();
+        }
+        sendResponse({ success: true, shieldActive: active });
+        return true;
+      } else if (request.action === 'SCAN_PAGE') {
         const res = contentScriptInstance.scanPage();
         sendResponse(res);
+        return true;
       } else if (request.action === 'GET_THREATS') {
         sendResponse({
           count: contentScriptInstance.detectedElements.size,

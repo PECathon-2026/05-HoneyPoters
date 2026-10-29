@@ -34,6 +34,15 @@ const gatewayState = {
   auditLogs: []
 };
 
+// Sync shield state from chrome.storage.local on service worker startup
+if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+  chrome.storage.local.get(['shieldEnabled'], (res) => {
+    if (res && typeof res.shieldEnabled === 'boolean') {
+      gatewayState.shieldActive = res.shieldEnabled;
+    }
+  });
+}
+
 // Initialize BroadcastChannel
 let broadcastChannel = null;
 
@@ -268,6 +277,11 @@ function handleIncomingChannelMessage(message) {
 // Controller Methods
 export function toggleShield(forceActive) {
   gatewayState.shieldActive = typeof forceActive === 'boolean' ? forceActive : !gatewayState.shieldActive;
+  
+  if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+    chrome.storage.local.set({ shieldEnabled: gatewayState.shieldActive });
+  }
+
   broadcastEvent('SHIELD_TOGGLED', { shieldActive: gatewayState.shieldActive });
   return gatewayState.shieldActive;
 }
@@ -327,7 +341,7 @@ if (typeof chrome !== 'undefined' && chrome.runtime?.onMessage) {
     }
     if (request.action === 'TOGGLE_SHIELD') {
       const active = toggleShield(request.active);
-      sendResponse({ shieldActive: active });
+      sendResponse({ shieldActive: active, stats: gatewayState.stats });
       return false;
     }
     if (request.action === 'GET_STATE') {

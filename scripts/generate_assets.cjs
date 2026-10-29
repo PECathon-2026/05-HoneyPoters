@@ -1,0 +1,173 @@
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
+
+const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Radial Glow -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.4"/>
+      <stop offset="60%" stop-color="#0369a1" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Shield Border Gradient -->
+    <linearGradient id="shieldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+
+    <!-- Shield Glass Fill -->
+    <linearGradient id="shieldGlass" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" stop-opacity="0.95"/>
+      <stop offset="40%" stop-color="#082f49" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <!-- Glass Specular Highlight -->
+    <linearGradient id="specularHighlight" x1="0%" y1="0%" x2="70%" y2="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="40%" stop-color="#38bdf8" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Lens Core Radial -->
+    <radialGradient id="lensCore" cx="45%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#67e8f9"/>
+      <stop offset="35%" stop-color="#0284c7"/>
+      <stop offset="70%" stop-color="#0c4a6e"/>
+      <stop offset="100%" stop-color="#030712"/>
+    </radialGradient>
+
+    <!-- Soft Glow Filter -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow Behind Shield -->
+  <circle cx="256" cy="256" r="230" fill="url(#bgGlow)"/>
+
+  <!-- Outer Glassmorphic Shield Path -->
+  <path d="M 256 48
+           C 356 78, 444 98, 444 208
+           C 444 340, 350 424, 256 464
+           C 162 424, 68 340, 68 208
+           C 68 98, 156 78, 256 48 Z"
+        fill="url(#shieldGlass)"
+        stroke="url(#shieldBorder)"
+        stroke-width="14"
+        stroke-linejoin="round"
+        filter="url(#softGlow)"/>
+
+  <!-- Glass Specular Reflection (Top Left Wedge) -->
+  <path d="M 256 56
+           C 168 84, 80 104, 80 208
+           C 80 260, 98 310, 130 354
+           C 170 270, 214 170, 256 56 Z"
+        fill="url(#specularHighlight)"/>
+
+  <!-- High-Tech Privacy Lens Aperture / Ring -->
+  <g transform="translate(256, 250)">
+    <!-- Outer dashed tech ring -->
+    <circle cx="0" cy="0" r="102"
+            fill="none"
+            stroke="#0ea5e9"
+            stroke-width="4"
+            stroke-dasharray="14 8"
+            opacity="0.6"/>
+
+    <!-- Middle Glowing Ring -->
+    <circle cx="0" cy="0" r="86"
+            fill="none"
+            stroke="#38bdf8"
+            stroke-width="6"
+            opacity="0.9"/>
+
+    <!-- Lens Glass Core -->
+    <circle cx="0" cy="0" r="70"
+            fill="url(#lensCore)"
+            stroke="#7dd3fc"
+            stroke-width="4"/>
+
+    <!-- Privacy Iris / Lens Geometry (Stylized Eye / Shutter) -->
+    <path d="M -50 0 C -25 -32, 25 -32, 50 0 C 25 32, -25 32, -50 0 Z"
+          fill="none"
+          stroke="#e0f2fe"
+          stroke-width="6"
+          filter="url(#softGlow)"/>
+
+    <!-- Inner Core Pupil / Secure AI Diamond Node -->
+    <circle cx="0" cy="0" r="18" fill="#38bdf8"/>
+    <circle cx="0" cy="0" r="9" fill="#ffffff"/>
+
+    <!-- Horizontal & Vertical Grid Ticks -->
+    <line x1="-86" y1="0" x2="-72" y2="0" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+    <line x1="72" y1="0" x2="86" y2="0" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+    <line x1="0" y1="-86" x2="0" y2="-72" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+    <line x1="0" y1="72" x2="0" y2="86" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Top Corner Glint / Sparkle -->
+  <polygon points="370,110 376,126 392,132 376,138 370,154 364,138 348,132 364,126"
+           fill="#ffffff"
+           filter="url(#softGlow)"
+           opacity="0.9"/>
+  <circle cx="370" cy="132" r="3" fill="#38bdf8"/>
+</svg>`;
+
+async function main() {
+  const publicDir = path.resolve('public');
+  const extIconsDir = path.resolve('extension/icons');
+
+  if (!fs.existsSync(extIconsDir)) {
+    fs.mkdirSync(extIconsDir, { recursive: true });
+  }
+
+  // 1. Write public/favicon.svg
+  fs.writeFileSync(path.join(publicDir, 'favicon.svg'), svgContent, 'utf-8');
+  console.log('Saved public/favicon.svg');
+
+  // Also write to extension/favicon.svg
+  fs.writeFileSync(path.join('extension', 'favicon.svg'), svgContent, 'utf-8');
+
+  // 2. Render PNGs using sharp
+  const svgBuffer = Buffer.from(svgContent);
+
+  // public/logo.png (512x512)
+  await sharp(svgBuffer)
+    .resize(512, 512)
+    .png()
+    .toFile(path.join(publicDir, 'logo.png'));
+  console.log('Saved public/logo.png (512x512)');
+
+  // extension/icons/icon128.png (128x128)
+  await sharp(svgBuffer)
+    .resize(128, 128)
+    .png()
+    .toFile(path.join(extIconsDir, 'icon128.png'));
+  console.log('Saved extension/icons/icon128.png (128x128)');
+
+  // extension/icons/icon48.png (48x48)
+  await sharp(svgBuffer)
+    .resize(48, 48)
+    .png()
+    .toFile(path.join(extIconsDir, 'icon48.png'));
+  console.log('Saved extension/icons/icon48.png (48x48)');
+
+  // extension/icons/icon16.png (16x16)
+  await sharp(svgBuffer)
+    .resize(16, 16)
+    .png()
+    .toFile(path.join(extIconsDir, 'icon16.png'));
+  console.log('Saved extension/icons/icon16.png (16x16)');
+
+  console.log('All icons generated successfully!');
+}
+
+main().catch(err => {
+  console.error('Error generating assets:', err);
+  process.exit(1);
+});

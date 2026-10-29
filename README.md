@@ -170,6 +170,9 @@ node tests/verify_phase3_canary_leakage.mjs
 
 # Run Local Secret Injection & DOM Automation Bridge test
 node tests/verify_phase3_secret_injector.mjs
+
+# Run Extension Popup Storage Persistence & Favicon verification test
+node tests/verify_popup_and_favicon.mjs
 ```
 
 ### 3. Start Vite Development Server

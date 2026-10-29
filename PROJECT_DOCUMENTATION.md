@@ -656,4 +656,10 @@ The complete Phase 1-4 double-verification loop ran cleanly:
   - `dist/assets/vendor-react-*.js`: 221.06 kB
   - `dist/assets/vendor-recharts-*.js`: 372.69 kB
 - **Extension Manifest V3 Verification**: Validated `manifest.json`, ESM background service worker, and DOM content script integration via `tests/verify_phase2_part1.mjs`.
+- **Extension Popup State Persistence & Branding**: Verified via `tests/verify_popup_and_favicon.mjs`:
+  - `chrome.storage.local.get(['shieldEnabled'])` restoration on load (defaults to `true`).
+  - `chrome.storage.local.set({ shieldEnabled: false })` on toggle switch.
+  - Active broadcast propagation (`SHIELD_TOGGLED`) across background service worker, open tabs (`contentScript.js`), and React dashboard (`BroadcastChannel`).
+  - Interceptors fail-open/bypass when shield is toggled OFF and clear in-page badges.
+  - Crisp glassmorphic Shield SVG logo (`public/favicon.svg`), 512x512 app logo (`public/logo.png`), and extension icons (`extension/icons/icon16.png`, `icon48.png`, `icon128.png`) configured in `manifest.json` and `index.html`.
 - **Full Engine Test Suite**: `npm test` and all verification suites passed with 100% zero-leakage confirmation across all 5 evaluation scenarios, canary honeypot probes, and DOM secret injection tests.

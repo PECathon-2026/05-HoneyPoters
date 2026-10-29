@@ -88,6 +88,17 @@ export function usePrivacyLensIPC() {
     }
   }, []);
 
+  // Read initial shieldEnabled from chrome.storage.local if available
+  useEffect(() => {
+    if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      chrome.storage.local.get(['shieldEnabled'], (res) => {
+        if (res && typeof res.shieldEnabled === 'boolean') {
+          setShieldActive(res.shieldEnabled);
+        }
+      });
+    }
+  }, []);
+
   // Initialize BroadcastChannel
   useEffect(() => {
     if (typeof BroadcastChannel !== 'undefined') {
@@ -165,7 +176,10 @@ export function usePrivacyLensIPC() {
   const toggleShield = useCallback((targetState) => {
     const next = typeof targetState === 'boolean' ? targetState : !shieldActive;
     setShieldActive(next);
-    postToChannel('TOGGLE_SHIELD', { active: next });
+    if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      chrome.storage.local.set({ shieldEnabled: next });
+    }
+    postToChannel('TOGGLE_SHIELD', { active: next, shieldActive: next });
   }, [shieldActive, postToChannel]);
 
   // Set security mode
