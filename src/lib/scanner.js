@@ -115,7 +115,7 @@ export const PII_RULES = [
     severity: SEVERITY.CRITICAL,
     replacementToken: '[REDACTED: API_KEY]',
     // Matches Google/Gemini keys (AIza...), OpenAI keys (sk-...), AWS keys (AKIA...), GitHub tokens
-    pattern: /\b(?:AIza[0-9A-Za-z\-_]{35}|sk-(?:proj-)?[a-zA-Z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{36,})\b/g,
+    pattern: /\b(?:AIza[0-9A-Za-z\-_]{30,40}|sk-(?:proj-)?[a-zA-Z0-9_\-]{20,}|AKIA[0-9A-Z]{16}|(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{36,})\b/g,
     validate: (match) => !match.startsWith('[REDACTED:')
   },
   {

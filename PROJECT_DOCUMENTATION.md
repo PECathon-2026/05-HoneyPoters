@@ -543,3 +543,43 @@ The automated double-verification test suite (`tests/verify_phase3_evaluation_sc
   - Re-scanning all sanitized outputs with `scanText()` confirmed exactly 0 residual PII threats.
   - Bulk benchmark scorecard confirmed 5/5 scenarios passed (24 threats neutralized, < 1ms total latency, 100% zero-leakage rate).
   - Fail-Closed Gatekeeper confirmed hard network abort on raw scenario payloads in `FAIL_CLOSED_STRICT` mode.
+
+
+---
+
+### [Phase 3 - Part 2]: Automated Synthetic Canary Testing & Re-Sanitization (`src/lib/geminiClient.js`)
+
+#### 1. What is it? (Kya Hai)
+`runCanaryLeakageTest` is PrivacyLens's automated synthetic honeypot probe and self-healing privacy watchdog built into `src/lib/geminiClient.js`. It dynamically generates high-entropy synthetic canary secrets (`CANARY_HONEYPOT_TOKENS`) representing payment cards (Luhn-verified), Google Gemini API keys, passwords, 6-digit OTPs, and UIDAI Aadhaar numbers. It injects these canaries directly into outgoing test buffers to verify that client-side sanitization suppresses 100% of canary markers before network transmission.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Proactive Leak Detection (Tripwire Defense)**: Static regex filters and heuristic scanners can suffer from edge-case bypasses or regex compilation drift. Canary honeypots act as active tripwires: if an unredacted canary value is detected in the post-sanitization buffer, the system instantly catches the breach before cloud dispatch.
+- **Dynamic Threshold Tuning**: Rather than failing silently or using rigid static rules, detecting a canary leak triggers automatic threshold tightening (e.g., lowering RAG vector similarity threshold from `0.60` to `0.35` and upgrading the policy to `FAIL_CLOSED_STRICT`).
+- **Emergency Client-Side Hard Abort**: Guarantees that if a honeypot probe trips, an immediate hard network abort occurs and an urgent UI alert banner is broadcast over the `privacylens_channel` BroadcastChannel IPC to notify the user.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Canary Injection (`runCanaryLeakageTest`)**:
+   - Injects 5 synthetic canary honeypot tokens into an encapsulated header block (`[PRIVACYLENS_CANARY_BUFFER id="..."]`) preceding the outbound test payload.
+2. **First-Pass Sanitization & Post-Sanitization Inspection**:
+   - Executes primary `sanitizeText()` on the buffer.
+   - Inspects the output to assert whether any raw canary secret (`creditCard`, `apiKey`, `password`, `otp`, `aadhaar`) persists.
+3. **Dynamic Threshold Tuning & Re-Sanitization**:
+   - If a leak is caught:
+     - Automatically logs `CANARY_LEAK_PREVENTED`.
+     - Tunes vector similarity thresholds from `0.60` down to `0.35`.
+     - Enforces aggressive boundary checking and executes secondary re-sanitization to purge any residual leaks.
+4. **Client-Side Hard Abort Alert**:
+   - Broadcasts `CANARY_LEAK_HARD_ABORT` event via `BroadcastChannel` and the internal security event bus.
+   - Triggers a `CRITICAL` alert with tamper-proof transaction forensics.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_phase3_canary_leakage.mjs`) ran twice with zero errors:
+- **Pass 1 - Baseline Canary Neutralization**:
+  - Injected 5 synthetic canaries into outgoing test buffer.
+  - Confirmed that all 5 honeypots were neutralized on first pass (`canaryLeaked: false`, `isGuaranteedSafe: true`, `status: 'CANARY_VERIFIED_CLEAN'`).
+- **Pass 2 - Simulated Leak Trap & Emergency Response**:
+  - Injected simulated leak vector (`simulateLeak: true`).
+  - Caught canary leak (`canaryLeaked: true`, 1 active leak detected).
+  - Validated dynamic threshold tuning (`tunedSimilarityThreshold: 0.35`, `policyUpgradedTo: 'FAIL_CLOSED_STRICT'`).
+  - Verified re-sanitization purged the leak completely (`isGuaranteedSafe: true`).
+  - Verified Client-Side Hard Abort alert was created and broadcasted with audit record status `FAIL_CLOSED_BLOCKED`.
