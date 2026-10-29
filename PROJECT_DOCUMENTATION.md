@@ -662,6 +662,10 @@ The complete Phase 1-4 double-verification loop ran cleanly:
   - Active broadcast propagation (`SHIELD_TOGGLED`) across background service worker, open tabs (`contentScript.js`), and React dashboard (`BroadcastChannel`).
   - Interceptors fail-open/bypass when shield is toggled OFF and clear in-page badges.
   - Crisp glassmorphic Shield SVG logo (`public/favicon.svg`), 512x512 app logo (`public/logo.png`), and extension icons (`extension/icons/icon16.png`, `icon48.png`, `icon128.png`) configured in `manifest.json` and `index.html`.
+- **Extension Popup Theme Engine & Synchronization**: Verified via `tests/verify_popup_theme.mjs`:
+  - Full theme alignment in `extension/popup.html`: Pure Z-Black (`#000000` / `#0a0a0a` / `#262626`) dark mode and warm Beige-White (`#fdfbf7` / `#ffffff` / `#e2e8f0`) light mode.
+  - Interactive Sun/Moon theme toggle button in popup header with instant DOM class switching (`body.dark` / `body.light`).
+  - Persistent state synchronization across `chrome.storage.local.set({ theme })` and `BroadcastChannel('privacylens_channel')` connecting Extension Popup and React WebApp.
 - **UI Refactor, Themes & Dedicated Navigation**: Verified via `tests/verify_ui_refactor.mjs`:
   - Theme Engine (`ThemeContext`) with dynamic switching between Pure Z-Black OLED Dark Mode (`#000000` / `#0a0a0a` / `#111111` with neutral borders and zero bluish tint) and warm Beige-White Light Mode (`#fdfbf7` / `#f5f0eb`), Sun/Moon navbar toggle, and `localStorage` persistence.
   - Dedicated Home Page (`HomePage.jsx`) with Value Proposition hero, live Master Shield toggle & KPI metrics bar, and 4 Primary Navigation Cards (`/analytics`, `/diff`, `/scenarios`, `/audit`).

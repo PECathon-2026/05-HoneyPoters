@@ -53,7 +53,44 @@ export function ThemeProvider({ children }) {
     try {
       localStorage.setItem('privacylens_theme', theme);
     } catch (e) {}
+
+    // Sync to Chrome Extension Storage if available
+    try {
+      if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+        chrome.storage.local.set({ theme });
+      }
+    } catch (e) {}
+
+    // Broadcast theme to extension popup or peer tabs
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        const bc = new BroadcastChannel('privacylens_channel');
+        bc.postMessage({
+          source: 'PRIVACYLENS_WEBAPP',
+          type: 'THEME_CHANGED',
+          payload: { theme }
+        });
+        bc.close();
+      }
+    } catch (e) {}
   }, [theme]);
+
+  // Listen for theme changes broadcast by the extension popup
+  useEffect(() => {
+    if (typeof BroadcastChannel === 'undefined') return;
+    try {
+      const bc = new BroadcastChannel('privacylens_channel');
+      bc.onmessage = (event) => {
+        const data = event.data;
+        if (data && data.type === 'THEME_CHANGED' && (data.payload?.theme === 'dark' || data.payload?.theme === 'light')) {
+          setThemeState(data.payload.theme);
+        }
+      };
+      return () => {
+        bc.close();
+      };
+    } catch (e) {}
+  }, []);
 
   const toggleTheme = () => {
     setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark'));

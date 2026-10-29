@@ -1,6 +1,6 @@
 /**
  * PrivacyLens Extension Popup Script
- * Manages Master Shield Toggle, Chrome Storage Persistence, and Cross-Context IPC
+ * Manages Master Shield Toggle, Dynamic Dark/Light Theme Switching, Chrome Storage Persistence, and Cross-Context IPC
  * Team 05-HoneyPoters — PECathon 2026 (PS-004)
  */
 
@@ -9,6 +9,37 @@ const statusPill = document.getElementById('status-pill');
 const statIntercepted = document.getElementById('stat-intercepted');
 const statThreats = document.getElementById('stat-threats');
 const shieldModeDesc = document.getElementById('shield-mode-desc');
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const themeIcon = document.getElementById('theme-icon');
+const openWebappLink = document.getElementById('open-webapp-link');
+
+let currentTheme = 'dark';
+
+/**
+ * Applies the active theme ('dark' | 'light') to popup DOM.
+ * @param {string} theme - 'dark' (Pure Z-Black) or 'light' (Warm Beige)
+ */
+function applyTheme(theme) {
+  currentTheme = (theme === 'light') ? 'light' : 'dark';
+  
+  if (document.body) {
+    document.body.className = currentTheme;
+  }
+  
+  if (themeIcon) {
+    themeIcon.textContent = (currentTheme === 'dark') ? '☀️' : '🌙';
+  }
+  
+  if (themeToggleBtn) {
+    themeToggleBtn.title = (currentTheme === 'dark') 
+      ? 'Switch to Beige Light Mode' 
+      : 'Switch to Pure Z-Black Dark Mode';
+  }
+
+  try {
+    localStorage.setItem('privacylens_theme', currentTheme);
+  } catch (e) {}
+}
 
 /**
  * Updates Popup UI elements according to the active shield state and gateway stats.
@@ -28,14 +59,10 @@ function updateUI(state) {
   if (statusPill) {
     if (isActive) {
       statusPill.textContent = '🟢 Shield Active: Zero Cloud Leakage';
-      statusPill.style.color = '#38bdf8';
-      statusPill.style.borderColor = 'rgba(14, 165, 233, 0.3)';
-      statusPill.style.background = 'rgba(14, 165, 233, 0.15)';
+      statusPill.className = 'status-pill active';
     } else {
       statusPill.textContent = '⚠️ Shield Inactive: Direct Cloud Bypass';
-      statusPill.style.color = '#f87171';
-      statusPill.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-      statusPill.style.background = 'rgba(239, 68, 68, 0.15)';
+      statusPill.className = 'status-pill inactive';
     }
   }
 
@@ -50,15 +77,24 @@ function updateUI(state) {
 }
 
 /**
- * 1. Initial State Restoration:
- * Read 'shieldEnabled' from chrome.storage.local immediately on popup load.
- * Default to true only if undefined.
+ * 1. Initial State & Theme Restoration:
+ * Read 'shieldEnabled' and 'theme' from chrome.storage.local immediately on popup load.
+ * Default shieldEnabled to true only if undefined. Default theme to 'dark'.
  */
 if (typeof chrome !== 'undefined' && chrome.storage?.local) {
   chrome.storage.local.get(['shieldEnabled'], (result) => {
     const isEnabled = (result && result.shieldEnabled !== undefined) ? result.shieldEnabled : true;
     updateUI({ shieldActive: isEnabled });
   });
+
+  chrome.storage.local.get(['theme'], (result) => {
+    const savedTheme = result?.theme || (function() {
+      try { return localStorage.getItem('privacylens_theme'); } catch(e) { return null; }
+    })() || 'dark';
+    applyTheme(savedTheme);
+  });
+} else {
+  applyTheme('dark');
 }
 
 /**
@@ -74,7 +110,7 @@ if (typeof chrome !== 'undefined' && chrome.runtime?.sendMessage) {
 }
 
 /**
- * 3. User Toggle Event Handler:
+ * 3. User Master Shield Toggle Event Handler:
  * Persists state to chrome.storage.local, notifies background worker,
  * broadcasts to all active tab content scripts, and informs BroadcastChannel listeners.
  */
@@ -82,7 +118,7 @@ if (shieldToggle) {
   shieldToggle.addEventListener('change', () => {
     const active = shieldToggle.checked;
 
-    // A. Save state to Chrome Storage (Requirement 1: chrome.storage.local.set)
+    // A. Save state to Chrome Storage (Requirement: chrome.storage.local.set)
     if (typeof chrome !== 'undefined' && chrome.storage?.local) {
       chrome.storage.local.set({ shieldEnabled: active }, () => {
         if (chrome.runtime?.lastError) {
@@ -130,5 +166,80 @@ if (shieldToggle) {
 
     // E. Immediate UI Update
     updateUI({ shieldActive: active });
+  });
+}
+
+/**
+ * 4. Theme Toggle Button Event Handler:
+ * Switches between Pure Z-Black Dark Mode (#000000) and Warm Beige Light Mode (#fdfbf7).
+ * Persists to chrome.storage.local and broadcasts to WebApp.
+ */
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener('click', () => {
+    const nextTheme = (currentTheme === 'dark') ? 'light' : 'dark';
+    applyTheme(nextTheme);
+
+    // Save to chrome.storage.local
+    if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      chrome.storage.local.set({ theme: nextTheme });
+    }
+
+    // Broadcast theme change via BroadcastChannel
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        const channel = new BroadcastChannel('privacylens_channel');
+        channel.postMessage({
+          source: 'PRIVACYLENS_POPUP',
+          type: 'THEME_CHANGED',
+          payload: { theme: nextTheme }
+        });
+        channel.close();
+      }
+    } catch (err) {}
+  });
+}
+
+/**
+ * 5. Cross-Context Listener (Sync theme & shield when updated outside popup)
+ */
+if (typeof chrome !== 'undefined' && chrome.storage?.onChanged) {
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'local') {
+      if (changes.shieldEnabled) {
+        updateUI({ shieldActive: changes.shieldEnabled.newValue });
+      }
+      if (changes.theme) {
+        applyTheme(changes.theme.newValue);
+      }
+    }
+  });
+}
+
+try {
+  if (typeof BroadcastChannel !== 'undefined') {
+    const bc = new BroadcastChannel('privacylens_channel');
+    bc.onmessage = (event) => {
+      const data = event.data;
+      if (!data) return;
+      if (data.type === 'THEME_CHANGED' && data.payload?.theme) {
+        applyTheme(data.payload.theme);
+      } else if (data.type === 'TOGGLE_SHIELD' && typeof data.payload?.active === 'boolean') {
+        updateUI({ shieldActive: data.payload.active });
+      }
+    };
+  }
+} catch (e) {}
+
+/**
+ * 6. Open WebApp Cockpit Link
+ */
+if (openWebappLink) {
+  openWebappLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (typeof chrome !== 'undefined' && chrome.tabs?.create) {
+      chrome.tabs.create({ url: 'http://localhost:5173/' });
+    } else {
+      window.open('http://localhost:5173/', '_blank');
+    }
   });
 }
