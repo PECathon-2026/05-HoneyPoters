@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "PrivacyLens - Client-Side AI Privacy Shield",
+  "version": "2.0.0",
+  "description": "Client-side privacy-preserving AI browser agent shield & safety gateway. Zero cloud leakage.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "css": ["contentScript.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "PrivacyLens Shield"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "lib/*",
+        "contentScript.css"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

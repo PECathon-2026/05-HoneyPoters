@@ -38,7 +38,11 @@ PrivacyLens acts as a transparent, client-side safety shield placed immediately 
   - [Part 2: HTML5 Canvas Visual Masker (`imageMasker.js`)](#phase-1---part-2-html5-canvas-visual-masker-srclibimagemaskerjs)
   - [Part 3: In-Browser Contextual RAG Engine (`ragScanner.js`)](#phase-1---part-3-in-browser-contextual-rag-engine-srclibragscannerjs)
   - [Part 4: Fail-Closed Safety Proxy (`geminiClient.js`)](#phase-1---part-4-fail-closed-safety-proxy-srclibgeminiclientjs)
-- [Phase 2: Agentic Workflow & Browser Interceptor](#phase-2---agentic-workflow--browser-interceptor)
+- [Phase 2: Extension Gateway & Interactive React Dashboard](#phase-2---extension-gateway--interactive-react-dashboard)
+  - [Part 1: Chrome Extension Gateway & Service Worker (`extension/`)](#phase-2---part-1-chrome-extension-gateway--service-worker-extension)
+  - [Part 2: Glassmorphic React Dashboard UI Component (`ShieldDashboard.jsx`)](#phase-2---part-2-glassmorphic-react-dashboard-ui-component-srccomponentsshielddashboardjsx)
+  - [Part 3: Live Recharts Analytics & Privacy Health Index (`PrivacyAnalytics.jsx`)](#phase-2---part-3-live-recharts-analytics--privacy-health-index-srccomponentsprivacyanalyticsjsx)
+  - [Part 4: BroadcastChannel IPC & Payload Diff Inspector (`PayloadDiffInspector.jsx`)](#phase-2---part-4-broadcastchannel-ipc--payload-diff-inspector-srccomponentspayloaddiffinspectorjsx)
 - [Phase 3: Interactive Security Dashboard & Real-Time Telemetry](#phase-3---interactive-security-dashboard--real-time-telemetry)
 - [Phase 4: Jury Showcase, Live Benchmark & Presentation](#phase-4---jury-showcase-live-benchmark--presentation)
 
@@ -205,5 +209,53 @@ The automated double-verification test suite (`tests/verify_part4.mjs`) verified
   - Recorded 3 requests, 1 blocked, 1 sanitized, 1 clean dispatch.
   - Zero Leakage Rate calculated at **100%**.
   - Real-time subscriber listener received all 3 dispatched security events.
+
+---
+
+## Phase 2 - Extension Gateway & Interactive React Dashboard
+
+### [Phase 2 - Part 1]: Chrome Extension Gateway & Service Worker (`extension/`)
+
+#### 1. What is it? (Kya Hai)
+Phase 2 Part 1 is PrivacyLens's browser edge runtime gateway packaged as a Manifest V3 Chrome Extension. It comprises:
+- `extension/manifest.json`: Manifest V3 specification with ESM Service Worker (`"type": "module"`), content script declarations, and storage/scripting permissions.
+- `extension/background.js`: Central Service Worker acting as an outbound request interception gateway, routing outbound LLM prompts and images through PrivacyLens's local sanitization pipeline and broadcasting events.
+- `extension/contentScript.js` & `extension/contentScript.css`: In-page inspector executing `scanDOM()` to detect sensitive password, credit card, Aadhaar, and PAN input fields, attaching real-time visual shield badges and intercepting form submissions.
+- `extension/popup.html` & `extension/popup.js`: Quick-control extension popup displaying the master Shield Active/Inactive toggle, real-time telemetry counters, and security status pills.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Active Browser Boundary Enforcement**: Core sanitization algorithms in Phase 1 operate in code; the Chrome Extension establishes the physical boundary between web pages, AI browser agents, and external cloud AI endpoints (e.g. Google Gemini, ChatGPT, Claude).
+- **Zero Cloud Leakage at Ingestion**: Rather than asking developers to manually sanitize inputs in their web applications, the extension automatically hooks into user forms, inputs, and agent outbound dispatches at the browser level before any HTTP request leaves the client device.
+- **Inter-Process Synchronization**: AI browser agents, web pages, extension popups, and the React Dashboard run in different browser contexts. Using native `BroadcastChannel` (`privacylens_channel`) alongside `chrome.runtime` messaging creates an instantaneous, decoupled security event bus.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Manifest V3 Architecture**:
+   - Background service worker runs modern ES Modules (`type: "module"`), importing deterministic scanner, RAG engine, and canvas masker directly without bundling overhead.
+   - Declares `web_accessible_resources` for modular access by content scripts.
+2. **In-Page DOM & Form Interception (`contentScript.js`)**:
+   - Scans DOM tree on page load using `scanDOM()` to identify `input[type="password"]`, `autocomplete="cc-number"`, and sensitive attribute keywords.
+   - Listens to live `input` and `focusin` events; when sensitive patterns are entered, dynamically applies `.privacylens-protected-input` and floating badges (`🛡️ [PrivacyLens: PASSWORD]`).
+   - Hooks into `submit` events across `<form>` elements to flag sensitive submissions before dispatch.
+3. **Outbound Request Interception Gateway (`background.js`)**:
+   - `interceptOutboundPayload({ prompt, image, targetUrl, options })`:
+     - Checks master shield state: if disabled, logs bypass and permits dispatch.
+     - Runs `sanitizeText()` locally to replace Aadhaar, PAN, Card, Passwords, Emails, and API keys with semantic tokens.
+     - If images are provided with coordinate boxes, invokes `maskImage()` for offscreen `#000000` blackout redaction.
+     - Enforces **Fail-Closed Gatekeeping**: if strict mode is active or residual PII is detected, issues a hard abort and records a `FAIL_CLOSED_BLOCKED` audit entry.
+4. **BroadcastChannel Event Bus (`privacylens_channel`)**:
+   - Broadcasts real-time events (`REQUEST_SANITIZED`, `FAIL_CLOSED_BLOCKED`, `SHIELD_TOGGLED`, `DOM_SCAN_COMPLETED`).
+   - Enables the upcoming React Dashboard (`ShieldDashboard.jsx`) to receive telemetry and state updates instantaneously without polling.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_phase2_part1.mjs`) verified:
+- **Manifest V3 Specification**: Validated `manifest_version: 3`, ESM Service Worker configuration, and permission manifest.
+- **Pass 1 - Functional Interception**:
+  - Outbound prompt containing Aadhaar (`2345 6789 0124`), PAN (`ABCDE1234F`), Visa (`4242 4242 4242 4242`), and Password was intercepted and sanitized into semantic tokens (`[REDACTED: AADHAAR]`, `[REDACTED: PAN]`, `[REDACTED: CARD_NUMBER]`, `[REDACTED: PASSCODE]`).
+  - Zero raw secrets traversed the interceptor.
+  - Broadcast event `REQUEST_SANITIZED` was received over `BroadcastChannel('privacylens_channel')`.
+- **Pass 2 - Fail-Closed & State Controls**:
+  - `FAIL_CLOSED_STRICT` mode hard-aborted sensitive requests with zero data transmission.
+  - Master Shield Toggle (`toggleShield(false)`) accurately activated bypass mode, then re-engaged zero-leakage protection on `toggleShield(true)`.
+  - DOM inspection identified password, credit card, and Aadhaar inputs with screen coordinate bounding boxes.
 
 ---

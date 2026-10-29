@@ -467,11 +467,10 @@ const SENSITIVE_ATTR_KEYWORDS = [
  * }}
  */
 export function scanDOM(rootNode) {
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
+  const root = rootNode || (typeof document !== 'undefined' ? document : null);
+  if (!root || typeof root.querySelectorAll !== 'function') {
     return { hasSensitiveFields: false, sensitiveElements: [], redactionBoxes: [] };
   }
-
-  const root = rootNode || document;
   const elements = root.querySelectorAll('input, textarea, select, [contenteditable="true"]');
   const sensitiveElements = [];
   const redactionBoxes = [];
@@ -539,7 +538,7 @@ export function scanDOM(rootNode) {
       if (rect.width > 0 && rect.height > 0) {
         const item = {
           elementId: el.id || `field_${index}`,
-          selector: el.id ? `#${el.id}` : `${el.tagName.toLowerCase()}[name="${el.name || ''}"]`,
+          selector: el.id ? `#${el.id}` : `${(el.tagName || 'input').toLowerCase()}[name="${el.name || ''}"]`,
           type: category,
           reason,
           boundingClientRect: {

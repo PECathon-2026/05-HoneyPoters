@@ -1,0 +1,51 @@
+/**
+ * PrivacyLens Content Script Visual Shield Styles
+ * Team 05-HoneyPoters — PECathon 2026 (PS-004)
+ */
+
+.privacylens-protected-input {
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.6) !important;
+  transition: box-shadow 0.25s ease-in-out !important;
+}
+
+.privacylens-critical-input {
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.7) !important;
+  transition: box-shadow 0.25s ease-in-out !important;
+}
+
+.privacylens-shield-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #38bdf8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  pointer-events: none;
+  z-index: 2147483647;
+  position: absolute;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: privacylens-fade-in 0.2s ease-out;
+}
+
+.privacylens-shield-badge.critical {
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(30, 10, 15, 0.95);
+}
+
+@keyframes privacylens-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
