@@ -44,8 +44,8 @@ const CATEGORY_COLORS = {
 const CustomChartTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/95 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-700/80 backdrop-blur-md p-3 rounded-xl shadow-2xl text-xs font-mono">
-        <p className="text-slate-600 dark:text-slate-400 font-bold mb-1.5">{label}</p>
+      <div className="bg-white/95 dark:bg-black/95 border border-slate-200 dark:border-neutral-800 backdrop-blur-md p-3 rounded-xl shadow-2xl text-xs font-mono">
+        <p className="text-slate-600 dark:text-neutral-400 font-bold mb-1.5">{label}</p>
         {payload.map((entry, index) => (
           <div key={`item-${index}`} className="flex items-center justify-between gap-4 py-0.5">
             <span style={{ color: entry.color }} className="font-semibold flex items-center gap-1.5">
@@ -137,20 +137,20 @@ export function PrivacyAnalytics({
   }, [shieldActive]);
 
   const scoreColor = privacyScore >= 90 ? '#10b981' : privacyScore >= 70 ? '#f59e0b' : '#ef4444';
-  const gridStroke = isDark ? '#1e293b' : '#e2e8f0';
-  const axisColor = isDark ? '#94a3b8' : '#64748b';
+  const gridStroke = isDark ? '#1f1f1f' : '#e2e8f0';
+  const axisColor = isDark ? '#a3a3a3' : '#64748b';
 
   return (
-    <div className="w-full space-y-6 text-slate-800 dark:text-slate-100 font-sans transition-colors">
+    <div className="w-full space-y-6 text-slate-800 dark:text-neutral-100 font-sans transition-colors">
       {/* SECTION TITLE */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-neutral-800 pb-3">
         <div className="flex items-center gap-2.5">
           <Activity className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
           <h2 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
             Live Telemetry & Privacy Health Index
           </h2>
         </div>
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400">
+        <div className="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-neutral-400">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
           Zero-Lag Telemetry Pipeline
         </div>
@@ -159,13 +159,13 @@ export function PrivacyAnalytics({
       {/* TOP ROW: DYNAMIC PRIVACY HEALTH INDEX GAUGE & COMPLIANCE BADGES */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* PRIVACY HEALTH INDEX GAUGE CARD (4 COLS) */}
-        <div className="lg:col-span-4 rounded-3xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 backdrop-blur-xl p-6 shadow-xl flex flex-col items-center justify-between text-center relative overflow-hidden transition-colors">
-          <div className="w-full flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 font-mono">
+        <div className="lg:col-span-4 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 backdrop-blur-xl p-6 shadow-xl flex flex-col items-center justify-between text-center relative overflow-hidden transition-colors">
+          <div className="w-full flex items-center justify-between text-xs text-slate-500 dark:text-neutral-400 font-mono">
             <span className="flex items-center gap-1.5 font-bold">
               <Award className="w-4 h-4 text-amber-500" />
               SAFETY INDEX
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+            <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-neutral-900 text-slate-700 dark:text-neutral-300 font-bold">
               {shieldActive ? 'GRADE A+' : 'COMPROMISED'}
             </span>
           </div>
@@ -180,7 +180,7 @@ export function PrivacyAnalytics({
                 r="70"
                 stroke="currentColor"
                 strokeWidth="12"
-                className="text-slate-200 dark:text-slate-800/70"
+                className="text-slate-200 dark:text-neutral-800"
                 fill="transparent"
               />
               {/* Animated Progress circle */}
@@ -203,30 +203,30 @@ export function PrivacyAnalytics({
               <span className="text-4xl font-black font-mono tracking-tight text-slate-900 dark:text-white">
                 {privacyScore}
               </span>
-              <span className="text-[10px] font-bold font-mono uppercase tracking-widest text-slate-500 dark:text-slate-400">
+              <span className="text-[10px] font-bold font-mono uppercase tracking-widest text-slate-500 dark:text-neutral-400">
                 Out of 100
               </span>
             </div>
           </div>
 
-          <div className="w-full bg-slate-50 dark:bg-slate-950/60 rounded-2xl p-3.5 border border-slate-200 dark:border-slate-800/60 text-left space-y-2 text-xs font-mono">
+          <div className="w-full bg-slate-50 dark:bg-black rounded-2xl p-3.5 border border-slate-200 dark:border-neutral-800 text-left space-y-2 text-xs font-mono">
             <div className="flex justify-between items-center">
-              <span className="text-slate-500 dark:text-slate-400">Zero Cloud Leakage:</span>
+              <span className="text-slate-500 dark:text-neutral-400">Zero Cloud Leakage:</span>
               <span className="font-bold text-emerald-600 dark:text-emerald-400">{shieldActive ? '100.0% Enforced' : '0.0% Bypassed'}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-500 dark:text-slate-400">DPDP Act 2023:</span>
+              <span className="text-slate-500 dark:text-neutral-400">DPDP Act 2023:</span>
               <span className="font-bold text-cyan-600 dark:text-cyan-400">{shieldActive ? 'Compliant' : 'Violation'}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-slate-500 dark:text-slate-400">Gatekeeper Latency:</span>
+              <span className="text-slate-500 dark:text-neutral-400">Gatekeeper Latency:</span>
               <span className="font-bold text-slate-900 dark:text-white">&lt;12ms</span>
             </div>
           </div>
         </div>
 
         {/* TIME SERIES AREA CHART: REQUESTS VS THREATS (8 COLS) */}
-        <div className="lg:col-span-8 rounded-3xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 backdrop-blur-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between transition-colors">
+        <div className="lg:col-span-8 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 backdrop-blur-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between transition-colors">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <div>
               <div className="flex items-center gap-2">
@@ -235,7 +235,7 @@ export function PrivacyAnalytics({
                   Real-Time Interception Trend (Requests vs Threats)
                 </h3>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-neutral-400 mt-0.5">
                 Outbound AI dispatches vs locally neutralized sensitive PII fragments over time
               </p>
             </div>
@@ -307,7 +307,7 @@ export function PrivacyAnalytics({
       </div>
 
       {/* BOTTOM ROW: CATEGORY BREAKDOWN BAR CHART */}
-      <div className="rounded-3xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 backdrop-blur-xl p-5 sm:p-6 shadow-xl transition-colors">
+      <div className="rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 backdrop-blur-xl p-5 sm:p-6 shadow-xl transition-colors">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2">
             <PieIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -315,7 +315,7 @@ export function PrivacyAnalytics({
               PII Threat Distribution by Classification Category
             </h3>
           </div>
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+          <span className="text-xs text-slate-500 dark:text-neutral-400 font-mono">
             Granular Breakdown Across Indian & Global Regulated Identifiers
           </span>
         </div>

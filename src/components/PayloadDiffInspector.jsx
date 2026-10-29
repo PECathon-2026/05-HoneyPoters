@@ -98,16 +98,16 @@ Please generate a welcome email for this user.`,
   };
 
   return (
-    <div className="w-full space-y-6 text-slate-800 dark:text-slate-100 font-sans transition-colors">
+    <div className="w-full space-y-6 text-slate-800 dark:text-neutral-100 font-sans transition-colors">
       {/* SECTION HEADER & SELECTOR */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800/80 pb-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-neutral-800 pb-3">
         <div className="flex items-center gap-2.5">
           <Terminal className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
           <div>
             <h2 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Payload Diff & Gatekeeper Inspector
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-neutral-400">
               Zero-leak verification: compare raw client input against safe payload dispatched to cloud AI
             </p>
           </div>
@@ -116,14 +116,14 @@ Please generate a welcome email for this user.`,
         {/* Transaction Selector Dropdown */}
         {events.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">Transaction:</span>
+            <span className="text-xs text-slate-500 dark:text-neutral-400 font-mono">Transaction:</span>
             <select
               value={activeEvent?.id || ''}
               onChange={(e) => {
                 setSelectedEventId(e.target.value);
                 setDismissBlockedAlert(false);
               }}
-              className="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1 text-xs font-mono text-slate-800 dark:text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="bg-slate-100 dark:bg-[#111111] border border-slate-300 dark:border-neutral-800 rounded-lg px-2.5 py-1 text-xs font-mono text-slate-800 dark:text-neutral-200 focus:outline-none focus:border-cyan-500"
             >
               {events.slice(0, 10).map((evt) => (
                 <option key={evt.id} value={evt.id}>
@@ -137,7 +137,7 @@ Please generate a welcome email for this user.`,
 
       {/* FAIL-CLOSED HARD ABORT VISUAL ALERT OVERLAY */}
       {showBlockedOverlay && (
-        <div className="relative overflow-hidden rounded-2xl bg-red-500/10 dark:bg-red-950/80 border-2 border-red-500/70 backdrop-blur-xl p-5 shadow-lg transition-colors">
+        <div className="relative overflow-hidden rounded-2xl bg-red-500/10 dark:bg-black/90 border-2 border-red-500/70 backdrop-blur-xl p-5 shadow-lg transition-colors">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-4">
               <div className="p-3 rounded-xl bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/40 animate-pulse">
@@ -158,7 +158,7 @@ Please generate a welcome email for this user.`,
                 <p className="text-xs text-red-700 dark:text-red-200/90 mt-1">
                   {activeEvent?.reason || 'Strict security policy hard-aborted request due to sensitive credential detection.'}
                 </p>
-                <div className="mt-3 flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono text-slate-600 dark:text-slate-300">
+                <div className="mt-3 flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono text-slate-600 dark:text-neutral-300">
                   <span>Target: <strong className="text-slate-900 dark:text-white">{activeEvent?.targetUrl || 'Google Gemini API'}</strong></span>
                   <span>Threats Blocked: <strong className="text-red-600 dark:text-red-400">{activeEvent?.threatCount || 1}</strong></span>
                   <span>Latency: <strong className="text-slate-900 dark:text-white">{activeEvent?.latencyMs || 2}ms</strong></span>
@@ -181,7 +181,7 @@ Please generate a welcome email for this user.`,
       {/* SIDE-BY-SIDE DIFF PANELS */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
         {/* LEFT COLUMN: RAW INTERCEPTED PAYLOAD (5 COLS) */}
-        <div className="lg:col-span-5 rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-red-500/30 backdrop-blur-xl p-5 shadow-xl flex flex-col justify-between transition-colors">
+        <div className="lg:col-span-5 rounded-2xl bg-white/80 dark:bg-[#0a0a0a] border border-red-500/30 backdrop-blur-xl p-5 shadow-xl flex flex-col justify-between transition-colors">
           <div>
             <div className="flex items-center justify-between mb-3 border-b border-red-500/20 pb-2.5">
               <div className="flex items-center gap-2">
@@ -195,16 +195,16 @@ Please generate a welcome email for this user.`,
               </span>
             </div>
 
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
+            <p className="text-[11px] text-slate-500 dark:text-neutral-400 mb-2">
               Captured from client DOM / AI prompt before leaving the browser:
             </p>
 
-            <div className="rounded-xl bg-slate-50 dark:bg-slate-950 p-4 border border-slate-200 dark:border-slate-800 font-mono text-xs text-red-700 dark:text-red-200/90 whitespace-pre-wrap break-words leading-relaxed min-h-[180px] max-h-[300px] overflow-y-auto overflow-x-auto">
+            <div className="rounded-xl bg-slate-50 dark:bg-black p-4 border border-slate-200 dark:border-neutral-800 font-mono text-xs text-red-700 dark:text-red-200/90 whitespace-pre-wrap break-words leading-relaxed min-h-[180px] max-h-[300px] overflow-y-auto overflow-x-auto">
               {activeEvent?.originalPrompt || 'No raw payload captured'}
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
+          <div className="mt-4 pt-3 border-t border-slate-200 dark:border-neutral-800 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-neutral-400">
             <span>Size: {activeEvent?.originalPrompt?.length || 0} chars</span>
             <span className="text-red-500 font-semibold">Intercepted at Edge</span>
           </div>
@@ -221,7 +221,7 @@ Please generate a welcome email for this user.`,
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 block">
                 Local Redaction
               </span>
-              <span className="text-[11px] font-mono text-slate-500 dark:text-slate-300 block">
+              <span className="text-[11px] font-mono text-slate-500 dark:text-neutral-300 block">
                 {activeEvent?.latencyMs ? `${activeEvent.latencyMs}ms` : '<10ms'}
               </span>
             </div>
@@ -229,11 +229,11 @@ Please generate a welcome email for this user.`,
         </div>
 
         {/* RIGHT COLUMN: SANITIZED CLOUD DISPATCH (5 COLS) */}
-        <div className={`lg:col-span-5 rounded-2xl bg-white/80 dark:bg-slate-900/60 border backdrop-blur-xl p-5 shadow-xl flex flex-col justify-between transition-colors ${
+        <div className={`lg:col-span-5 rounded-2xl bg-white/80 dark:bg-[#0a0a0a] border backdrop-blur-xl p-5 shadow-xl flex flex-col justify-between transition-colors ${
           isBlocked ? 'border-red-500/40' : 'border-emerald-500/30'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-slate-800 pb-2.5">
+            <div className="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-neutral-800 pb-2.5">
               <div className="flex items-center gap-2">
                 {isBlocked ? (
                   <ShieldAlert className="w-4 h-4 text-red-500" />
@@ -253,14 +253,14 @@ Please generate a welcome email for this user.`,
               </span>
             </div>
 
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
+            <p className="text-[11px] text-slate-500 dark:text-neutral-400 mb-2">
               {isBlocked 
                 ? 'Network transmission halted in RAM; zero data sent to external AI servers.' 
                 : 'All PII substituted with semantic tokens ready for Google Gemini API:'}
             </p>
 
-            <div className={`rounded-xl bg-slate-50 dark:bg-slate-950 p-4 border font-mono text-xs whitespace-pre-wrap break-words leading-relaxed min-h-[180px] max-h-[300px] overflow-y-auto overflow-x-auto ${
-              isBlocked ? 'border-red-500/30 text-red-700 dark:text-red-300/80 italic' : 'border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200'
+            <div className={`rounded-xl bg-slate-50 dark:bg-black p-4 border font-mono text-xs whitespace-pre-wrap break-words leading-relaxed min-h-[180px] max-h-[300px] overflow-y-auto overflow-x-auto ${
+              isBlocked ? 'border-red-500/30 text-red-700 dark:text-red-300/80 italic' : 'border-slate-200 dark:border-neutral-800 text-slate-800 dark:text-neutral-200'
             }`}>
               {isBlocked ? (
                 <div className="flex flex-col items-center justify-center h-full py-8 text-center space-y-2">
@@ -274,13 +274,13 @@ Please generate a welcome email for this user.`,
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
+          <div className="mt-4 pt-3 border-t border-slate-200 dark:border-neutral-800 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-neutral-400">
             <span>Size: {activeEvent?.sanitizedPrompt?.length || 0} chars</span>
             {!isBlocked && activeEvent?.sanitizedPrompt && (
               <button
                 type="button"
                 onClick={handleCopySanitized}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs transition"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-700 dark:text-neutral-200 text-xs transition"
               >
                 {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
                 {copied ? 'Copied!' : 'Copy Sanitized'}

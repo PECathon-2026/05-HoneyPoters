@@ -58,10 +58,10 @@ export default function EvaluationScenarios() {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto py-2 font-sans text-slate-800 dark:text-slate-100 transition-colors">
+    <div className="space-y-6 max-w-7xl mx-auto py-2 font-sans text-slate-800 dark:text-neutral-100 transition-colors">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-7 rounded-3xl bg-gradient-to-r from-slate-100 via-white to-cyan-50 dark:from-slate-900 dark:via-slate-900/90 dark:to-cyan-950/40 border border-slate-200 dark:border-slate-800 shadow-xl relative overflow-hidden transition-colors">
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-7 rounded-3xl bg-gradient-to-r from-slate-100 via-white to-cyan-50 dark:from-black dark:via-[#0a0a0a] dark:to-[#0a0a0a] border border-slate-200 dark:border-neutral-800 shadow-xl relative overflow-hidden transition-colors">
+        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none dark:hidden" />
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30">
@@ -74,7 +74,7 @@ export default function EvaluationScenarios() {
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Official Evaluation Scenarios Laboratory
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
             Live interactive benchmark verifying PrivacyLens against the 5 official hackathon evaluation criteria: financial checkout, multi-factor authentication, support transcripts, visual face coordinates, and developer secrets.
           </p>
         </div>
@@ -93,8 +93,8 @@ export default function EvaluationScenarios() {
 
       {/* Benchmark Summary Scorecard (When Run) */}
       {benchmarkScorecard && (
-        <div className="p-5 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-emerald-500/40 shadow-xl shadow-emerald-500/5 animate-in fade-in transition-colors">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 gap-3">
+        <div className="p-5 rounded-3xl bg-white/90 dark:bg-[#0a0a0a] border border-emerald-500/40 shadow-xl shadow-emerald-500/5 animate-in fade-in transition-colors">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 dark:border-neutral-800 gap-3">
             <div>
               <div className="text-xs font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-semibold">
                 ✓ Automated Test Suite Scorecard
@@ -103,7 +103,7 @@ export default function EvaluationScenarios() {
                 5 / 5 Scenarios Passed with 100% Zero Cloud Leakage
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-500 dark:text-slate-400">
+            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-500 dark:text-neutral-400">
               <span>Total Latency: <strong className="text-cyan-600 dark:text-cyan-400">{benchmarkScorecard.totalDurationMs} ms</strong></span>
               <span>Threats Neutralized: <strong className="text-emerald-600 dark:text-emerald-400">{benchmarkScorecard.totalThreatsNeutralized}</strong></span>
             </div>
@@ -117,7 +117,7 @@ export default function EvaluationScenarios() {
                 className={`p-3 rounded-2xl border cursor-pointer transition ${
                   selectedScenarioId === res.scenarioId
                     ? 'bg-cyan-500/10 border-cyan-500 shadow-sm'
-                    : 'bg-slate-50 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                    : 'bg-slate-50 dark:bg-black border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -125,7 +125,7 @@ export default function EvaluationScenarios() {
                   <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">100% Safe</span>
                 </div>
                 <div className="font-semibold text-xs text-slate-900 dark:text-white truncate mt-1">{res.title}</div>
-                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">{res.threatsNeutralized} neutralized</div>
+                <div className="text-[11px] text-slate-500 dark:text-neutral-400 font-mono mt-0.5">{res.threatsNeutralized} neutralized</div>
               </div>
             ))}
           </div>
@@ -133,7 +133,7 @@ export default function EvaluationScenarios() {
       )}
 
       {/* Scenario Navigation Tabs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 p-1.5 bg-slate-100/90 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl transition-colors">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 p-1.5 bg-slate-100/90 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 rounded-2xl transition-colors">
         {SCENARIO_LIST.map((sc) => {
           const isSelected = selectedScenarioId === sc.id;
           return (
@@ -144,10 +144,10 @@ export default function EvaluationScenarios() {
               className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
                 isSelected
                   ? 'bg-cyan-500 text-slate-950 shadow-sm font-bold'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/60'
+                  : 'text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-neutral-800/60'
               }`}
             >
-              <span className="w-4 h-4 rounded-full bg-slate-950/15 dark:bg-slate-950/40 flex items-center justify-center text-[10px] font-mono shrink-0">
+              <span className="w-4 h-4 rounded-full bg-slate-950/15 dark:bg-neutral-900 flex items-center justify-center text-[10px] font-mono shrink-0">
                 {sc.number}
               </span>
               <span className="truncate">{sc.title}</span>
@@ -160,7 +160,7 @@ export default function EvaluationScenarios() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Metadata & Target Schema (4 Cols) */}
         <div className="lg:col-span-4 space-y-4">
-          <div className="p-5 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-4 shadow-lg transition-colors">
+          <div className="p-5 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 space-y-4 shadow-lg transition-colors">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono text-cyan-600 dark:text-cyan-400 font-semibold uppercase tracking-wider">
                 Scenario #{selectedScenario.number} Overview
@@ -172,18 +172,18 @@ export default function EvaluationScenarios() {
 
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">{selectedScenario.title}</h2>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-neutral-400 mt-1 leading-relaxed">
                 {selectedScenario.description}
               </p>
             </div>
 
-            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
-              <div className="text-xs font-semibold text-slate-700 dark:text-slate-300">Target Redaction Tokens:</div>
+            <div className="pt-3 border-t border-slate-200 dark:border-neutral-800 space-y-2">
+              <div className="text-xs font-semibold text-slate-700 dark:text-neutral-300">Target Redaction Tokens:</div>
               <div className="flex flex-wrap gap-1.5">
                 {selectedScenario.expectedTokens.map((tok) => (
                   <span
                     key={tok}
-                    className="text-[11px] font-mono px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-950 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30"
+                    className="text-[11px] font-mono px-2 py-1 rounded-md bg-slate-100 dark:bg-black text-cyan-700 dark:text-cyan-300 border border-cyan-500/30"
                   >
                     {tok}
                   </span>
@@ -193,12 +193,12 @@ export default function EvaluationScenarios() {
 
             {/* Standalone HTML Mock Link */}
             {STANDALONE_PAGES[selectedScenario.id] && (
-              <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
+              <div className="pt-3 border-t border-slate-200 dark:border-neutral-800">
                 <a
                   href={STANDALONE_PAGES[selectedScenario.id]}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/40 text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 transition group"
+                  className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 hover:border-cyan-500/40 text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 transition group"
                 >
                   <span className="flex items-center gap-2">
                     <span>🌐</span>
@@ -212,8 +212,8 @@ export default function EvaluationScenarios() {
 
           {/* Sensitive Fields Target Checklist */}
           {selectedScenario.sensitiveFields && (
-            <div className="p-5 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-3 shadow-lg transition-colors">
-              <div className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+            <div className="p-5 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 space-y-3 shadow-lg transition-colors">
+              <div className="text-xs font-semibold text-slate-700 dark:text-neutral-300 flex items-center justify-between">
                 <span>Evaluated Sensitive Fields</span>
                 <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">✓ All Suppressed</span>
               </div>
@@ -221,10 +221,10 @@ export default function EvaluationScenarios() {
                 {selectedScenario.sensitiveFields.map((field) => (
                   <div
                     key={field.name}
-                    className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 flex flex-col gap-1 text-xs"
+                    className="p-2.5 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 flex flex-col gap-1 text-xs"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-800 dark:text-slate-200">{field.name}</span>
+                      <span className="font-semibold text-slate-800 dark:text-neutral-200">{field.name}</span>
                       <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">✓ Redacted</span>
                     </div>
                     <div className="text-[11px] font-mono text-red-500 truncate">
@@ -244,14 +244,14 @@ export default function EvaluationScenarios() {
         <div className="lg:col-span-8 space-y-4">
           {/* Visual Scenario #4: Canvas Face Blackout */}
           {selectedScenario.isVisual ? (
-            <div className="p-5 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-4 shadow-lg transition-colors">
+            <div className="p-5 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 space-y-4 shadow-lg transition-colors">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <span>📹</span>
                     <span>Offscreen Canvas Coordinate Blackout Inspector</span>
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-xs text-slate-500 dark:text-neutral-400 mt-0.5">
                     Permanent solid #000000 pixel blackout over facial landmarks. Non-invertible and mathematically verified.
                   </p>
                 </div>
@@ -262,23 +262,23 @@ export default function EvaluationScenarios() {
 
               {/* Mock Face SVG Rendering */}
               {activeScenarioResult && activeScenarioResult.maskedSvgDataUrl && (
-                <div className="flex flex-col md:flex-row gap-4 items-center justify-center p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div className="flex flex-col md:flex-row gap-4 items-center justify-center p-4 bg-slate-50 dark:bg-black rounded-2xl border border-slate-200 dark:border-neutral-800">
                   <div className="text-center space-y-2 w-full md:w-auto">
                     <div className="text-[11px] font-mono text-slate-500">Redacted Offscreen Canvas Output</div>
                     <img
                       src={activeScenarioResult.maskedSvgDataUrl}
                       alt="Redacted Face Canvas"
-                      className="max-w-[320px] w-full mx-auto rounded-xl border border-slate-300 dark:border-slate-700 shadow-md"
+                      className="max-w-[320px] w-full mx-auto rounded-xl border border-slate-300 dark:border-neutral-700 shadow-md"
                     />
                   </div>
 
                   <div className="space-y-3 flex-1 text-xs w-full">
-                    <div className="font-semibold text-slate-700 dark:text-slate-300">Face Coordinates Clamping Table:</div>
+                    <div className="font-semibold text-slate-700 dark:text-neutral-300">Face Coordinates Clamping Table:</div>
                     <div className="space-y-1.5 font-mono text-[11px]">
                       {activeScenarioResult.clampedBoxes.map((b, idx) => (
-                        <div key={idx} className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex justify-between">
+                        <div key={idx} className="p-2 rounded-xl bg-white dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 flex justify-between">
                           <span className="text-cyan-600 dark:text-cyan-400">{b.label}</span>
-                          <span className="text-slate-500 dark:text-slate-400">[{b.clampedX}, {b.clampedY}, {b.clampedW}×{b.clampedH}]</span>
+                          <span className="text-slate-500 dark:text-neutral-400">[{b.clampedX}, {b.clampedY}, {b.clampedW}×{b.clampedH}]</span>
                         </div>
                       ))}
                     </div>
@@ -287,7 +287,7 @@ export default function EvaluationScenarios() {
                       <button
                         type="button"
                         onClick={() => copyToClipboard(JSON.stringify(activeScenarioResult.multimodalPayload, null, 2), 'visionJson')}
-                        className="w-full py-2 px-3 rounded-xl text-xs font-mono font-semibold bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-cyan-500/30 text-cyan-600 dark:text-cyan-300 transition"
+                        className="w-full py-2 px-3 rounded-xl text-xs font-mono font-semibold bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-cyan-500/30 text-cyan-600 dark:text-cyan-300 transition"
                       >
                         {copiedToken === 'visionJson' ? '✓ Copied Gemini Vision JSON!' : 'Copy Gemini Vision Multimodal Payload'}
                       </button>
@@ -300,7 +300,7 @@ export default function EvaluationScenarios() {
             /* Text & DOM Scenarios (1, 2, 3, 5): Side-by-Side Payload Diff */
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Raw Input Box */}
-              <div className="p-4 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-2 flex flex-col shadow-lg transition-colors">
+              <div className="p-4 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 space-y-2 flex flex-col shadow-lg transition-colors">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono text-red-500 font-semibold flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -310,13 +310,13 @@ export default function EvaluationScenarios() {
                     {selectedScenario.rawInput?.length || 0} chars
                   </span>
                 </div>
-                <pre className="flex-1 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-red-500/20 text-slate-800 dark:text-slate-300 font-mono text-xs overflow-x-auto whitespace-pre-wrap break-words leading-relaxed select-all">
+                <pre className="flex-1 p-3.5 rounded-2xl bg-slate-50 dark:bg-black border border-red-500/20 text-slate-800 dark:text-neutral-300 font-mono text-xs overflow-x-auto whitespace-pre-wrap break-words leading-relaxed select-all">
                   {selectedScenario.rawInput}
                 </pre>
               </div>
 
               {/* Sanitized Output Box */}
-              <div className="p-4 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-2 flex flex-col shadow-lg transition-colors">
+              <div className="p-4 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 space-y-2 flex flex-col shadow-lg transition-colors">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
@@ -326,7 +326,7 @@ export default function EvaluationScenarios() {
                     {activeScenarioResult?.threatsNeutralized || 0} neutralized
                   </span>
                 </div>
-                <pre className="flex-1 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-mono text-xs overflow-x-auto whitespace-pre-wrap break-words leading-relaxed select-all">
+                <pre className="flex-1 p-3.5 rounded-2xl bg-slate-50 dark:bg-black border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-mono text-xs overflow-x-auto whitespace-pre-wrap break-words leading-relaxed select-all">
                   {activeScenarioResult?.sanitizedOutput || 'Running redaction...'}
                 </pre>
               </div>
@@ -335,14 +335,14 @@ export default function EvaluationScenarios() {
 
           {/* Underlying HTML DOM Markup Preview */}
           {selectedScenario.mockDOM && (
-            <div className="p-4 rounded-3xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-2 shadow-lg transition-colors">
+            <div className="p-4 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 space-y-2 shadow-lg transition-colors">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-semibold">
+                <span className="text-xs font-mono text-slate-500 dark:text-neutral-400 font-semibold">
                   Simulated Browser DOM Markup ({selectedScenario.id}.html)
                 </span>
                 <span className="text-[10px] font-mono text-slate-500">HTML5 DOM Snapshot</span>
               </div>
-              <pre className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 font-mono text-xs overflow-x-auto whitespace-pre-wrap break-words">
+              <pre className="p-3.5 rounded-2xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 text-slate-600 dark:text-neutral-400 font-mono text-xs overflow-x-auto whitespace-pre-wrap break-words">
                 {selectedScenario.mockDOM}
               </pre>
             </div>

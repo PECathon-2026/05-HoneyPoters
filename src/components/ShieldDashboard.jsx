@@ -78,15 +78,15 @@ export function ShieldDashboard({
   const threatCount = (type) => stats?.threatTypes?.[type] || 0;
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6 text-slate-800 dark:text-slate-100 font-sans transition-colors">
-      {/* Background Ambient Glow */}
-      <div className="relative">
+    <div className="w-full max-w-7xl mx-auto space-y-6 text-slate-800 dark:text-neutral-100 font-sans transition-colors">
+      {/* Background Ambient Glow (Light mode only - dark mode is pure pitch Z-black) */}
+      <div className="relative dark:hidden">
         <div className="absolute -top-16 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -top-16 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* TOP HEADER & MASTER SHIELD HERO CARD */}
-      <div className="relative overflow-hidden rounded-3xl bg-white/80 dark:bg-slate-900/70 border border-slate-200/90 dark:border-slate-800/80 backdrop-blur-xl p-5 sm:p-8 shadow-xl transition-colors">
+      <div className="relative overflow-hidden rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200/90 dark:border-neutral-800 backdrop-blur-xl p-5 sm:p-8 shadow-xl transition-colors">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="flex items-center gap-4 sm:gap-5">
             <div className={`p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 ${
@@ -101,11 +101,11 @@ export function ShieldDashboard({
                 <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                   PrivacyLens Shield Gateway
                 </h1>
-                <span className="px-2.5 py-0.5 text-xs font-mono font-bold tracking-wider rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-cyan-600 dark:text-cyan-400">
+                <span className="px-2.5 py-0.5 text-xs font-mono font-bold tracking-wider rounded-full bg-slate-100 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 text-cyan-600 dark:text-cyan-400">
                   PS-004 • EDGE GATEWAY
                 </span>
               </div>
-              <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-neutral-400">
                 {shieldActive 
                   ? '🟢 Master Shield Active: Zero Cloud Leakage enforced across outbound AI traffic.' 
                   : '🔴 Shield Inactive: Outbound AI payloads are currently bypassing client inspection.'}
@@ -115,14 +115,14 @@ export function ShieldDashboard({
 
           {/* MASTER TOGGLE & POLICY SWITCHER */}
           <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
-            <div className="flex items-center bg-slate-100 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl p-1 shadow-inner text-xs">
+            <div className="flex items-center bg-slate-100 dark:bg-black border border-slate-200 dark:border-neutral-800 rounded-xl p-1 shadow-inner text-xs">
               <button
                 type="button"
                 onClick={() => onSetSecurityMode && onSetSecurityMode('REDACT_AND_FORWARD')}
                 className={`px-3 py-1.5 font-medium rounded-lg transition-all ${
                   securityMode === 'REDACT_AND_FORWARD'
                     ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    : 'text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Redact & Forward
@@ -133,7 +133,7 @@ export function ShieldDashboard({
                 className={`px-3 py-1.5 font-medium rounded-lg transition-all ${
                   securityMode === 'FAIL_CLOSED_STRICT'
                     ? 'bg-red-500 text-white font-bold shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    : 'text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Fail-Closed Strict
@@ -156,20 +156,20 @@ export function ShieldDashboard({
         </div>
 
         {/* METRICS ROW */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-8 pt-6 border-t border-slate-200 dark:border-slate-800/80">
-          <div className="bg-slate-50 dark:bg-slate-950/50 rounded-xl p-3.5 sm:p-4 border border-slate-200 dark:border-slate-800/60">
-            <span className="text-[11px] sm:text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">Intercepted Requests</span>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-8 pt-6 border-t border-slate-200 dark:border-neutral-800">
+          <div className="bg-slate-50 dark:bg-black rounded-xl p-3.5 sm:p-4 border border-slate-200 dark:border-neutral-800">
+            <span className="text-[11px] sm:text-xs uppercase tracking-wider text-slate-500 dark:text-neutral-400 font-medium">Intercepted Requests</span>
             <div className="mt-1 text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono">{stats.totalIntercepted || 0}</div>
           </div>
-          <div className="bg-slate-50 dark:bg-slate-950/50 rounded-xl p-3.5 sm:p-4 border border-slate-200 dark:border-slate-800/60">
+          <div className="bg-slate-50 dark:bg-black rounded-xl p-3.5 sm:p-4 border border-slate-200 dark:border-neutral-800">
             <span className="text-[11px] sm:text-xs uppercase tracking-wider text-cyan-600 dark:text-cyan-400 font-medium">Sanitized & Safe</span>
             <div className="mt-1 text-xl sm:text-2xl font-black text-cyan-600 dark:text-cyan-400 font-mono">{stats.totalSanitized || 0}</div>
           </div>
-          <div className="bg-slate-50 dark:bg-slate-950/50 rounded-xl p-3.5 sm:p-4 border border-slate-200 dark:border-slate-800/60">
+          <div className="bg-slate-50 dark:bg-black rounded-xl p-3.5 sm:p-4 border border-slate-200 dark:border-neutral-800">
             <span className="text-[11px] sm:text-xs uppercase tracking-wider text-red-600 dark:text-red-400 font-medium">Hard Aborts (Blocked)</span>
             <div className="mt-1 text-xl sm:text-2xl font-black text-red-600 dark:text-red-400 font-mono">{stats.totalBlocked || 0}</div>
           </div>
-          <div className="bg-slate-50 dark:bg-slate-950/50 rounded-xl p-3.5 sm:p-4 border border-slate-200 dark:border-slate-800/60">
+          <div className="bg-slate-50 dark:bg-black rounded-xl p-3.5 sm:p-4 border border-slate-200 dark:border-neutral-800">
             <span className="text-[11px] sm:text-xs uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-medium">Zero-Leak Ratio</span>
             <div className="mt-1 text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">100.0%</div>
           </div>
@@ -177,7 +177,7 @@ export function ShieldDashboard({
       </div>
 
       {/* ACTIVE THREAT BADGES */}
-      <div className="rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 backdrop-blur-xl p-5 sm:p-6 shadow-xl transition-colors">
+      <div className="rounded-2xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 backdrop-blur-xl p-5 sm:p-6 shadow-xl transition-colors">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2">
             <Flame className="w-5 h-5 text-amber-500" />
@@ -185,15 +185,15 @@ export function ShieldDashboard({
               Active PII Threat Classifications
             </h2>
           </div>
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+          <span className="text-xs text-slate-500 dark:text-neutral-400 font-mono">
             Total Threats Suppressed: <strong className="text-cyan-600 dark:text-cyan-400 font-bold">{stats.threatsDetected || 0}</strong>
           </span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:border-cyan-500/40 transition">
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 flex flex-col justify-between hover:border-cyan-500/40 transition">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">UIDAI Aadhaar</span>
+              <span className="text-xs font-semibold text-slate-700 dark:text-neutral-300">UIDAI Aadhaar</span>
               <span className="text-xs">🇮🇳</span>
             </div>
             <div className="mt-2 flex items-baseline justify-between">
@@ -202,9 +202,9 @@ export function ShieldDashboard({
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:border-cyan-500/40 transition">
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 flex flex-col justify-between hover:border-cyan-500/40 transition">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Income Tax PAN</span>
+              <span className="text-xs font-semibold text-slate-700 dark:text-neutral-300">Income Tax PAN</span>
               <span className="text-xs">📑</span>
             </div>
             <div className="mt-2 flex items-baseline justify-between">
@@ -213,9 +213,9 @@ export function ShieldDashboard({
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:border-cyan-500/40 transition">
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 flex flex-col justify-between hover:border-cyan-500/40 transition">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Payment Cards</span>
+              <span className="text-xs font-semibold text-slate-700 dark:text-neutral-300">Payment Cards</span>
               <span className="text-xs">💳</span>
             </div>
             <div className="mt-2 flex items-baseline justify-between">
@@ -224,9 +224,9 @@ export function ShieldDashboard({
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:border-red-500/40 transition">
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 flex flex-col justify-between hover:border-red-500/40 transition">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Passwords / OTP</span>
+              <span className="text-xs font-semibold text-slate-700 dark:text-neutral-300">Passwords / OTP</span>
               <span className="text-xs">🔒</span>
             </div>
             <div className="mt-2 flex items-baseline justify-between">
@@ -235,22 +235,22 @@ export function ShieldDashboard({
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:border-cyan-500/40 transition">
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 flex flex-col justify-between hover:border-cyan-500/40 transition">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Email & Phone</span>
+              <span className="text-xs font-semibold text-slate-700 dark:text-neutral-300">Email & Phone</span>
               <span className="text-xs">📞</span>
             </div>
             <div className="mt-2 flex items-baseline justify-between">
-              <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-bold">Contact</span>
+              <span className="text-xs font-mono text-slate-500 dark:text-neutral-400 font-bold">Contact</span>
               <span className="text-lg font-mono font-black text-slate-900 dark:text-white">
                 {(threatCount('EMAIL') + threatCount('PHONE_NUMBER'))}
               </span>
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:border-purple-500/40 transition">
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 flex flex-col justify-between hover:border-purple-500/40 transition">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">Contextual / RAG</span>
+              <span className="text-xs font-semibold text-slate-700 dark:text-neutral-300">Contextual / RAG</span>
               <span className="text-xs">🧠</span>
             </div>
             <div className="mt-2 flex items-baseline justify-between">
@@ -264,13 +264,13 @@ export function ShieldDashboard({
       {/* TWO COLUMN GRID: SIMULATOR TESTBENCH + LIVE EVENT TICKER */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* INTERACTIVE ATTACK BENCHMARK TESTER (5 COLS) */}
-        <div className="lg:col-span-5 rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 backdrop-blur-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between transition-colors">
+        <div className="lg:col-span-5 rounded-2xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 backdrop-blur-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between transition-colors">
           <div>
             <div className="flex items-center gap-2 mb-3">
               <Zap className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
               <h3 className="text-base font-bold text-slate-900 dark:text-white">Payload Interception Simulator</h3>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mb-4">
+            <p className="text-xs text-slate-600 dark:text-neutral-400 mb-4">
               Inject synthetic attack vectors to test client-side sanitization, semantic tokenization, and fail-closed aborts.
             </p>
 
@@ -284,7 +284,7 @@ export function ShieldDashboard({
                     setSimulatorInput(vec.text);
                     handleSimulate(vec.text);
                   }}
-                  className="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60 transition"
+                  className="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-neutral-900 hover:bg-slate-200 dark:hover:bg-neutral-800 text-slate-700 dark:text-neutral-300 border border-slate-200 dark:border-neutral-800 transition"
                 >
                   {vec.label}
                 </button>
@@ -296,7 +296,7 @@ export function ShieldDashboard({
               onChange={(e) => setSimulatorInput(e.target.value)}
               placeholder="Paste raw prompt containing Aadhaar, PAN, Card, or Password to test local redaction..."
               rows={5}
-              className="w-full bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs font-mono text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:border-cyan-500/60 transition resize-none"
+              className="w-full bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 rounded-xl p-3 text-xs font-mono text-slate-800 dark:text-neutral-200 placeholder:text-slate-400 dark:placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/60 transition resize-none"
             />
           </div>
 
@@ -312,7 +312,7 @@ export function ShieldDashboard({
             <button
               type="button"
               onClick={() => setSimulatorInput('')}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-700 transition"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-700 dark:text-neutral-300 text-xs font-medium border border-slate-200 dark:border-neutral-800 transition"
             >
               Clear
             </button>
@@ -320,7 +320,7 @@ export function ShieldDashboard({
         </div>
 
         {/* REAL-TIME EVENT TICKER (7 COLS) */}
-        <div className="lg:col-span-7 rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 backdrop-blur-xl p-5 sm:p-6 shadow-xl flex flex-col transition-colors">
+        <div className="lg:col-span-7 rounded-2xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 backdrop-blur-xl p-5 sm:p-6 shadow-xl flex flex-col transition-colors">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-cyan-600 dark:text-cyan-400 animate-pulse" />
@@ -331,7 +331,7 @@ export function ShieldDashboard({
                 type="button"
                 onClick={onResetStats}
                 title="Reset Stats"
-                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition"
+                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-600 dark:text-neutral-400 transition"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
               </button>
@@ -339,7 +339,7 @@ export function ShieldDashboard({
                 type="button"
                 onClick={onClearEvents}
                 title="Clear Logs"
-                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition"
+                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-600 dark:text-neutral-400 transition"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
@@ -361,7 +361,7 @@ export function ShieldDashboard({
                   <div
                     key={evt.id || i}
                     onClick={() => setSelectedEvent(evt)}
-                    className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 hover:border-cyan-500/40 transition cursor-pointer"
+                    className="p-3 rounded-xl bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 hover:border-cyan-500/40 transition cursor-pointer"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-1">
                       <div className="flex items-center gap-2">
@@ -376,7 +376,7 @@ export function ShieldDashboard({
                         }`}>
                           {evt.status}
                         </span>
-                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                        <span className="text-[11px] text-slate-500 dark:text-neutral-400 font-mono">
                           {evt.latencyMs ? `${evt.latencyMs}ms` : '<1ms'}
                         </span>
                       </div>
@@ -385,7 +385,7 @@ export function ShieldDashboard({
                       </span>
                     </div>
 
-                    <div className="mt-2 text-xs text-slate-800 dark:text-slate-300 font-mono line-clamp-1">
+                    <div className="mt-2 text-xs text-slate-800 dark:text-neutral-300 font-mono line-clamp-1">
                       {evt.originalPrompt || evt.reason || 'Outbound request'}
                     </div>
 

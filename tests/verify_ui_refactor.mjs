@@ -12,7 +12,7 @@ console.log('🧪 VERIFYING UI REFACTOR: THEMES, HOME PAGE & RESPONSIVENESS');
 console.log('================================================================');
 
 // 1. Verify Theme Context Engine & CSS
-console.log('\n[STEP 1]: Verifying Theme Engine & CSS Classes...');
+console.log('\n[STEP 1]: Verifying Theme Engine & Pure Z-Black CSS Classes...');
 assert(fs.existsSync('src/context/ThemeContext.jsx'), 'src/context/ThemeContext.jsx must exist');
 const themeContextCode = fs.readFileSync('src/context/ThemeContext.jsx', 'utf-8');
 assert(themeContextCode.includes('ThemeProvider'), 'ThemeContext must export ThemeProvider');
@@ -23,8 +23,9 @@ assert(themeContextCode.includes('applyThemeToDOM'), 'ThemeContext must apply th
 const indexCss = fs.readFileSync('src/index.css', 'utf-8');
 assert(indexCss.includes('@custom-variant dark'), 'index.css must declare @custom-variant dark');
 assert(indexCss.includes('--bg-app: #fdfbf7'), 'index.css must define warm beige light background');
-assert(indexCss.includes('--bg-app: #020617'), 'index.css must define deep dark background');
-console.log('  ✓ Theme engine and CSS variables verified (Deep Dark #020617 & Beige Light #fdfbf7)');
+assert(indexCss.includes('--bg-app: #000000'), 'index.css must define pure Z-black background #000000');
+assert(indexCss.includes('--bg-card: #0a0a0a'), 'index.css must define pure Z-black card background #0a0a0a');
+console.log('  ✓ Theme engine and CSS variables verified (Pure Z-Black #000000/#0a0a0a & Beige Light #fdfbf7)');
 
 // 2. Verify Dedicated Home Page Component
 console.log('\n[STEP 2]: Verifying HomePage.jsx & Navigation Cards...');

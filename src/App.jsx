@@ -1,6 +1,6 @@
 /**
  * PrivacyLens — Main Application Container
- * Features Dedicated Page Routing, Responsive Layouts, and Deep Dark / Beige Light Theme Toggle
+ * Features Dedicated Page Routing, Responsive Layouts, and True Z-Black / Beige Light Themes
  * Team 05-HoneyPoters — PECathon 2026 (PS-004)
  */
 
@@ -68,20 +68,18 @@ export function App() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-slate-950 transition-colors duration-250 ${
-      isDark ? 'bg-[#020617] text-slate-100' : 'bg-[#fdfbf7] text-slate-900'
+    <div className={`min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black transition-colors duration-250 ${
+      isDark ? 'bg-black text-neutral-100' : 'bg-[#fdfbf7] text-slate-900'
     }`}>
-      {/* Background radial gradient glow */}
-      <div className={`fixed inset-0 pointer-events-none transition-opacity duration-500 ${
-        isDark 
-          ? 'bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(14,165,233,0.15),rgba(255,255,255,0))] opacity-100' 
-          : 'bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(217,119,6,0.08),rgba(14,165,233,0.04))] opacity-100'
-      }`} />
+      {/* Background radial gradient glow (Light mode only - dark mode is pure pitch Z-black) */}
+      {!isDark && (
+        <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(217,119,6,0.08),rgba(14,165,233,0.04))] opacity-100" />
+      )}
 
       {/* TOP NAVIGATION BAR */}
       <header className={`sticky top-0 z-50 border-b backdrop-blur-md transition-colors duration-200 ${
         isDark 
-          ? 'bg-slate-950/85 border-slate-800/80 shadow-lg shadow-black/20' 
+          ? 'bg-black/90 border-neutral-800 shadow-lg shadow-black/60' 
           : 'bg-white/90 border-slate-200/90 shadow-sm'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
@@ -92,7 +90,7 @@ export function App() {
           >
             <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shadow-md overflow-hidden p-1 transition-transform group-hover:scale-105 ${
               isDark 
-                ? 'bg-slate-900 border-cyan-500/40 shadow-cyan-500/10' 
+                ? 'bg-[#0a0a0a] border-neutral-800' 
                 : 'bg-white border-cyan-500/30 shadow-slate-200'
             }`}>
               <img src="/favicon.svg" alt="PrivacyLens Logo" className="w-full h-full object-contain" />
@@ -115,7 +113,7 @@ export function App() {
           </div>
 
           {/* Desktop Navigation Tabs */}
-          <nav className="hidden lg:flex items-center gap-1 bg-slate-100/80 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 p-1 rounded-2xl text-xs font-medium">
+          <nav className="hidden lg:flex items-center gap-1 bg-slate-100/80 dark:bg-[#0d0d0d] border border-slate-200/80 dark:border-neutral-800 p-1 rounded-2xl text-xs font-medium">
             {navLinks.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -126,8 +124,8 @@ export function App() {
                   onClick={() => handleNavClick(tab.id)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-medium transition-all ${
                     isActive
-                      ? 'bg-cyan-500 text-slate-950 font-bold shadow-sm shadow-cyan-500/20'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/50'
+                      ? 'bg-cyan-500 text-black font-bold shadow-sm'
+                      : 'text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-neutral-800/60'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -160,10 +158,10 @@ export function App() {
               onClick={toggleTheme}
               className={`p-2 rounded-xl border transition-all duration-200 ${
                 isDark 
-                  ? 'bg-slate-900 border-slate-700/80 text-amber-400 hover:bg-slate-800 hover:text-amber-300 shadow-sm' 
+                  ? 'bg-[#111111] border-neutral-800 text-amber-400 hover:bg-neutral-800 hover:text-amber-300 shadow-sm' 
                   : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200 hover:text-slate-900 shadow-sm'
               }`}
-              title={isDark ? 'Switch to Beige Light Mode' : 'Switch to Deep Dark Mode'}
+              title={isDark ? 'Switch to Beige Light Mode' : 'Switch to Z-Black Dark Mode'}
               aria-label="Toggle theme"
             >
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -173,7 +171,7 @@ export function App() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              className="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-neutral-300 hover:bg-slate-100 dark:hover:bg-neutral-900 transition"
               aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -183,7 +181,7 @@ export function App() {
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl px-4 py-4 space-y-2 shadow-2xl">
+          <div className="lg:hidden border-t border-slate-200 dark:border-neutral-800 bg-white/95 dark:bg-black/95 backdrop-blur-xl px-4 py-4 space-y-2 shadow-2xl">
             <div className="grid grid-cols-2 gap-2 text-xs font-medium">
               {navLinks.map((tab) => {
                 const Icon = tab.icon;
@@ -195,8 +193,8 @@ export function App() {
                     onClick={() => handleNavClick(tab.id)}
                     className={`flex items-center gap-2 p-2.5 rounded-xl font-medium transition text-left ${
                       isActive
-                        ? 'bg-cyan-500 text-slate-950 font-bold'
-                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900'
+                        ? 'bg-cyan-500 text-black font-bold'
+                        : 'text-slate-700 dark:text-neutral-300 hover:bg-slate-100 dark:hover:bg-neutral-900'
                     }`}
                   >
                     <Icon className="w-4 h-4 shrink-0" />
@@ -206,7 +204,7 @@ export function App() {
               })}
             </div>
 
-            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs font-mono">
+            <div className="pt-3 border-t border-slate-200 dark:border-neutral-800 flex items-center justify-between text-xs font-mono">
               <span className="text-slate-500">Master Shield:</span>
               <button
                 type="button"
@@ -299,12 +297,12 @@ export function App() {
       {/* FOOTER */}
       <footer className={`relative z-10 border-t py-6 px-4 sm:px-8 text-center text-xs font-mono transition-colors ${
         isDark 
-          ? 'bg-slate-950/80 border-slate-800/80 text-slate-500' 
+          ? 'bg-black border-neutral-800 text-neutral-500' 
           : 'bg-white/80 border-slate-200/90 text-slate-500'
       }`}>
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-700 dark:text-slate-300">PrivacyLens (PS-004)</span>
+            <span className="font-bold text-slate-700 dark:text-neutral-300">PrivacyLens (PS-004)</span>
             <span>•</span>
             <span>Team 05-HoneyPoters</span>
             <span>•</span>

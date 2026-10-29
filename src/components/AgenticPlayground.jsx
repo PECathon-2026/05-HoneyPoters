@@ -161,16 +161,16 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
   };
 
   return (
-    <div className="w-full space-y-6 text-slate-800 dark:text-slate-100 font-sans transition-colors">
+    <div className="w-full space-y-6 text-slate-800 dark:text-neutral-100 font-sans transition-colors">
       {/* SECTION HEADER */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800/80 pb-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-neutral-800 pb-3">
         <div className="flex items-center gap-2.5">
           <Bot className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
           <div>
             <h2 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Autonomous Agentic Browser & DOM Playground
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-neutral-400">
               Simulate autonomous AI agents reading live web forms and intercepting extraction
             </p>
           </div>
@@ -181,21 +181,21 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
           <button
             type="button"
             onClick={() => handleAutofill(0)}
-            className="flex-1 sm:flex-initial px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition"
+            className="flex-1 sm:flex-initial px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-xs font-semibold text-slate-700 dark:text-neutral-200 border border-slate-200 dark:border-neutral-800 transition"
           >
             Autofill Profile 1
           </button>
           <button
             type="button"
             onClick={() => handleAutofill(1)}
-            className="flex-1 sm:flex-initial px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition"
+            className="flex-1 sm:flex-initial px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-xs font-semibold text-slate-700 dark:text-neutral-200 border border-slate-200 dark:border-neutral-800 transition"
           >
             Profile 2
           </button>
           <button
             type="button"
             onClick={handleClear}
-            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-xs font-mono text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-800 transition"
+            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-xs font-mono text-slate-500 dark:text-neutral-400 border border-slate-200 dark:border-neutral-800 transition"
           >
             Reset
           </button>
@@ -205,15 +205,15 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
       {/* TWO COLUMN GRID: SIMULATED BROWSER SESSION + AGENT EXTRACTION INSPECTOR */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* SIMULATED WEB BROWSER WINDOW (6 COLS) */}
-        <div className="lg:col-span-6 rounded-3xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 backdrop-blur-xl shadow-xl overflow-hidden flex flex-col justify-between transition-colors">
+        <div className="lg:col-span-6 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 backdrop-blur-xl shadow-xl overflow-hidden flex flex-col justify-between transition-colors">
           {/* MOCK BROWSER CHROME URL BAR */}
-          <div className="bg-slate-100 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800/80 px-4 py-2.5 flex items-center justify-between">
+          <div className="bg-slate-100 dark:bg-black border-b border-slate-200 dark:border-neutral-800 px-4 py-2.5 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
               <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
             </div>
-            <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 px-3 py-1 rounded-lg text-[11px] font-mono text-slate-600 dark:text-slate-300 w-3/4 justify-center">
+            <div className="flex items-center gap-1.5 bg-white dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 px-3 py-1 rounded-lg text-[11px] font-mono text-slate-600 dark:text-neutral-300 w-3/4 justify-center">
               <Lock className="w-3 h-3 text-emerald-500" />
               <span className="truncate">https://secure-portal.pec-bank.in/customer-kyc</span>
             </div>
@@ -224,21 +224,21 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
           <div className="p-5 space-y-3.5 text-xs">
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label className="text-slate-700 dark:text-slate-300 font-semibold">User Full Name:</label>
+                <label className="text-slate-700 dark:text-neutral-300 font-semibold">User Full Name:</label>
               </div>
               <input
                 type="text"
                 value={formData.fullName}
                 onChange={(e) => handleInputChange('fullName', e.target.value)}
                 placeholder="e.g. Rahul Sharma"
-                className="w-full bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
+                className="w-full bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-slate-800 dark:text-neutral-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-slate-700 dark:text-slate-300 font-semibold">UIDAI Aadhaar:</label>
+                  <label className="text-slate-700 dark:text-neutral-300 font-semibold">UIDAI Aadhaar:</label>
                   {getFieldBadge('aadhaar', formData.aadhaar)}
                 </div>
                 <input
@@ -246,13 +246,13 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
                   value={formData.aadhaar}
                   onChange={(e) => handleInputChange('aadhaar', e.target.value)}
                   placeholder="2345 6789 0124"
-                  className="w-full bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
+                  className="w-full bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-slate-800 dark:text-neutral-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-slate-700 dark:text-slate-300 font-semibold">Income Tax PAN:</label>
+                  <label className="text-slate-700 dark:text-neutral-300 font-semibold">Income Tax PAN:</label>
                   {getFieldBadge('pan', formData.pan)}
                 </div>
                 <input
@@ -260,7 +260,7 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
                   value={formData.pan}
                   onChange={(e) => handleInputChange('pan', e.target.value)}
                   placeholder="ABCDE1234F"
-                  className="w-full bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-mono uppercase focus:border-cyan-500/60 focus:outline-none transition"
+                  className="w-full bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-slate-800 dark:text-neutral-200 font-mono uppercase focus:border-cyan-500/60 focus:outline-none transition"
                 />
               </div>
             </div>
@@ -268,7 +268,7 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="sm:col-span-2">
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-slate-700 dark:text-slate-300 font-semibold">Payment Card:</label>
+                  <label className="text-slate-700 dark:text-neutral-300 font-semibold">Payment Card:</label>
                   {getFieldBadge('card', formData.card)}
                 </div>
                 <input
@@ -276,13 +276,13 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
                   value={formData.card}
                   onChange={(e) => handleInputChange('card', e.target.value)}
                   placeholder="4242 4242 4242 4242"
-                  className="w-full bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
+                  className="w-full bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-slate-800 dark:text-neutral-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-slate-700 dark:text-slate-300 font-semibold">CVV:</label>
+                  <label className="text-slate-700 dark:text-neutral-300 font-semibold">CVV:</label>
                   {getFieldBadge('cvv', formData.cvv)}
                 </div>
                 <input
@@ -291,7 +291,7 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
                   onChange={(e) => handleInputChange('cvv', e.target.value)}
                   placeholder="894"
                   maxLength={4}
-                  className="w-full bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
+                  className="w-full bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-slate-800 dark:text-neutral-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
                 />
               </div>
             </div>
@@ -299,7 +299,7 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-slate-700 dark:text-slate-300 font-semibold">Account Password:</label>
+                  <label className="text-slate-700 dark:text-neutral-300 font-semibold">Account Password:</label>
                   {getFieldBadge('password', formData.password)}
                 </div>
                 <input
@@ -307,13 +307,13 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
+                  className="w-full bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-slate-800 dark:text-neutral-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-slate-700 dark:text-slate-300 font-semibold">Contact Mobile:</label>
+                  <label className="text-slate-700 dark:text-neutral-300 font-semibold">Contact Mobile:</label>
                   {getFieldBadge('phone', formData.phone)}
                 </div>
                 <input
@@ -321,14 +321,14 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
                   placeholder="+91 98765 43210"
-                  className="w-full bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-800 dark:text-slate-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
+                  className="w-full bg-slate-50 dark:bg-black border border-slate-200 dark:border-neutral-800 rounded-xl px-3 py-2 text-slate-800 dark:text-neutral-200 font-mono focus:border-cyan-500/60 focus:outline-none transition"
                 />
               </div>
             </div>
           </div>
 
           {/* SIMULATION TRIGGER BUTTONS */}
-          <div className="bg-slate-50 dark:bg-slate-950/90 border-t border-slate-200 dark:border-slate-800 p-4 flex flex-col sm:flex-row gap-2.5">
+          <div className="bg-slate-50 dark:bg-black border-t border-slate-200 dark:border-neutral-800 p-4 flex flex-col sm:flex-row gap-2.5">
             <button
               type="button"
               disabled={agentRunning}
@@ -352,9 +352,9 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
         </div>
 
         {/* AGENT EXTRACTION INSPECTOR (6 COLS) */}
-        <div className="lg:col-span-6 rounded-3xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 backdrop-blur-xl p-5 shadow-xl flex flex-col justify-between transition-colors">
+        <div className="lg:col-span-6 rounded-3xl bg-white/80 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 backdrop-blur-xl p-5 shadow-xl flex flex-col justify-between transition-colors">
           <div>
-            <div className="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-slate-800 pb-2.5">
+            <div className="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-neutral-800 pb-2.5">
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -372,15 +372,15 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
               )}
             </div>
 
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-3">
+            <p className="text-[11px] text-slate-500 dark:text-neutral-400 mb-3">
               Payload constructed by the autonomous agent ready for cloud LLM reasoning:
             </p>
 
             <div className={`rounded-2xl p-4 border font-mono text-xs whitespace-pre-wrap break-words leading-relaxed min-h-[220px] max-h-[320px] overflow-y-auto overflow-x-auto ${
               !extractedPayload
-                ? 'bg-slate-50 dark:bg-slate-950/80 border-slate-200 dark:border-slate-800 text-slate-400 flex items-center justify-center text-center'
+                ? 'bg-slate-50 dark:bg-black border-slate-200 dark:border-neutral-800 text-slate-400 flex items-center justify-center text-center'
                 : extractedPayload.mode === 'PROTECTED'
-                ? 'bg-slate-50 dark:bg-slate-950 border-cyan-500/40 text-cyan-800 dark:text-cyan-200'
+                ? 'bg-slate-50 dark:bg-black border-cyan-500/40 text-cyan-800 dark:text-cyan-200'
                 : 'bg-red-500/10 dark:bg-red-950/40 border-red-500/50 text-red-700 dark:text-red-200'
             }`}>
               {!extractedPayload ? (
@@ -395,7 +395,7 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
           </div>
 
           {/* TELEMETRY FOOTER */}
-          <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
+          <div className="mt-4 pt-3 border-t border-slate-200 dark:border-neutral-800 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-neutral-400">
             {extractedPayload ? (
               <>
                 <span>
@@ -406,7 +406,7 @@ Contact Email: ${formData.email || 'rahul.sharma@pec.edu'}`;
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs transition"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-700 dark:text-neutral-200 text-xs transition"
                 >
                   {copiedPayload ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
                   {copiedPayload ? 'Copied' : 'Copy Output'}
