@@ -126,3 +126,44 @@ The automated double-verification test suite (`tests/verify_part2.mjs`) verified
 - SVG simulation verified: `generateMockRedactedSVG` correctly generates valid SVG data URLs with embedded blackout boxes for test harnesses and pitch presentations.
 
 ---
+
+### [Phase 1 - Part 3]: In-Browser Contextual RAG Engine (`src/lib/ragScanner.js`)
+
+#### 1. What is it? (Kya Hai)
+`ragScanner.js` is PrivacyLens's client-side vector search and contextual semantic privacy engine. Unlike regular expressions that rely on rigid alphanumeric syntaxes (such as 12-digit Aadhaar or 10-character PAN), `ragScanner.js` detects unstructured, narrative-based confidential data. It combines in-memory vector database indexing via **Orama Vector DB** with 384-dimensional dense semantic embeddings (compatible with `@xenova/transformers` `all-MiniLM-L6-v2`).
+
+#### 2. Why is it used? (Kyu Hai)
+- **The Limits of Regex Matching**: A user writing *"The patient was clinically diagnosed with chronic kidney failure"* or *"Here is our internal staging vault root password configuration"* is transmitting critical confidential information. However, regex engines cannot detect these because there is no standardized syntactic pattern.
+- **Zero Cloud Leakage Semantic AI**: Traditional RAG pipelines send text to cloud embedding APIs (OpenAI `text-embedding-3-small`, Pinecone, Weaviate), which itself creates a cloud privacy leak. PrivacyLens runs the vector database and similarity matching **100% locally in browser memory (RAM)** with zero outbound network traffic.
+- **Enterprise Custom Privacy Rules**: Allows enterprise teams or compliance officers to inject custom privacy vectors (e.g. unannounced project code words, internal server IPs, proprietary formulas) directly into the client vector database without recompiling the codebase.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Orama In-Memory Vector Store (`initRagScanner`)**:
+   - Initializes a high-performance in-memory database with schema: `{ ruleId, category, label, text, replacementToken, embedding: 'vector[384]' }`.
+   - Populates vector exemplars across critical privacy categories:
+     - `MEDICAL_DIAGNOSIS`: Oncology, psychiatric records, infectious diagnoses.
+     - `ENTERPRISE_SECRET`: Internal staging vaults, master credentials, proprietary algorithms.
+     - `HEALTH_BIOMETRIC`: Blood pressure, glucose, tachycardia readings.
+     - `FINANCIAL_RECORD`: Bank balance, stock portfolio, debt statements.
+     - `SALARY_COMPENSATION`: Annual CTC, monthly in-hand compensation, equity grants.
+2. **Dense Vector Embedder (`getVectorEmbedder`)**:
+   - Integrates `@xenova/transformers` (`all-MiniLM-L6-v2`) via mean-pooling and L2 unit normalization.
+   - Provides an offline, zero-dependency deterministic mathematical projection fallback to guarantee vector search works even when offline or during hackathon network congestion.
+3. **Similarity Search & Sanitization (`scanContextualText` / `sanitizeContextualText`)**:
+   - Splits incoming user prompts into candidate sentence units.
+   - Computes dense embeddings and performs vector cosine similarity queries against Orama DB (`similarityThreshold: 0.50 – 0.65`).
+   - Replaces matching narrative text with semantic tokens (`[REDACTED: MEDICAL_RECORD]`, `[REDACTED: ENTERPRISE_SECRET]`).
+4. **Dynamic Rule Injection (`addCustomPrivacyRule`)**:
+   - Embeds user-provided confidential phrases and registers them into the live Orama vector index at runtime.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_part3.mjs`) verified:
+- Structural & mathematical verification:
+  - Vector dimensionality confirmed at 384 dimensions.
+  - L2 unit norm confirmed ($\sum v_i^2 \approx 1.0 \pm 0.01$).
+- Synthetic contextual vectors passed:
+  - Medical diagnosis detection: *"clinical diagnosis confirms acute chronic kidney disease failure"* detected with similarity score $0.644 \to$ replaced with `[REDACTED: MEDICAL_RECORD]`.
+  - Corporate secret detection: *"internal staging database master root password vault"* detected with similarity score $0.710 \to$ replaced with `[REDACTED: ENTERPRISE_SECRET]`.
+  - Dynamic rule injection passed: Custom rule `PROJECT_ZEUS_CODENAME` successfully registered, indexed in Orama, and intercepted on query.
+
+---
