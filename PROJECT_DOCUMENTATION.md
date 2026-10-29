@@ -333,3 +333,38 @@ The automated double-verification test suite (`tests/verify_phase2_part3.mjs`) v
   - SVG radial stroke dashoffset verified ($0\text{px}$ offset when full, $>200\text{px}$ offset when degraded).
 
 ---
+
+### [Phase 2 - Part 4]: BroadcastChannel IPC & Payload Diff Inspector (`PayloadDiffInspector.jsx`)
+
+#### 1. What is it? (Kya Hai)
+`PayloadDiffInspector.jsx` is PrivacyLens's comparative security inspection panel. It provides a side-by-side terminal comparison between the **"Raw Intercepted Payload"** (captured from client forms, DOM inputs, or AI prompts) and the **"Sanitized Payload"** (safe for Google Gemini 1.5 Flash cloud dispatch). It includes glowing semantic token highlights, character size delta trackers, and an animated **Fail-Closed Hard Abort Visual Alert Overlay** that triggers whenever an unredacted payload or critical credential is blocked locally.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Zero-Trust Auditability (Seeing is Believing)**: Security engineers, compliance auditors, and hackathon judges need unambiguous visual proof of what was redacted and what was permitted to leave the browser. The side-by-side view renders raw text versus sanitized semantic tokens side-by-side.
+- **Fail-Closed Verification**: When an autonomous AI browser agent or script attempts to transmit credentials (e.g., plaintext passwords or master API keys in strict mode), the inspector displays a prominent red warning banner explaining that the request was terminated in client RAM and zero bytes were dispatched.
+- **Seamless Inter-Process Synchronization**: Connected directly via `usePrivacyLensIPC()` over native `BroadcastChannel('privacylens_channel')`, enabling real-time synchronized payload inspection across tabs, extension workers, and dashboard views.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Side-by-Side Dual-Terminal Interface**:
+   - **Left Panel (Raw Intercepted)**: Rendered in a crimson-accented terminal displaying the raw text containing sensitive Aadhaar numbers, PAN identifiers, credit cards, or passwords with raw threat counters.
+   - **Center Pillar**: Features an animated pipeline flow icon with real-time gatekeeper processing latency ($<12\text{ms}$).
+   - **Right Panel (Sanitized Cloud Dispatch)**: Rendered in an emerald/cyan-accented terminal where all sensitive PII substrings are transformed into bright cyan glowing badges (`[REDACTED: AADHAAR]`, `[REDACTED: PAN]`, `[REDACTED: CARD_NUMBER]`, `[REDACTED: PASSCODE]`).
+2. **Fail-Closed Hard Abort Visual Alert Overlay**:
+   - When a transaction status is `FAIL_CLOSED_BLOCKED` or `RESIDUAL_LEAK_BLOCKED`:
+     - Displays a high-contrast red alert box with pulsating shield icon: `PRIVACYLENS_FAIL_CLOSED_BLOCKED`.
+     - Confirms zero network transmission: right panel displays *"HARD NETWORK ABORT ENFORCED: Zero bytes traversed the browser network boundary"*.
+3. **Interactive Inspection History Dropdown**:
+   - Users can toggle between the live stream's latest intercepted transaction and prior historical audit records.
+   - Includes a 1-click "Copy Sanitized Payload" button for manual test dispatch.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_phase2_part4.mjs`) verified:
+- **Structural Integrity**: Validated component exports, modal alerts, and semantic token rendering algorithms in `PayloadDiffInspector.jsx`.
+- **Pass 1 - Side-by-Side Diff & Token Mapping**:
+  - Raw payload containing Aadhaar (`2345 6789 0124`), PAN (`ABCDE1234F`), Visa (`4242 4242 4242 4242`), and Password was mapped to respective semantic tokens.
+  - Zero raw secrets leaked into the sanitized dispatch.
+- **Pass 2 - Fail-Closed Alert Overlay & IPC Synchronization**:
+  - `FAIL_CLOSED_BLOCKED` status verified to suppress cloud dispatch (`sanitizedPrompt === null`).
+  - BroadcastChannel IPC verified: synchronization messages correctly received and processed over `privacylens_channel`.
+
+---

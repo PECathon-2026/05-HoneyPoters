@@ -1,16 +1,17 @@
 /**
  * PrivacyLens — Main Application Container
- * Integrated Shield Dashboard & Privacy Analytics Telemetry
+ * Integrated Shield Dashboard, Payload Diff Inspector, and Privacy Analytics
  * Team 05-HoneyPoters — PECathon 2026 (PS-004)
  */
 
 import React, { useState } from 'react';
 import ShieldDashboard from './components/ShieldDashboard';
+import PayloadDiffInspector from './components/PayloadDiffInspector';
 import PrivacyAnalytics from './components/PrivacyAnalytics';
 import { usePrivacyLensIPC } from './hooks/usePrivacyLensIPC';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState('all'); // 'all' | 'shield' | 'analytics'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'diff' | 'analytics' | 'shield'
 
   const {
     shieldActive,
@@ -50,12 +51,30 @@ export function App() {
         <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-xl p-1 text-xs">
           <button
             type="button"
-            onClick={() => setActiveTab('all')}
+            onClick={() => setActiveTab('overview')}
             className={`px-3 py-1 rounded-lg font-medium transition ${
-              activeTab === 'all' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+              activeTab === 'overview' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
             }`}
           >
-            Overview
+            Full Overview
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('diff')}
+            className={`px-3 py-1 rounded-lg font-medium transition ${
+              activeTab === 'diff' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Payload Diff
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('analytics')}
+            className={`px-3 py-1 rounded-lg font-medium transition ${
+              activeTab === 'analytics' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Analytics
           </button>
           <button
             type="button"
@@ -66,21 +85,12 @@ export function App() {
           >
             Shield Cockpit
           </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('analytics')}
-            className={`px-3 py-1 rounded-lg font-medium transition ${
-              activeTab === 'analytics' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Live Analytics
-          </button>
         </div>
       </header>
 
       {/* Main Content Area */}
       <main className="relative z-10 p-4 sm:p-8 max-w-7xl mx-auto w-full flex-1 space-y-8">
-        {(activeTab === 'all' || activeTab === 'shield') && (
+        {(activeTab === 'overview' || activeTab === 'shield') && (
           <ShieldDashboard
             shieldActive={shieldActive}
             onToggleShield={toggleShield}
@@ -94,7 +104,15 @@ export function App() {
           />
         )}
 
-        {(activeTab === 'all' || activeTab === 'analytics') && (
+        {(activeTab === 'overview' || activeTab === 'diff') && (
+          <PayloadDiffInspector
+            latestIntercept={latestIntercept}
+            events={events}
+            securityMode={securityMode}
+          />
+        )}
+
+        {(activeTab === 'overview' || activeTab === 'analytics') && (
           <PrivacyAnalytics
             shieldActive={shieldActive}
             stats={stats}
