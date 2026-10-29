@@ -43,7 +43,11 @@ PrivacyLens acts as a transparent, client-side safety shield placed immediately 
   - [Part 2: Glassmorphic React Dashboard UI Component (`ShieldDashboard.jsx`)](#phase-2---part-2-glassmorphic-react-dashboard-ui-component-srccomponentsshielddashboardjsx)
   - [Part 3: Live Recharts Analytics & Privacy Health Index (`PrivacyAnalytics.jsx`)](#phase-2---part-3-live-recharts-analytics--privacy-health-index-srccomponentsprivacyanalyticsjsx)
   - [Part 4: BroadcastChannel IPC & Payload Diff Inspector (`PayloadDiffInspector.jsx`)](#phase-2---part-4-broadcastchannel-ipc--payload-diff-inspector-srccomponentspayloaddiffinspectorjsx)
-- [Phase 3: Interactive Security Dashboard & Real-Time Telemetry](#phase-3---interactive-security-dashboard--real-time-telemetry)
+- [Phase 3: Multimodal Visual Redaction & Agentic Interceptor](#phase-3---multimodal-visual-redaction--agentic-interceptor)
+  - [Part 1: Multimodal Visual Redaction Studio (`VisualRedactionStudio.jsx`)](#phase-3---part-1-multimodal-visual-redaction-studio-srccomponentsvisualredactionstudiojsx)
+  - [Part 2: Autonomous Agentic Form Playground (`AgenticPlayground.jsx`)](#phase-3---part-2-autonomous-agentic-form-playground-srccomponentsagenticplaygroundjsx)
+  - [Part 3: Forensic Audit Trail & Compliance Exporter (`AuditForensics.jsx`)](#phase-3---part-3-forensic-audit-trail--compliance-exporter-srccomponentsauditforensicsjsx)
+  - [Part 4: Jury Showcase & Live Leak Benchmark (`JuryShowcase.jsx`)](#phase-3---part-4-jury-showcase--live-leak-benchmark-srccomponentsjuryshowcasejsx)
 - [Phase 4: Jury Showcase, Live Benchmark & Presentation](#phase-4---jury-showcase-live-benchmark--presentation)
 
 ---
@@ -366,5 +370,40 @@ The automated double-verification test suite (`tests/verify_phase2_part4.mjs`) v
 - **Pass 2 - Fail-Closed Alert Overlay & IPC Synchronization**:
   - `FAIL_CLOSED_BLOCKED` status verified to suppress cloud dispatch (`sanitizedPrompt === null`).
   - BroadcastChannel IPC verified: synchronization messages correctly received and processed over `privacylens_channel`.
+
+---
+
+## Phase 3 - Multimodal Visual Redaction & Agentic Interceptor
+
+### [Phase 3 - Part 1]: Multimodal Visual Redaction Studio (`src/components/VisualRedactionStudio.jsx`)
+
+#### 1. What is it? (Kya Hai)
+`VisualRedactionStudio.jsx` is PrivacyLens's multimodal visual obfuscation workbench and vision pre-processor. It connects directly with the HTML5 offscreen canvas visual masking engine (`src/lib/imageMasker.js`). It allows users, enterprise compliance reviewers, and autonomous AI agents to preview raw viewport screenshots against permanently redacted, non-invertible `#000000` blackout canvases before transmitting multimodal image parts to Google Gemini 1.5 Flash Vision.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Multimodal AI Data Leak Vector**: Modern vision-language models (Gemini 1.5/2.0 Flash, GPT-4o, Claude 3.5 Sonnet) routinely ingest screenshots of browser tabs, government identity portals, checkout pages, and electronic health records. Text-only sanitization leaves raw visual pixels exposed in screenshots.
+- **Permanent, Non-Invertible Information Destruction**: Blur or pixelation filters can be mathematically inverted using deep-learning deconvolution algorithms. PrivacyLens replaces targeted pixel bounding boxes with solid `#000000` blackouts stamped with monospaced security seals (`[REDACTED: AADHAAR]`, `[REDACTED: CARD_NUMBER]`).
+- **Interactive Multi-Document Demonstration**: Ships with realistic pre-loaded synthetic documents (UIDAI Aadhaar Card KYC, Payment Gateway Checkout with CVV, and Confidential Electronic Medical Records) so evaluators can test coordinate clamping and multimodal JSON packaging in 1 click.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Interactive Dual-Canvas Architecture**:
+   - **Raw Canvas**: Renders simulated document raster and highlights detected sensitive regions with pulsating dashed red leak warning borders (`⚠️ DETECTED LEAK`).
+   - **Masked Canvas**: Renders the identical source image through `maskCanvas()`, applying clamped solid `#000000` blackout rectangles with 4px safety margins and cyan security borders.
+2. **Interactive Coordinate Mask Toggles**:
+   - Lists active bounding boxes with exact screen coordinates `[x, y, width × height]`.
+   - Users can toggle individual masks on or off to inspect the canvas redactor's responsiveness.
+3. **Multimodal Gemini Vision JSON Generator**:
+   - In 1 click, converts the sanitized canvas to base64 data URL and formats it into the standard Google Gemini 1.5 Flash Vision API request body:
+     `{ contents: [{ role: 'user', parts: [{ text: '...' }, { inlineData: { mimeType: 'image/png', data: '...' } }] }] }`.
+   - Includes a 1-click "Download Redacted PNG" button for offline verification.
+
+#### 4. Verification & Testing Evidence
+The automated double-verification test suite (`tests/verify_phase3_part1.mjs`) verified:
+- **Structural Integrity**: Validated presets (`aadhaar_kyc`, `credit_card`, `medical_record`) and seamless integration in `App.jsx`.
+- **Pass 1 - Canvas Blackout Math & Coordinate Clamping**:
+  - Clamping algorithm validated against negative coordinate offsets ($x = -20$) and boundary overflows ($w = 700$ on 600px width).
+  - All 3 blackout rectangles were verified to execute `fillRect` with pure `#000000` fill and zero out-of-bounds leakage.
+- **Pass 2 - Multimodal Gemini Vision JSON Payload**:
+  - Validated standard Gemini Vision payload structure with base64 image part and `image/png` MIME type.
 
 ---

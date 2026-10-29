@@ -1,6 +1,6 @@
 /**
  * PrivacyLens — Main Application Container
- * Integrated Shield Dashboard, Payload Diff Inspector, and Privacy Analytics
+ * Integrated Shield Dashboard, Payload Diff Inspector, Privacy Analytics, and Visual Redaction Studio
  * Team 05-HoneyPoters — PECathon 2026 (PS-004)
  */
 
@@ -8,10 +8,11 @@ import React, { useState } from 'react';
 import ShieldDashboard from './components/ShieldDashboard';
 import PayloadDiffInspector from './components/PayloadDiffInspector';
 import PrivacyAnalytics from './components/PrivacyAnalytics';
+import VisualRedactionStudio from './components/VisualRedactionStudio';
 import { usePrivacyLensIPC } from './hooks/usePrivacyLensIPC';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'diff' | 'analytics' | 'shield'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'diff' | 'analytics' | 'visual' | 'shield'
 
   const {
     shieldActive,
@@ -69,6 +70,15 @@ export function App() {
           </button>
           <button
             type="button"
+            onClick={() => setActiveTab('visual')}
+            className={`px-3 py-1 rounded-lg font-medium transition ${
+              activeTab === 'visual' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Visual Studio
+          </button>
+          <button
+            type="button"
             onClick={() => setActiveTab('analytics')}
             className={`px-3 py-1 rounded-lg font-medium transition ${
               activeTab === 'analytics' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
@@ -110,6 +120,10 @@ export function App() {
             events={events}
             securityMode={securityMode}
           />
+        )}
+
+        {(activeTab === 'overview' || activeTab === 'visual') && (
+          <VisualRedactionStudio />
         )}
 
         {(activeTab === 'overview' || activeTab === 'analytics') && (
