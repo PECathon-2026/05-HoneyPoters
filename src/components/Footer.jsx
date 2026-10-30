@@ -56,24 +56,24 @@ export function Footer({
 
   return (
     <footer className="relative z-10 w-full mt-20 border-t border-[#1e1e1e] bg-[#000000] text-neutral-300 font-sans selection:bg-[#3DE2DD] selection:text-black">
-      {/* 1. TOP OPERATIONAL TELEMETRY & SYSTEM HEALTH STRIP */}
-      <div className="w-full border-b border-[#181818] bg-[#050505] px-4 sm:px-8 py-3.5">
+      {/* 1. TOP OPERATIONAL TELEMETRY & SYSTEM HEALTH STRIP (BLACK + CYAN + WHITE) */}
+      <div className="w-full border-b border-neutral-900 bg-[#050505] px-4 sm:px-8 py-3.5">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 text-xs font-mono">
           {/* Status Indicator */}
           <div className="flex flex-wrap items-center gap-3">
-            <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#3DE2DD]/10 text-[#3DE2DD] border border-[#3DE2DD]/30">
+              <span className="w-2 h-2 rounded-full bg-[#3DE2DD] animate-ping" />
               <strong className="tracking-wide">OPERATIONAL</strong>
-              <span>• Client Egress Guard Active</span>
+              <span className="text-white">• Client Egress Guard Active</span>
             </span>
-            <span className="text-neutral-500 hidden sm:inline">|</span>
-            <span className="text-neutral-400">
-              ZERO CLOUD TELEMETRY: <strong className="text-emerald-400">100.0% ISOLATED</strong>
+            <span className="text-neutral-700 hidden sm:inline">|</span>
+            <span className="text-neutral-300">
+              ZERO CLOUD TELEMETRY: <strong className="text-[#3DE2DD]">100.0% ISOLATED</strong>
             </span>
           </div>
 
           {/* Real-time Hardware & Crypto Metrics */}
-          <div className="flex flex-wrap items-center gap-4 text-[11px] text-neutral-400">
+          <div className="flex flex-wrap items-center gap-4 text-[11px] text-neutral-300">
             <div>
               LATENCY: <strong className="text-white">&lt;0.04ms</strong>
             </div>
@@ -89,11 +89,11 @@ export function Footer({
             <a
               href="/PrivacyLens-Extension-v2.0.0.zip"
               download="PrivacyLens-Extension-v2.0.0.zip"
-              className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#3DE2DD]/10 hover:bg-[#3DE2DD]/20 text-[#3DE2DD] border border-[#3DE2DD]/30 transition shadow-sm font-bold"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#3DE2DD]/10 hover:bg-[#3DE2DD]/20 text-[#3DE2DD] border border-[#3DE2DD]/40 transition shadow-sm font-bold"
               title="Download PrivacyLens Chrome Extension (.zip)"
             >
-              <Download className="w-3.5 h-3.5" />
-              <span>Get Extension (.zip)</span>
+              <Download className="w-3.5 h-3.5 text-[#3DE2DD]" />
+              <span className="text-white hover:text-[#3DE2DD]">Get Extension (.zip)</span>
             </a>
           </div>
         </div>
@@ -229,34 +229,34 @@ export function Footer({
           {/* COLUMN 3: CRYPTOGRAPHIC ENGINES & SAFEGUARDS (Cols 7-9) */}
           <div className="lg:col-span-3 space-y-4">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-2">
-              <Lock className="w-3.5 h-3.5 text-emerald-400" />
+              <Lock className="w-3.5 h-3.5 text-[#3DE2DD]" />
               <span>Defense Engines</span>
             </h4>
             <div className="space-y-3 text-xs">
-              <div className="p-2.5 rounded-xl bg-[#0a0a0a] border border-neutral-800 space-y-1">
+              <div className="p-2.5 rounded-xl bg-[#0a0a0a] border border-neutral-800 space-y-1 hover:border-[#3DE2DD]/40 transition">
                 <div className="font-mono font-bold text-white flex items-center justify-between">
                   <span>Verhoeff D₅ & Luhn Mod-10</span>
-                  <span className="text-[10px] text-emerald-400 font-mono">0 False Positives</span>
+                  <span className="text-[10px] text-[#3DE2DD] font-mono">0 False Positives</span>
                 </div>
                 <p className="text-[11px] text-neutral-400">
                   Deterministic dihedral group verification for 12-digit Indian Aadhaar and PCI credit card numbers.
                 </p>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#0a0a0a] border border-neutral-800 space-y-1">
+              <div className="p-2.5 rounded-xl bg-[#0a0a0a] border border-neutral-800 space-y-1 hover:border-[#3DE2DD]/40 transition">
                 <div className="font-mono font-bold text-white flex items-center justify-between">
                   <span>Offscreen Canvas Blackout</span>
-                  <span className="text-[10px] text-[#3DE2DD] font-mono">Solid #000000</span>
+                  <span className="text-[10px] text-white font-mono">Solid #000000</span>
                 </div>
                 <p className="text-[11px] text-neutral-400">
                   Solid RGB blackout with coordinate clamping. Visual pixels permanently destroyed prior to VLM ingest.
                 </p>
               </div>
 
-              <div className="p-2.5 rounded-xl bg-[#0a0a0a] border border-neutral-800 space-y-1">
+              <div className="p-2.5 rounded-xl bg-[#0a0a0a] border border-neutral-800 space-y-1 hover:border-[#3DE2DD]/40 transition">
                 <div className="font-mono font-bold text-white flex items-center justify-between">
                   <span>Fail-Closed Tripwire</span>
-                  <span className="text-[10px] text-red-400 font-mono">Hard Abort</span>
+                  <span className="text-[10px] text-[#3DE2DD] font-mono">Hard Abort</span>
                 </div>
                 <p className="text-[11px] text-neutral-400">
                   Immediate 0-byte transmission block when policy doubt or adversarial prompt injection is detected.
@@ -268,7 +268,7 @@ export function Footer({
           {/* COLUMN 4: EVALUATOR CONSOLE & HACKATHON SPECS (Cols 10-12) */}
           <div className="lg:col-span-3 space-y-4">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-2">
-              <Terminal className="w-3.5 h-3.5 text-amber-400" />
+              <Terminal className="w-3.5 h-3.5 text-[#3DE2DD]" />
               <span>PECathon SecOps</span>
             </h4>
 
@@ -287,7 +287,7 @@ export function Footer({
                   href="https://policylen-s.web.app" 
                   target="_blank" 
                   rel="noreferrer"
-                  className="text-emerald-400 hover:underline flex items-center gap-1"
+                  className="text-[#3DE2DD] hover:underline flex items-center gap-1"
                 >
                   <span>policylen-s.web.app</span>
                   <ExternalLink className="w-3 h-3" />
@@ -300,16 +300,16 @@ export function Footer({
                   type="button"
                   onClick={runIntegrityCheck}
                   disabled={checkingIntegrity}
-                  className="w-full py-2 px-3 rounded-xl bg-[#141414] hover:bg-neutral-800 border border-neutral-700 text-neutral-200 text-xs font-mono font-bold flex items-center justify-center gap-2 transition"
+                  className="w-full py-2 px-3 rounded-xl bg-[#141414] hover:bg-neutral-800 border border-neutral-700 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 transition"
                 >
-                  <Activity className={`w-3.5 h-3.5 ${checkingIntegrity ? 'animate-spin text-[#3DE2DD]' : 'text-emerald-400'}`} />
+                  <Activity className={`w-3.5 h-3.5 ${checkingIntegrity ? 'animate-spin text-[#3DE2DD]' : 'text-[#3DE2DD]'}`} />
                   <span>{checkingIntegrity ? 'Running Integrity Test...' : 'Run 7-Criteria Test'}</span>
                 </button>
 
                 {integrityStatus && (
-                  <div className="mt-2 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-[10px] text-emerald-400 space-y-0.5">
-                    <div className="font-bold flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" />
+                  <div className="mt-2 p-2 rounded-lg bg-[#3DE2DD]/10 border border-[#3DE2DD]/30 text-[10px] text-[#3DE2DD] space-y-0.5">
+                    <div className="font-bold flex items-center gap-1 text-white">
+                      <CheckCircle2 className="w-3 h-3 text-[#3DE2DD]" />
                       <span>{integrityStatus.tests}</span>
                     </div>
                     <div>Latency: {integrityStatus.latency} | {integrityStatus.leakage}</div>
@@ -321,9 +321,9 @@ export function Footer({
               <button
                 type="button"
                 onClick={onOpenAuth}
-                className="w-full py-2 px-3 rounded-xl bg-[#3DE2DD]/10 hover:bg-[#3DE2DD]/20 border border-[#3DE2DD]/40 text-[#3DE2DD] text-xs font-mono font-bold flex items-center justify-center gap-2 transition"
+                className="w-full py-2 px-3 rounded-xl bg-[#3DE2DD] hover:bg-[#34c7c2] text-black text-xs font-mono font-extrabold flex items-center justify-center gap-2 transition shadow-[0_0_15px_rgba(61,226,221,0.25)]"
               >
-                <UserCheck className="w-3.5 h-3.5" />
+                <UserCheck className="w-3.5 h-3.5 text-black" />
                 <span>SecOps Identity Portal</span>
               </button>
             </div>
@@ -332,13 +332,13 @@ export function Footer({
       </div>
 
       {/* 3. BOTTOM LEGAL, GITHUB & SIGN-OFF BAR */}
-      <div className="border-t border-[#181818] bg-[#020202] px-4 sm:px-8 py-6 text-xs font-mono text-neutral-500">
+      <div className="border-t border-neutral-900 bg-[#020202] px-4 sm:px-8 py-6 text-xs font-mono text-neutral-400">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-neutral-400">Copyright © 2026 PrivacyLens.</span>
+            <span className="text-white font-bold">Copyright © 2026 PrivacyLens.</span>
             <span>All rights reserved.</span>
             <span>•</span>
-            <span className="text-neutral-400">Team 05-HoneyPoters (PECathon 2026)</span>
+            <span className="text-neutral-300">Team 05-HoneyPoters (PECathon 2026)</span>
           </div>
 
           <div className="flex items-center gap-5 text-[11px]">
@@ -346,16 +346,16 @@ export function Footer({
               href="https://github.com/PECathon-2026/05-HoneyPoters"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 hover:text-[#3DE2DD] transition-colors"
+              className="flex items-center gap-1.5 text-white hover:text-[#3DE2DD] transition-colors"
             >
-              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5 fill-current text-[#3DE2DD]" viewBox="0 0 24 24">
                 <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
               </svg>
               <span>GitHub Repo</span>
             </a>
             <span className="text-neutral-800">•</span>
-            <span className="text-emerald-500 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <span className="text-[#3DE2DD] flex items-center gap-1.5 font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#3DE2DD]" />
               Zero-Data Retention Guaranteed
             </span>
           </div>
