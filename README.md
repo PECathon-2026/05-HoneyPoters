@@ -3,6 +3,7 @@
 ### Client-Side Privacy-Preserving AI Browser Agent Shield & Safety Gateway
 
 [![PECathon 2026](https://img.shields.io/badge/PECathon_2026-PS--004_PrivacyLens-0284c7?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/PECathon-2026/05-HoneyPoters)
+[![Live WebApp](https://img.shields.io/badge/Live_WebApp-policylen--s.web.app-00dfa2?style=for-the-badge&logo=firebase&logoColor=white)](https://policylen-s.web.app)
 [![Zero Cloud Leakage](https://img.shields.io/badge/Zero_Cloud_Leakage-100%25_Verified-10b981?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/PECathon-2026/05-HoneyPoters)
 [![Production Build](https://img.shields.io/badge/Production_Build-Passing_(433ms)-38bdf8?style=for-the-badge&logo=vite&logoColor=white)](https://github.com/PECathon-2026/05-HoneyPoters)
 [![Team](https://img.shields.io/badge/Team-05--HoneyPoters-f59e0b?style=for-the-badge&logo=github&logoColor=white)](https://github.com/PECathon-2026/05-HoneyPoters)
@@ -133,12 +134,18 @@ npm run dev
 # Open http://localhost:5173 to access the Shield Dashboard & Evaluation Scenarios Lab
 ```
 
-### Production Build
+### Production Build & Live Firebase Deployment
 
 ```bash
+# 1. Compile optimized production bundle
 npm run build
-# Compiles optimized, code-split production bundles into dist/ in under 500ms
+
+# 2. Deploy directly to Firebase Hosting
+firebase deploy --only hosting
 ```
+
+- **Live Production WebApp URL:** [https://policylen-s.web.app](https://policylen-s.web.app)
+- **Firebase Project Console:** [https://console.firebase.google.com/project/policylen-s/overview](https://console.firebase.google.com/project/policylen-s/overview)
 
 ### Loading Chrome Extension in Developer Mode
 
