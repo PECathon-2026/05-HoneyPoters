@@ -50,6 +50,8 @@ export function App() {
     authContext = useAuth();
   } catch (e) {}
   const authUser = authContext.currentUser || localAuthUser;
+  const authUserName = authUser?.displayName || authUser?.name || authUser?.email?.split('@')[0] || '';
+  const authButtonLabel = authUserName ? (authUserName.split(' ')[0] || 'SecOps') : 'Auth';
 
   const {
     shieldActive,
@@ -213,7 +215,7 @@ export function App() {
                 title="SecOps Authentication & Identity Session"
               >
                 <User className="w-3.5 h-3.5 text-cyan-500" />
-                <span>{authUser ? (authUser.name.split(' ')[0] || 'SecOps') : 'Auth'}</span>
+                <span>{authUser ? authButtonLabel : 'Auth'}</span>
               </button>
 
               {/* Mobile Hamburger (Home view) */}
@@ -268,7 +270,7 @@ export function App() {
                     ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30' 
                     : isDark ? 'bg-[#111111] border-neutral-800 text-neutral-300' : 'bg-slate-100 border-slate-200 text-slate-700'
                 }`}
-                title={authUser ? `Signed in as ${authUser.name}` : 'Sign In'}
+                title={authUser ? `Signed in as ${authUserName || 'SecOps'}` : 'Sign In'}
               >
                 <User className="w-4 h-4 text-cyan-500" />
               </button>

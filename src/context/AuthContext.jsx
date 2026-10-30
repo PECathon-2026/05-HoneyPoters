@@ -102,10 +102,12 @@ export function AuthProvider({ children }) {
       if (!savedUser) {
         savedUser = {
           uid: 'secops-lead',
+          name: USER_ROLES.SECOPS_LEAD.name,
           displayName: USER_ROLES.SECOPS_LEAD.name,
           email: USER_ROLES.SECOPS_LEAD.email,
           isAnonymous: false,
-          role: USER_ROLES.SECOPS_LEAD.role
+          role: USER_ROLES.SECOPS_LEAD.role,
+          clearance: USER_ROLES.SECOPS_LEAD.clearance
         };
         savedToken = `privacylens_ram_token_${Date.now()}`;
       }
@@ -121,22 +123,36 @@ export function AuthProvider({ children }) {
 
     // 2. Listen to Firebase Auth State Changes if auth initialized
     if (auth) {
-      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        if (firebaseUser) {
-          const idToken = await firebaseUser.getIdToken();
-          const userPayload = {
-            uid: firebaseUser.uid,
-            displayName: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Authenticated User',
-            email: firebaseUser.email,
-            photoURL: firebaseUser.photoURL,
-            role: userRole.role
-          };
-          setCurrentUser(userPayload);
-          setToken(idToken);
-          saveAuthSession(userPayload, userRole, idToken);
-        }
-      });
-      return () => unsubscribe();
+      try {
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+          try {
+            if (firebaseUser) {
+              const idToken = await firebaseUser.getIdToken().catch(() => null);
+              const displayName = firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Authenticated User';
+              const userPayload = {
+                uid: firebaseUser.uid,
+                name: displayName,
+                displayName: displayName,
+                email: firebaseUser.email,
+                photoURL: firebaseUser.photoURL,
+                role: userRole?.role || 'SecOps Lead'
+              };
+              setCurrentUser(userPayload);
+              if (idToken) {
+                setToken(idToken);
+                saveAuthSession(userPayload, userRole, idToken);
+              }
+            }
+          } catch (callbackErr) {
+            console.warn('[PrivacyLens Auth] Firebase state change handler warning:', callbackErr);
+          }
+        }, (authListenerErr) => {
+          console.warn('[PrivacyLens Auth] Firebase auth listener warning:', authListenerErr);
+        });
+        return () => unsubscribe();
+      } catch (authInitErr) {
+        console.warn('[PrivacyLens Auth] onAuthStateChanged subscription error:', authInitErr);
+      }
     }
   }, []);
 
