@@ -117,13 +117,13 @@ export function AuthModal({
           isDark ? 'border-neutral-800 bg-[#0d0d0d]' : 'border-slate-100 bg-slate-50'
         }`}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-[#3DE2DD]/15 text-[#3DE2DD] flex items-center justify-center">
               <Fingerprint className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-bold">SecOps Authentication</h2>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 font-bold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#3DE2DD]/10 text-[#3DE2DD] border border-[#3DE2DD]/30 font-bold">
                   Firebase RBAC
                 </span>
               </div>
@@ -191,7 +191,7 @@ export function AuthModal({
                 </div>
                 <div className="flex justify-between items-center py-1 border-b border-slate-200/60 dark:border-neutral-800/60">
                   <span className="text-slate-500 dark:text-neutral-400">Auth Method:</span>
-                  <span className="font-semibold text-cyan-600 dark:text-cyan-400">
+                  <span className="font-semibold text-[#3DE2DD]">
                     Firebase RBAC (Secure Gateway)
                   </span>
                 </div>
@@ -304,14 +304,14 @@ export function AuthModal({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-neutral-800 bg-white dark:bg-black text-xs font-sans focus:outline-none focus:border-cyan-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-neutral-800 bg-white dark:bg-black text-xs font-sans focus:outline-none focus:border-[#3DE2DD]"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs flex items-center justify-center gap-2 transition shadow-md shadow-cyan-500/20"
+                  className="w-full py-2.5 rounded-xl bg-[#3DE2DD] hover:bg-[#34c7c2] text-black font-bold text-xs flex items-center justify-center gap-2 transition shadow-md shadow-[#3DE2DD]/20"
                 >
                   {actionLoading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <LogIn className="w-3.5 h-3.5" />}
                   <span>{isRegisterMode ? 'Create Firebase Account' : 'Sign In with Email'}</span>
@@ -344,7 +344,7 @@ export function AuthModal({
                 <button
                   type="button"
                   onClick={() => { setIsRegisterMode(!isRegisterMode); setAuthError(null); }}
-                  className="text-xs text-cyan-600 dark:text-cyan-400 hover:underline"
+                  className="text-xs text-[#3DE2DD] hover:underline"
                 >
                   {isRegisterMode ? 'Already have an account? Sign In' : 'Need an evaluator account? Register'}
                 </button>
@@ -356,7 +356,7 @@ export function AuthModal({
           <div className={`p-3.5 rounded-2xl border font-mono text-[11px] space-y-1.5 ${
             isDark ? 'bg-black border-neutral-800 text-neutral-400' : 'bg-slate-50 border-slate-200 text-slate-600'
           }`}>
-            <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 font-bold">
+            <div className="flex items-center gap-2 text-[#3DE2DD] font-bold">
               <Lock className="w-3.5 h-3.5" />
               <span>Zero-Storage Trust Boundary:</span>
             </div>
@@ -373,7 +373,7 @@ export function AuthModal({
           <button
             type="button"
             onClick={handleCopyToken}
-            className="text-slate-500 hover:text-cyan-500 transition flex items-center gap-1.5"
+            className="text-slate-500 hover:text-[#3DE2DD] transition flex items-center gap-1.5"
           >
             <Key className="w-3.5 h-3.5" />
             <span>{tokenCopied ? '✓ Session Token Copied' : 'Copy Session Token'}</span>
@@ -382,7 +382,7 @@ export function AuthModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition"
+            className="px-4 py-2 rounded-xl bg-[#3DE2DD] text-black font-bold hover:bg-[#34c7c2] transition shadow-md shadow-[#3DE2DD]/20"
           >
             Done
           </button>

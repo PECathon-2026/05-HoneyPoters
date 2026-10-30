@@ -87,12 +87,12 @@ export function App() {
   const isHomePage = activeTab === 'home';
 
   return (
-    <div className={`min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black transition-colors duration-250 ${
+    <div className={`min-h-screen flex flex-col justify-between selection:bg-[#3DE2DD] selection:text-black transition-colors duration-250 ${
       isDark ? 'bg-black text-neutral-100' : 'bg-[#fdfbf7] text-slate-900'
     }`}>
       {/* Background radial gradient glow (Light mode only - dark mode is pure pitch Z-black) */}
       {!isDark && (
-        <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(217,119,6,0.08),rgba(14,165,233,0.04))] opacity-100" />
+        <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(61,226,221,0.08),rgba(14,165,233,0.04))] opacity-100" />
       )}
 
       {/* TOP NAVIGATION BAR */}
@@ -112,7 +112,7 @@ export function App() {
               <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shadow-md overflow-hidden p-1 transition-transform group-hover:scale-105 ${
                 isDark 
                   ? 'bg-[#0a0a0a] border-neutral-800' 
-                  : 'bg-white border-cyan-500/30 shadow-slate-200'
+                  : 'bg-white border-[#3DE2DD]/30 shadow-slate-200'
               }`}>
                 <img src="/favicon.svg" alt="PrivacyLens Logo" className="w-full h-full object-contain" />
               </div>
@@ -123,7 +123,7 @@ export function App() {
                   }`}>
                     PrivacyLens
                   </span>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#3DE2DD]/10 text-[#3DE2DD] border border-[#3DE2DD]/30">
                     PS-004
                   </span>
                 </div>
@@ -138,7 +138,7 @@ export function App() {
               <button
                 type="button"
                 onClick={() => handleNavClick('home')}
-                className="hidden md:flex items-center gap-1 ml-2 px-2.5 py-1 rounded-lg text-xs font-mono font-semibold text-slate-500 dark:text-neutral-400 hover:text-cyan-500 dark:hover:text-cyan-400 hover:bg-slate-100 dark:hover:bg-neutral-900 border border-transparent hover:border-slate-300 dark:hover:border-neutral-800 transition"
+                className="hidden md:flex items-center gap-1 ml-2 px-2.5 py-1 rounded-lg text-xs font-mono font-semibold text-slate-500 dark:text-neutral-400 hover:text-[#3DE2DD] hover:bg-slate-100 dark:hover:bg-neutral-900 border border-transparent hover:border-[#3DE2DD]/30 transition"
                 title="Return to Home Page"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
@@ -160,7 +160,7 @@ export function App() {
                     onClick={() => handleNavClick(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-medium transition-all ${
                       isActive
-                        ? 'bg-cyan-500 text-black font-bold shadow-sm'
+                        ? 'bg-[#3DE2DD] text-black font-extrabold shadow-sm shadow-[#3DE2DD]/20'
                         : 'text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-neutral-800/60'
                     }`}
                   >
@@ -180,7 +180,7 @@ export function App() {
               <a
                 href="/PrivacyLens-Extension-v2.0.0.zip"
                 download="PrivacyLens-Extension-v2.0.0.zip"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-500/50 hover:scale-[1.02] transition-all shadow-sm"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-[#3DE2DD]/30 bg-[#3DE2DD]/10 text-[#3DE2DD] hover:bg-[#3DE2DD]/20 hover:border-[#3DE2DD]/50 hover:scale-[1.02] transition-all shadow-sm"
                 title="Download PrivacyLens Chrome Extension (.zip)"
               >
                 <Download className="w-3.5 h-3.5" />
@@ -192,7 +192,7 @@ export function App() {
               <button
                 type="button"
                 onClick={() => handleNavClick('shield')}
-                className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl font-bold text-xs bg-cyan-500 hover:bg-cyan-400 text-black shadow-md shadow-cyan-500/20 hover:scale-[1.02] transition-all"
+                className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl font-bold text-xs bg-[#3DE2DD] hover:bg-[#34c7c2] text-black shadow-md shadow-[#3DE2DD]/20 hover:scale-[1.02] transition-all"
                 title="Open Shield Cockpit & Attack Tester"
               >
                 <Sliders className="w-3.5 h-3.5" />
@@ -248,7 +248,7 @@ export function App() {
               <a
                 href="/PrivacyLens-Extension-v2.0.0.zip"
                 download="PrivacyLens-Extension-v2.0.0.zip"
-                className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-mono font-semibold border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-all"
+                className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-mono font-semibold border border-[#3DE2DD]/30 bg-[#3DE2DD]/10 text-[#3DE2DD] hover:bg-[#3DE2DD]/20 transition-all"
                 title="Download PrivacyLens Chrome Extension (.zip)"
               >
                 <Download className="w-3.5 h-3.5" />
@@ -325,7 +325,7 @@ export function App() {
                 onClick={() => handleNavClick('home')}
                 className="w-full flex items-center gap-2 p-2.5 rounded-xl font-bold bg-slate-100 dark:bg-neutral-900 text-slate-900 dark:text-white text-xs text-left"
               >
-                <ChevronLeft className="w-4 h-4 text-cyan-500" />
+                <ChevronLeft className="w-4 h-4 text-[#3DE2DD]" />
                 <span>Return to Home Page</span>
               </button>
             )}
@@ -460,28 +460,28 @@ export function App() {
             <button 
               type="button" 
               onClick={() => handleNavClick('shield')}
-              className="hover:text-cyan-500 transition-colors"
+              className="hover:text-[#3DE2DD] transition-colors"
             >
               Shield Cockpit
             </button>
             <button 
               type="button" 
               onClick={() => handleNavClick('scenarios')}
-              className="hover:text-cyan-500 transition-colors"
+              className="hover:text-[#3DE2DD] transition-colors"
             >
               5 Evaluation Scenarios
             </button>
             <button 
               type="button" 
               onClick={() => handleNavClick('diff')}
-              className="hover:text-cyan-500 transition-colors"
+              className="hover:text-[#3DE2DD] transition-colors"
             >
               Payload Diff
             </button>
             <button 
               type="button" 
               onClick={() => handleNavClick('audit')}
-              className="hover:text-cyan-500 transition-colors"
+              className="hover:text-[#3DE2DD] transition-colors"
             >
               Audit Forensics
             </button>
