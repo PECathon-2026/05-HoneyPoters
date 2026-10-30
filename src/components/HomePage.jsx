@@ -25,7 +25,8 @@ import {
   Terminal,
   ExternalLink,
   Sliders,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Download
 } from 'lucide-react';
 
 export function HomePage({
@@ -98,6 +99,15 @@ export function HomePage({
 
             {/* Primary Action Buttons Connecting into Shield Cockpit */}
             <div className="flex flex-wrap items-center gap-3 pt-4">
+              <a
+                href="/PrivacyLens-Extension-v2.0.0.zip"
+                download="PrivacyLens-Extension-v2.0.0.zip"
+                className="px-5 py-3 rounded-2xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 font-extrabold text-sm border border-cyan-500/30 flex items-center gap-2 hover:scale-[1.02] transition-all shadow-md shadow-cyan-500/10"
+                title="Download PrivacyLens Chrome Extension for local browser installation"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download Extension (.zip)</span>
+              </a>
               <button
                 type="button"
                 onClick={() => onNavigate && onNavigate('shield')}

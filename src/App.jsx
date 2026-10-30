@@ -34,7 +34,8 @@ import {
   Sliders,
   User,
   ArrowLeft,
-  ChevronLeft
+  ChevronLeft,
+  Download
 } from 'lucide-react';
 
 export function App() {
@@ -173,8 +174,20 @@ export function App() {
 
           {/* TOP RIGHT CONTROLS */}
           {isHomePage ? (
-            /* HOME PAGE TOP RIGHT: EXACTLY 3 BUTTONS (Shield Cockpit, Theme, Auth) */
+            /* HOME PAGE TOP RIGHT: Download Extension (left of Shield Cockpit), Shield Cockpit, Theme, Auth */
             <div className="flex items-center gap-2.5">
+              {/* Button 0: Download Extension (On left of Shield Cockpit) */}
+              <a
+                href="/PrivacyLens-Extension-v2.0.0.zip"
+                download="PrivacyLens-Extension-v2.0.0.zip"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-500/50 hover:scale-[1.02] transition-all shadow-sm"
+                title="Download PrivacyLens Chrome Extension (.zip)"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Download Extension</span>
+                <span className="sm:hidden">Extension</span>
+              </a>
+
               {/* Button 1: Shield Cockpit */}
               <button
                 type="button"
@@ -231,6 +244,17 @@ export function App() {
           ) : (
             /* COCKPIT PAGES TOP RIGHT: Master Shield Pill, Theme, Auth, Mobile Menu */
             <div className="flex items-center gap-2.5">
+              {/* Quick Download Extension Link */}
+              <a
+                href="/PrivacyLens-Extension-v2.0.0.zip"
+                download="PrivacyLens-Extension-v2.0.0.zip"
+                className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-mono font-semibold border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-all"
+                title="Download PrivacyLens Chrome Extension (.zip)"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Extension</span>
+              </a>
+
               {/* Quick Master Shield Status Pill */}
               <button
                 type="button"

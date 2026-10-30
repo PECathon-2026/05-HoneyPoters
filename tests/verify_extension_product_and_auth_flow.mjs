@@ -43,6 +43,7 @@ const appCode = fs.readFileSync('src/App.jsx', 'utf-8');
 
 // Check isHomePage logic
 assert(appCode.includes("const isHomePage = activeTab === 'home'"), 'App.jsx must declare isHomePage state condition');
+assert(appCode.includes('Button 0: Download Extension'), 'App.jsx must include Download Extension button on left of Shield Cockpit');
 assert(appCode.includes('Button 1: Shield Cockpit'), 'App.jsx must include Button 1: Shield Cockpit');
 assert(appCode.includes('Button 2: Theme Toggle Switch'), 'App.jsx must include Button 2: Theme Toggle Switch');
 assert(appCode.includes('Button 3: Auth Session Trigger'), 'App.jsx must include Button 3: Auth Session Trigger');

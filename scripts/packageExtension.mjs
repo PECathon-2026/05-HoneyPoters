@@ -46,6 +46,14 @@ try {
   console.log(`✓ PrivacyLens Extension packaged successfully!`);
   console.log(`  File: ${zipFile}`);
   console.log(`  Size: ${(stats.size / 1024).toFixed(1)} KB`);
+
+  // Mirror to public directory for direct 1-click webapp download
+  const publicDir = path.resolve('public');
+  if (fs.existsSync(publicDir)) {
+    const publicZip = path.join(publicDir, 'PrivacyLens-Extension-v2.0.0.zip');
+    fs.copyFileSync(zipFile, publicZip);
+    console.log(`✓ Mirrored to WebApp public downloads: ${publicZip}`);
+  }
 } catch (err) {
   console.error('Packaging failed:', err.message);
   process.exit(1);
