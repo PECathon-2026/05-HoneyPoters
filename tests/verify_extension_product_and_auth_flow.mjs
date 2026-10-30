@@ -30,7 +30,8 @@ assert(popupHtml.includes('id="theme-toggle-btn"'), 'popup.html must include the
 
 const popupJs = fs.readFileSync('extension/popup.js', 'utf-8');
 assert(popupJs.includes('openWebappHome'), 'popup.js must implement openWebappHome function');
-assert(popupJs.includes('http://localhost:5173/'), 'popup.js must target WebApp URL http://localhost:5173/');
+assert(popupJs.includes('https://policylen-s.web.app/'), 'popup.js must target official deployed URL https://policylen-s.web.app/');
+assert(popupJs.includes('http://localhost:5173/'), 'popup.js must include local development URL fallback');
 assert(popupJs.includes('launchWebappBtn'), 'popup.js must bind launchWebappBtn');
 assert(popupJs.includes('openWebappLink'), 'popup.js must bind openWebappLink');
 console.log('  ✓ Extension popup verified as primary product with WebApp launch gateway and active layer tags');

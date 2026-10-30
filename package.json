@@ -9,6 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "package:extension": "node scripts/packageExtension.mjs",
     "test": "node test_core_modules.mjs && node tests/verify_all_4_tasks_point_by_point.mjs && node tests/benchmark_evaluation_criteria.mjs"
   },
   "dependencies": {

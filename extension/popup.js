@@ -233,12 +233,15 @@ try {
 
 /**
  * 6. Open WebApp Cockpit Link & Primary Launch Button
- * Opens http://localhost:5173/ in the browser tab or focuses existing WebApp tab.
+ * Opens official deployed production URL https://policylen-s.web.app/ in browser tab or focuses existing tab.
+ * Local development fallback: http://localhost:5173/
  */
 function openWebappHome() {
-  const targetUrl = 'http://localhost:5173/';
+  const targetUrl = 'https://policylen-s.web.app/';
+  const devUrl = 'http://localhost:5173/';
+
   if (typeof chrome !== 'undefined' && chrome.tabs?.query) {
-    chrome.tabs.query({ url: '*://localhost:5173/*' }, (tabs) => {
+    chrome.tabs.query({ url: ['https://policylen-s.web.app/*', 'https://policylen-s.firebaseapp.com/*', '*://localhost:5173/*'] }, (tabs) => {
       if (tabs && tabs.length > 0 && tabs[0].id) {
         chrome.tabs.update(tabs[0].id, { active: true });
         if (chrome.windows?.update && tabs[0].windowId) {
