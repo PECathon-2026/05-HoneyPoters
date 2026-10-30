@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "privacylen-s",
     "public": "dist",
     "ignore": [
       "firebase.json",

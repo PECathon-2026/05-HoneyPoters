@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "policylen-s"
-  }
+  },
+  "targets": {
+    "policylen-s": {
+      "hosting": {
+        "privacylens": [
+          "privacylen-s"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

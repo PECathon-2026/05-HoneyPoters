@@ -5,8 +5,15 @@
 import React from "react";
 import CogTrain from "@/components/originkit/ui/hero-54/cog-train";
 import { Download, Sliders, ArrowRight } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
 
 export function SectionHero({ onNavigate }) {
+  let isDark = true;
+  try {
+    const themeContext = useTheme();
+    isDark = themeContext.isDark;
+  } catch (e) {}
+
   return (
     <div className="hero-54">
       <section className="hero">
@@ -14,8 +21,8 @@ export function SectionHero({ onNavigate }) {
           <div>
             <p className="eyebrow">Calibre PS-004 · Hardware Isolation Engine</p>
             <div style={{ marginBottom: "12px" }}>
-              <span style={{ fontSize: "clamp(36px, 4.8vw, 68px)", fontWeight: 900, letterSpacing: "-0.035em", color: "#ffffff" }}>
-                Privacy<span style={{ color: "#3DE2DD" }}>Lens</span>
+              <span className="hero-54-brand-title">
+                Privacy<span>Lens</span>
               </span>
             </div>
             <h1>
@@ -79,9 +86,9 @@ export function SectionHero({ onNavigate }) {
               <div className="glass">
                 <div id="movement" aria-label="PrivacyLens Calibre PS-004 cryptographic movement, cogs turning">
                   <CogTrain
-                    background="#000000"
-                    baseColor="#3DE2DD"
-                    accentColor="#FFFFFF"
+                    background={isDark ? "#000000" : "#020617"}
+                    baseColor={isDark ? "#3DE2DD" : "#00d2c9"}
+                    accentColor={isDark ? "#FFFFFF" : "#ffffff"}
                     accentMix={32}
                     density={90}
                     size={56}

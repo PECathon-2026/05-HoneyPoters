@@ -6,7 +6,8 @@
  *  - Screen 2: One-Full-Scroll Operational Cockpit (#operational-cockpit)
  *              5-Stage Architectural Pipeline, Live Master Shield Controller, Real-Time KPIs,
  *              4 Dedicated Module Workspaces (/analytics, /diff, /scenarios, /audit), and Lab Tools.
- *  - Pure Z-Black (#000000 / #0a0a0a) with Electric Neon Cyan (#3DE2DD) accents.
+ *  - Pure Z-Black (#000000 / #0a0a0a) with Electric Neon Cyan (#3DE2DD) accents in dark mode,
+ *    and Clean Warm Beige/White (#fdfbf7 / #ffffff) with Slate & Cyan accents in light mode.
  * Team 05-HoneyPoters — PECathon 2026 (PS-004)
  */
 
@@ -82,24 +83,24 @@ export function HomePage({
       {/* ========================================================================= */}
       {/* 1. FULL-SCREEN INTERACTIVE MECHANICAL CIPHER HERO SECTION (SCREEN 1)     */}
       {/* ========================================================================= */}
-      <section className="relative w-full rounded-3xl overflow-hidden border border-neutral-800 bg-[#000000] shadow-[0_0_50px_rgba(0,0,0,0.95)] p-5 sm:p-8 lg:p-12 mb-16">
+      <section className="relative w-full rounded-3xl overflow-hidden border border-slate-200 dark:border-neutral-800 bg-white/90 dark:bg-[#000000] shadow-xl dark:shadow-[0_0_50px_rgba(0,0,0,0.95)] p-5 sm:p-8 lg:p-12 mb-16 backdrop-blur-xl transition-colors">
         {/* Ambient subtle backdrops */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(61,226,221,0.08)_0%,transparent_70%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.06)_0%,transparent_70%)] dark:bg-[radial-gradient(circle_at_top,rgba(61,226,221,0.08)_0%,transparent_70%)] pointer-events-none" />
 
         {/* Top Operational Status Badges */}
         <div className="relative z-10 w-full flex items-center justify-between mb-4">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="px-3.5 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-[#3DE2DD]/10 text-[#3DE2DD] border border-[#3DE2DD]/30 shadow-sm shadow-[#3DE2DD]/15 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#3DE2DD] animate-ping" />
+            <span className="px-3.5 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-cyan-500/10 dark:bg-[#3DE2DD]/10 text-cyan-700 dark:text-[#3DE2DD] border border-cyan-500/30 dark:border-[#3DE2DD]/30 shadow-sm flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-600 dark:bg-[#3DE2DD] animate-ping" />
               PS-004 • PRIVACYLENS
             </span>
-            <span className="px-3.5 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-white/5 text-white border border-neutral-700 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#3DE2DD] animate-pulse" />
+            <span className="px-3.5 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-white border border-slate-300 dark:border-neutral-700 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-[#3DE2DD] animate-pulse" />
               ZERO CLOUD LEAKAGE
             </span>
           </div>
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1 text-xs font-mono text-neutral-300 border border-neutral-800 rounded-full bg-black/90 backdrop-blur-md">
-            <Radio className="w-3.5 h-3.5 text-[#3DE2DD] animate-pulse" />
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 text-xs font-mono text-slate-600 dark:text-neutral-300 border border-slate-300 dark:border-neutral-800 rounded-full bg-white/90 dark:bg-black/90 backdrop-blur-md">
+            <Radio className="w-3.5 h-3.5 text-cyan-600 dark:text-[#3DE2DD] animate-pulse" />
             <span>PECATHON 2026 // PS-004</span>
           </div>
         </div>
@@ -112,11 +113,11 @@ export function HomePage({
         {/* Bottom Cue to Full Scroll */}
         <div 
           onClick={scrollToCockpit}
-          className="relative z-10 flex flex-col items-center gap-2 cursor-pointer text-xs font-mono text-neutral-400 hover:text-[#3DE2DD] transition-all animate-bounce select-none pt-4 group"
+          className="relative z-10 flex flex-col items-center gap-2 cursor-pointer text-xs font-mono text-slate-500 dark:text-neutral-400 hover:text-cyan-600 dark:hover:text-[#3DE2DD] transition-all animate-bounce select-none pt-4 group"
           title="Click or scroll down to explore operational cockpit"
         >
-          <span className="group-hover:tracking-wider text-neutral-300 group-hover:text-white transition-all">Scroll to Explore Operational Cockpit</span>
-          <ChevronDown className="w-4 h-4 text-[#3DE2DD]" />
+          <span className="group-hover:tracking-wider text-slate-600 dark:text-neutral-300 group-hover:text-slate-900 dark:group-hover:text-white transition-all">Scroll to Explore Operational Cockpit</span>
+          <ChevronDown className="w-4 h-4 text-cyan-600 dark:text-[#3DE2DD]" />
         </div>
       </section>
 
@@ -126,66 +127,66 @@ export function HomePage({
       <div id="operational-cockpit" className="w-full space-y-12 pt-6">
         
         {/* 2.1 ARCHITECTURAL DEFENSE PIPELINE (AUTHENTIC CYBERSECURITY ENGINEERING) */}
-        <section className="rounded-3xl bg-[#080808] border border-neutral-800 p-6 sm:p-8 space-y-6">
+        <section className="rounded-3xl bg-slate-100/70 dark:bg-[#080808] border border-slate-200 dark:border-neutral-800 p-6 sm:p-8 space-y-6 transition-colors">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <Workflow className="w-4 h-4 text-[#3DE2DD]" />
-                <h3 className="text-base sm:text-lg font-bold text-white">
+                <Workflow className="w-4 h-4 text-cyan-600 dark:text-[#3DE2DD]" />
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                   5-Stage Deterministic Defense Architecture
                 </h3>
               </div>
-              <p className="text-xs text-neutral-400 font-mono mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-neutral-400 font-mono mt-0.5">
                 Zero Cloud Egress Pipeline • How PrivacyLens isolates browser agents at the hardware level
               </p>
             </div>
-            <span className="px-3 py-1 text-xs font-mono font-bold rounded-full bg-[#111111] text-[#3DE2DD] border border-[#3DE2DD]/30 w-fit">
+            <span className="px-3 py-1 text-xs font-mono font-bold rounded-full bg-white dark:bg-[#111111] text-cyan-700 dark:text-[#3DE2DD] border border-cyan-500/30 dark:border-[#3DE2DD]/30 w-fit">
               CLIENT ISOLATED
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs font-mono">
             {/* Stage 1 */}
-            <div className="p-4 rounded-2xl bg-[#0f0f0f] border border-neutral-800 space-y-2 relative group hover:border-[#3DE2DD]/40 transition">
-              <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider">01. INGESTION</div>
-              <div className="font-bold text-white text-sm">DOM & Stream Hook</div>
-              <p className="text-[11px] text-neutral-400 font-sans leading-relaxed">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#0f0f0f] border border-slate-200 dark:border-neutral-800 space-y-2 relative group hover:border-cyan-500/50 dark:hover:border-[#3DE2DD]/40 transition shadow-sm">
+              <div className="text-[10px] text-slate-500 dark:text-neutral-500 font-bold uppercase tracking-wider">01. INGESTION</div>
+              <div className="font-bold text-slate-900 dark:text-white text-sm">DOM & Stream Hook</div>
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 font-sans leading-relaxed">
                 MutationObserver hooks inputs, textareas, and offscreen canvas frames before outbound network packaging.
               </p>
             </div>
 
             {/* Stage 2 */}
-            <div className="p-4 rounded-2xl bg-[#0f0f0f] border border-neutral-800 space-y-2 relative group hover:border-[#3DE2DD]/40 transition">
-              <div className="text-[10px] text-[#3DE2DD] font-bold uppercase tracking-wider">02. MATHEMATICS</div>
-              <div className="font-bold text-white text-sm">Verhoeff & Luhn</div>
-              <p className="text-[11px] text-neutral-400 font-sans leading-relaxed">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#0f0f0f] border border-slate-200 dark:border-neutral-800 space-y-2 relative group hover:border-cyan-500/50 dark:hover:border-[#3DE2DD]/40 transition shadow-sm">
+              <div className="text-[10px] text-cyan-600 dark:text-[#3DE2DD] font-bold uppercase tracking-wider">02. MATHEMATICS</div>
+              <div className="font-bold text-slate-900 dark:text-white text-sm">Verhoeff & Luhn</div>
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 font-sans leading-relaxed">
                 Dihedral group D₅ validation for 12-digit Indian Aadhaar and Mod-10 for PCI cards to eliminate false positives.
               </p>
             </div>
 
             {/* Stage 3 */}
-            <div className="p-4 rounded-2xl bg-[#0f0f0f] border border-neutral-800 space-y-2 relative group hover:border-[#3DE2DD]/40 transition">
-              <div className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">03. VISION BLACKOUT</div>
-              <div className="font-bold text-white text-sm">Offscreen Blackout</div>
-              <p className="text-[11px] text-neutral-400 font-sans leading-relaxed">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#0f0f0f] border border-slate-200 dark:border-neutral-800 space-y-2 relative group hover:border-amber-500/50 transition shadow-sm">
+              <div className="text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider">03. VISION BLACKOUT</div>
+              <div className="font-bold text-slate-900 dark:text-white text-sm">Offscreen Blackout</div>
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 font-sans leading-relaxed">
                 Solid #000000 pixel blackout on offscreen HTML5 canvas. Visual pixels are irrecoverably destroyed.
               </p>
             </div>
 
             {/* Stage 4 */}
-            <div className="p-4 rounded-2xl bg-[#0f0f0f] border border-neutral-800 space-y-2 relative group hover:border-[#3DE2DD]/40 transition">
-              <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">04. DISPATCH</div>
-              <div className="font-bold text-white text-sm">Sanitized Cloud Egress</div>
-              <p className="text-[11px] text-neutral-400 font-sans leading-relaxed">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#0f0f0f] border border-slate-200 dark:border-neutral-800 space-y-2 relative group hover:border-emerald-500/50 transition shadow-sm">
+              <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">04. DISPATCH</div>
+              <div className="font-bold text-slate-900 dark:text-white text-sm">Sanitized Cloud Egress</div>
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 font-sans leading-relaxed">
                 Clean semantic placeholders (`[REDACTED: AADHAAR]`) sent to Gemini 1.5 Flash. Zero raw PII leaves device.
               </p>
             </div>
 
             {/* Stage 5 */}
-            <div className="p-4 rounded-2xl bg-[#0f0f0f] border border-neutral-800 space-y-2 relative group hover:border-[#3DE2DD]/40 transition">
-              <div className="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">05. EXECUTION</div>
-              <div className="font-bold text-white text-sm">Ephemeral DOM Vault</div>
-              <p className="text-[11px] text-neutral-400 font-sans leading-relaxed">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#0f0f0f] border border-slate-200 dark:border-neutral-800 space-y-2 relative group hover:border-indigo-500/50 transition shadow-sm">
+              <div className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wider">05. EXECUTION</div>
+              <div className="font-bold text-slate-900 dark:text-white text-sm">Ephemeral DOM Vault</div>
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 font-sans leading-relaxed">
                 Agent reasoning completed; local volatile RAM injector fills real secrets into target DOM without storage.
               </p>
             </div>
@@ -193,41 +194,41 @@ export function HomePage({
         </section>
 
         {/* 2.2 VALUE PROPOSITION & LIVE MASTER SHIELD CONTROLLER */}
-        <section className="relative overflow-hidden rounded-3xl bg-[#0a0a0a] border border-neutral-800 p-6 sm:p-10 shadow-xl transition-all">
+        <section className="relative overflow-hidden rounded-3xl bg-white/90 dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 p-6 sm:p-10 shadow-xl transition-all">
           <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
             <div className="max-w-3xl space-y-4">
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="px-3 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-[#3DE2DD]/10 text-[#3DE2DD] border border-[#3DE2DD]/30">
+                <span className="px-3 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-cyan-500/10 dark:bg-[#3DE2DD]/10 text-cyan-700 dark:text-[#3DE2DD] border border-cyan-500/30 dark:border-[#3DE2DD]/30">
                   REAL-TIME EDGE GATEKEEPER
                 </span>
-                <span className="px-3 py-1 text-xs font-mono font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="px-3 py-1 text-xs font-mono font-semibold rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   ACTIVE FILTERING
                 </span>
               </div>
 
-              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white leading-[1.2]">
+              <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.2]">
                 Deterministic Edge Privacy with Zero Cloud Leakage
               </h2>
 
-              <p className="text-sm sm:text-base text-neutral-400 leading-relaxed font-sans">
+              <p className="text-sm sm:text-base text-slate-600 dark:text-neutral-400 leading-relaxed font-sans">
                 PrivacyLens sits directly at the browser edge to intercept, detect, and redact sensitive personal identifiers, 
-                financial credentials, visual faces, and private chat logs <span className="font-semibold text-white">before</span> outbound 
+                financial credentials, visual faces, and private chat logs <span className="font-semibold text-slate-900 dark:text-white">before</span> outbound 
                 payloads traverse the network to Google Gemini or third-party LLMs.
               </p>
 
               {/* Quick architectural bullet pillars */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs font-medium text-neutral-300 font-mono">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs font-medium text-slate-700 dark:text-neutral-300 font-mono">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#3DE2DD] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-cyan-600 dark:text-[#3DE2DD] shrink-0" />
                   <span>Deterministic Luhn & Verhoeff</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#3DE2DD] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-cyan-600 dark:text-[#3DE2DD] shrink-0" />
                   <span>Offscreen Canvas Solid Blackout</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#3DE2DD] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-cyan-600 dark:text-[#3DE2DD] shrink-0" />
                   <span>Fail-Closed Tripwire Abort</span>
                 </div>
               </div>
@@ -237,7 +238,7 @@ export function HomePage({
                 <button
                   type="button"
                   onClick={() => onNavigate && onNavigate('shield')}
-                  className="px-5 py-3 rounded-2xl bg-[#3DE2DD] hover:bg-[#34c7c2] text-black font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-[#3DE2DD]/20 hover:scale-[1.02] transition-all font-sans"
+                  className="px-5 py-3 rounded-2xl bg-cyan-600 hover:bg-cyan-500 text-white dark:bg-[#3DE2DD] dark:hover:bg-[#34c7c2] dark:text-black font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/20 hover:scale-[1.02] transition-all font-sans"
                 >
                   <Sliders className="w-4 h-4" />
                   <span>Launch Shield Cockpit</span>
@@ -246,24 +247,24 @@ export function HomePage({
                 <button
                   type="button"
                   onClick={() => onNavigate && onNavigate('scenarios')}
-                  className="px-5 py-3 rounded-2xl bg-[#111111] hover:bg-neutral-800 text-neutral-200 font-bold text-sm border border-neutral-800 flex items-center gap-2 transition-all font-sans"
+                  className="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 dark:bg-[#111111] dark:hover:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-800 font-bold text-sm flex items-center gap-2 transition-all font-sans"
                 >
-                  <FlaskConical className="w-4 h-4 text-emerald-400" />
+                  <FlaskConical className="w-4 h-4 text-emerald-500" />
                   <span>5 Evaluation Scenarios</span>
                 </button>
               </div>
             </div>
 
             {/* MASTER SHIELD LIVE COCKPIT CONTROLLER */}
-            <div className="w-full lg:w-84 shrink-0 bg-[#111111] border border-neutral-800 rounded-2xl p-5 shadow-xl space-y-4 transition-colors">
+            <div className="w-full lg:w-84 shrink-0 bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 rounded-2xl p-5 shadow-xl space-y-4 transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className={`p-2 rounded-xl ${shieldActive ? 'bg-[#3DE2DD]/15 text-[#3DE2DD]' : 'bg-red-500/15 text-red-500'}`}>
+                  <div className={`p-2 rounded-xl ${shieldActive ? 'bg-cyan-500/15 text-cyan-600 dark:text-[#3DE2DD]' : 'bg-red-500/15 text-red-500'}`}>
                     {shieldActive ? <ShieldCheck className="w-5 h-5" /> : <ShieldAlert className="w-5 h-5" />}
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">Master Shield</h3>
-                    <p className="text-[11px] text-neutral-400 font-mono">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">Master Shield</h3>
+                    <p className="text-[11px] text-slate-500 dark:text-neutral-400 font-mono">
                       {shieldActive ? 'Zero Leakage Enforced' : 'Bypass Active'}
                     </p>
                   </div>
@@ -274,12 +275,12 @@ export function HomePage({
                   type="button"
                   onClick={() => onToggleShield && onToggleShield(!shieldActive)}
                   className={`relative inline-flex h-7 w-13 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                    shieldActive ? 'bg-[#3DE2DD]' : 'bg-neutral-800'
+                    shieldActive ? 'bg-cyan-600 dark:bg-[#3DE2DD]' : 'bg-slate-300 dark:bg-neutral-800'
                   }`}
                   title={shieldActive ? 'Disable Shield' : 'Enable Shield'}
                 >
                   <span
-                    className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out ${
+                    className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white dark:bg-black shadow-lg ring-0 transition duration-200 ease-in-out ${
                       shieldActive ? 'translate-x-6' : 'translate-x-0'
                     }`}
                   />
@@ -287,18 +288,18 @@ export function HomePage({
               </div>
 
               {/* Security Mode Selector */}
-              <div className="space-y-1.5 pt-2 border-t border-neutral-800 font-mono">
-                <label className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
+              <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-neutral-800 font-mono">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-neutral-400">
                   Security Policy
                 </label>
-                <div className="grid grid-cols-2 gap-1.5 bg-black p-1 rounded-xl text-xs border border-neutral-800">
+                <div className="grid grid-cols-2 gap-1.5 bg-slate-200/80 dark:bg-black p-1 rounded-xl text-xs border border-slate-300 dark:border-neutral-800">
                   <button
                     type="button"
                     onClick={() => onSetSecurityMode && onSetSecurityMode('REDACT_AND_FORWARD')}
                     className={`py-1.5 rounded-lg font-medium transition ${
                       securityMode === 'REDACT_AND_FORWARD'
-                        ? 'bg-neutral-900 text-[#3DE2DD] shadow-sm font-bold'
-                        : 'text-neutral-400 hover:text-white'
+                        ? 'bg-white text-cyan-700 dark:bg-neutral-900 dark:text-[#3DE2DD] shadow-sm font-bold'
+                        : 'text-slate-600 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white'
                     }`}
                   >
                     Redact
@@ -309,7 +310,7 @@ export function HomePage({
                     className={`py-1.5 rounded-lg font-medium transition ${
                       securityMode === 'FAIL_CLOSED_STRICT'
                         ? 'bg-red-500 text-white shadow-sm font-bold'
-                        : 'text-neutral-400 hover:text-white'
+                        : 'text-slate-600 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white'
                     }`}
                   >
                     Strict Block
@@ -320,8 +321,8 @@ export function HomePage({
               {/* Real-time status pill */}
               <div className={`p-2.5 rounded-xl text-xs font-mono font-medium text-center border ${
                 shieldActive
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                  : 'bg-red-500/10 text-red-400 border-red-500/30'
+                  ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30'
+                  : 'bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/30'
               }`}>
                 {shieldActive ? '🟢 Zero Cloud Leakage: ACTIVE' : '⚠️ Direct Cloud Bypass: ENGAGED'}
               </div>
@@ -329,36 +330,36 @@ export function HomePage({
           </div>
 
           {/* METRICS KPI BAR */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-neutral-800">
-            <div className="p-4 rounded-2xl bg-[#111111] border border-neutral-800">
-              <span className="text-[11px] uppercase tracking-wider text-neutral-400 font-semibold font-mono">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-200 dark:border-neutral-800">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800">
+              <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-neutral-400 font-semibold font-mono">
                 Intercepted Requests
               </span>
-              <div className="mt-1 text-2xl sm:text-3xl font-black text-white font-mono">
+              <div className="mt-1 text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono">
                 {stats.totalIntercepted || 0}
               </div>
             </div>
-            <div className="p-4 rounded-2xl bg-[#111111] border border-neutral-800">
-              <span className="text-[11px] uppercase tracking-wider text-[#3DE2DD] font-semibold font-mono">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800">
+              <span className="text-[11px] uppercase tracking-wider text-cyan-600 dark:text-[#3DE2DD] font-semibold font-mono">
                 Sanitized Locally
               </span>
-              <div className="mt-1 text-2xl sm:text-3xl font-black text-[#3DE2DD] font-mono">
+              <div className="mt-1 text-2xl sm:text-3xl font-black text-cyan-600 dark:text-[#3DE2DD] font-mono">
                 {stats.totalSanitized || 0}
               </div>
             </div>
-            <div className="p-4 rounded-2xl bg-[#111111] border border-neutral-800">
-              <span className="text-[11px] uppercase tracking-wider text-red-400 font-semibold font-mono">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800">
+              <span className="text-[11px] uppercase tracking-wider text-red-600 dark:text-red-400 font-semibold font-mono">
                 Fail-Closed Aborts
               </span>
-              <div className="mt-1 text-2xl sm:text-3xl font-black text-red-400 font-mono">
+              <div className="mt-1 text-2xl sm:text-3xl font-black text-red-600 dark:text-red-400 font-mono">
                 {stats.totalBlocked || 0}
               </div>
             </div>
-            <div className="p-4 rounded-2xl bg-[#111111] border border-neutral-800">
-              <span className="text-[11px] uppercase tracking-wider text-emerald-400 font-semibold font-mono">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800">
+              <span className="text-[11px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold font-mono">
                 Zero-Leak Ratio
               </span>
-              <div className="mt-1 text-2xl sm:text-3xl font-black text-emerald-400 font-mono">
+              <div className="mt-1 text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
                 {zeroLeakRatio}
               </div>
             </div>
@@ -369,14 +370,14 @@ export function HomePage({
         <section className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Dedicated Core Modules
               </h2>
-              <p className="text-sm text-neutral-400 font-mono">
+              <p className="text-sm text-slate-600 dark:text-neutral-400 font-mono">
                 Focused workspaces for evaluation, telemetry inspection, payload diffs, and forensics
               </p>
             </div>
-            <span className="text-xs font-mono text-neutral-400 bg-[#111111] border border-neutral-800 px-3 py-1 rounded-full w-fit">
+            <span className="text-xs font-mono text-slate-600 dark:text-neutral-400 bg-slate-100 dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 px-3 py-1 rounded-full w-fit">
               4 DEDICATED VIEWS
             </span>
           </div>
@@ -385,44 +386,44 @@ export function HomePage({
             {/* CARD 1: 📊 Analytics & Telemetry */}
             <div 
               onClick={() => onNavigate && onNavigate('analytics')}
-              className="group relative cursor-pointer overflow-hidden rounded-3xl bg-[#0a0a0a] border border-neutral-800 p-6 sm:p-7 shadow-lg hover:shadow-2xl hover:border-[#3DE2DD]/50 transition-all duration-300 flex flex-col justify-between"
+              className="group relative cursor-pointer overflow-hidden rounded-3xl bg-white dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 p-6 sm:p-7 shadow-md dark:shadow-lg hover:shadow-xl hover:border-cyan-500/50 dark:hover:border-[#3DE2DD]/50 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-[#3DE2DD]/15 text-[#3DE2DD] flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 text-cyan-600 dark:text-[#3DE2DD] flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
                     <BarChart3 className="w-6 h-6" />
                   </div>
-                  <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-[#3DE2DD]/10 text-[#3DE2DD] border border-[#3DE2DD]/30">
+                  <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-[#3DE2DD] border border-cyan-500/30 dark:border-[#3DE2DD]/30">
                     /analytics
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-[#3DE2DD] transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-[#3DE2DD] transition-colors">
                     Analytics & Telemetry
                   </h3>
-                  <p className="mt-1.5 text-sm text-neutral-400 leading-relaxed font-sans">
+                  <p className="mt-1.5 text-sm text-slate-600 dark:text-neutral-400 leading-relaxed font-sans">
                     Real-time time-series area charts, PII threat category breakdown, and dynamic DPDP Act 2023 health score index.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 pt-2 text-center text-xs font-mono">
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <div className="text-neutral-500 text-[10px]">Health Index</div>
-                    <div className="font-bold text-emerald-400">98 / 100</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <div className="text-slate-500 dark:text-neutral-500 text-[10px]">Health Index</div>
+                    <div className="font-bold text-emerald-600 dark:text-emerald-400">98 / 100</div>
                   </div>
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <div className="text-neutral-500 text-[10px]">Categories</div>
-                    <div className="font-bold text-[#3DE2DD]">7 PII Types</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <div className="text-slate-500 dark:text-neutral-500 text-[10px]">Categories</div>
+                    <div className="font-bold text-cyan-600 dark:text-[#3DE2DD]">7 PII Types</div>
                   </div>
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <div className="text-neutral-500 text-[10px]">Latency</div>
-                    <div className="font-bold text-white">&lt;0.04ms</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <div className="text-slate-500 dark:text-neutral-500 text-[10px]">Latency</div>
+                    <div className="font-bold text-slate-900 dark:text-white">&lt;0.04ms</div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-neutral-800/80 flex items-center justify-between text-xs font-bold text-[#3DE2DD] group-hover:translate-x-1 transition-transform font-mono">
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-neutral-800/80 flex items-center justify-between text-xs font-bold text-cyan-600 dark:text-[#3DE2DD] group-hover:translate-x-1 transition-transform font-mono">
                 <span>Explore Telemetry Charts</span>
                 <ArrowRight className="w-4 h-4" />
               </div>
@@ -431,44 +432,44 @@ export function HomePage({
             {/* CARD 2: 🔍 Payload Diff Inspector */}
             <div 
               onClick={() => onNavigate && onNavigate('diff')}
-              className="group relative cursor-pointer overflow-hidden rounded-3xl bg-[#0a0a0a] border border-neutral-800 p-6 sm:p-7 shadow-lg hover:shadow-2xl hover:border-[#3DE2DD]/50 transition-all duration-300 flex flex-col justify-between"
+              className="group relative cursor-pointer overflow-hidden rounded-3xl bg-white dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 p-6 sm:p-7 shadow-md dark:shadow-lg hover:shadow-xl hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
                     <SplitSquareVertical className="w-6 h-6" />
                   </div>
-                  <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30">
+                  <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-500/30">
                     /diff
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                     Payload Diff Inspector
                   </h3>
-                  <p className="mt-1.5 text-sm text-neutral-400 leading-relaxed font-sans">
+                  <p className="mt-1.5 text-sm text-slate-600 dark:text-neutral-400 leading-relaxed font-sans">
                     Side-by-side terminal inspector with inline character-level highlighting and irrecoverability proof.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 pt-2 text-center text-xs font-mono">
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <span className="text-neutral-500 text-[10px]">Verification</span>
-                    <div className="font-bold text-emerald-400">Irrecoverable</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <span className="text-slate-500 dark:text-neutral-500 text-[10px]">Verification</span>
+                    <div className="font-bold text-emerald-600 dark:text-emerald-400">Irrecoverable</div>
                   </div>
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <span className="text-neutral-500 text-[10px]">Diff Mode</span>
-                    <div className="font-bold text-indigo-400">Side-by-Side</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <span className="text-slate-500 dark:text-neutral-500 text-[10px]">Diff Mode</span>
+                    <div className="font-bold text-indigo-600 dark:text-indigo-400">Side-by-Side</div>
                   </div>
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <span className="text-neutral-500 text-[10px]">Format</span>
-                    <div className="font-bold text-white">JSON / Text</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <span className="text-slate-500 dark:text-neutral-500 text-[10px]">Format</span>
+                    <div className="font-bold text-slate-900 dark:text-white">JSON / Text</div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-neutral-800/80 flex items-center justify-between text-xs font-bold text-indigo-400 group-hover:translate-x-1 transition-transform font-mono">
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-neutral-800/80 flex items-center justify-between text-xs font-bold text-indigo-600 dark:text-indigo-400 group-hover:translate-x-1 transition-transform font-mono">
                 <span>Inspect Payloads</span>
                 <ArrowRight className="w-4 h-4" />
               </div>
@@ -477,44 +478,44 @@ export function HomePage({
             {/* CARD 3: 🧪 5 Evaluation Scenarios */}
             <div 
               onClick={() => onNavigate && onNavigate('scenarios')}
-              className="group relative cursor-pointer overflow-hidden rounded-3xl bg-[#0a0a0a] border border-neutral-800 p-6 sm:p-7 shadow-lg hover:shadow-2xl hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between"
+              className="group relative cursor-pointer overflow-hidden rounded-3xl bg-white dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 p-6 sm:p-7 shadow-md dark:shadow-lg hover:shadow-xl hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
                     <FlaskConical className="w-6 h-6" />
                   </div>
-                  <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                  <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
                     /scenarios
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                     5 Evaluation Scenarios
                   </h3>
-                  <p className="mt-1.5 text-sm text-neutral-400 leading-relaxed font-sans">
+                  <p className="mt-1.5 text-sm text-slate-600 dark:text-neutral-400 leading-relaxed font-sans">
                     Automated live testbed for the 5 official PECathon benchmarks: Aadhaar Verhoeff, Luhn Cards, Passwords, Prompt Injections, and Honeypot Canaries.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 pt-2 text-center text-xs font-mono">
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <span className="text-neutral-500 text-[10px]">Status</span>
-                    <div className="font-bold text-emerald-400">5 / 5 Passing</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <span className="text-slate-500 dark:text-neutral-500 text-[10px]">Status</span>
+                    <div className="font-bold text-emerald-600 dark:text-emerald-400">5 / 5 Passing</div>
                   </div>
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <span className="text-neutral-500 text-[10px]">Recall</span>
-                    <div className="font-bold text-white">100.0%</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <span className="text-slate-500 dark:text-neutral-500 text-[10px]">Recall</span>
+                    <div className="font-bold text-slate-900 dark:text-white">100.0%</div>
                   </div>
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <span className="text-neutral-500 text-[10px]">Canary Safe</span>
-                    <div className="font-bold text-emerald-400">0 Leaks</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <span className="text-slate-500 dark:text-neutral-500 text-[10px]">Canary Safe</span>
+                    <div className="font-bold text-emerald-600 dark:text-emerald-400">0 Leaks</div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-neutral-800/80 flex items-center justify-between text-xs font-bold text-emerald-400 group-hover:translate-x-1 transition-transform font-mono">
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-neutral-800/80 flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform font-mono">
                 <span>Run Evaluation Scenarios</span>
                 <ArrowRight className="w-4 h-4" />
               </div>
@@ -523,40 +524,40 @@ export function HomePage({
             {/* CARD 4: 🛡️ Audit Forensics */}
             <div 
               onClick={() => onNavigate && onNavigate('audit')}
-              className="group relative cursor-pointer overflow-hidden rounded-3xl bg-[#0a0a0a] border border-neutral-800 p-6 sm:p-7 shadow-lg hover:shadow-2xl hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between"
+              className="group relative cursor-pointer overflow-hidden rounded-3xl bg-white dark:bg-[#0a0a0a] border border-slate-200 dark:border-neutral-800 p-6 sm:p-7 shadow-md dark:shadow-lg hover:shadow-xl hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform">
                     <FileText className="w-6 h-6" />
                   </div>
-                  <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                  <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/30">
                     /audit
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-amber-400 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                     Audit Forensics
                   </h3>
-                  <p className="mt-1.5 text-sm text-neutral-400 leading-relaxed font-sans">
+                  <p className="mt-1.5 text-sm text-slate-600 dark:text-neutral-400 leading-relaxed font-sans">
                     Searchable client-side audit ledger with cryptographic SHA-256 verification, zero raw secret retention, and DPDP / GDPR exports.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-center text-xs font-mono">
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <span className="text-neutral-500 text-[10px]">Compliance</span>
-                    <div className="font-bold text-white">DPDP 2023 / GDPR</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <span className="text-slate-500 dark:text-neutral-500 text-[10px]">Compliance</span>
+                    <div className="font-bold text-slate-900 dark:text-white">DPDP 2023 / GDPR</div>
                   </div>
-                  <div className="bg-black p-2 rounded-xl border border-neutral-800">
-                    <span className="text-neutral-500 text-[10px]">Formats</span>
-                    <div className="font-bold text-amber-400">JSON & CSV</div>
+                  <div className="bg-slate-50 dark:bg-black p-2 rounded-xl border border-slate-200 dark:border-neutral-800">
+                    <span className="text-slate-500 dark:text-neutral-500 text-[10px]">Formats</span>
+                    <div className="font-bold text-amber-600 dark:text-amber-400">JSON & CSV</div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-neutral-800/80 flex items-center justify-between text-xs font-bold text-amber-400 group-hover:translate-x-1 transition-transform font-mono">
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-neutral-800/80 flex items-center justify-between text-xs font-bold text-amber-600 dark:text-amber-400 group-hover:translate-x-1 transition-transform font-mono">
                 <span>View Audit Forensics</span>
                 <ArrowRight className="w-4 h-4" />
               </div>
@@ -565,13 +566,13 @@ export function HomePage({
         </section>
 
         {/* 2.4 LAB SHORTCUTS (PLAYGROUND, VISUAL STUDIO, SHIELD COCKPIT) */}
-        <section className="rounded-3xl bg-[#080808] border border-neutral-800 p-6 sm:p-8 space-y-4 transition-colors">
+        <section className="rounded-3xl bg-slate-100/70 dark:bg-[#080808] border border-slate-200 dark:border-neutral-800 p-6 sm:p-8 space-y-4 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-white">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 Autonomous Agent & Visual Lab Tools
               </h3>
-              <p className="text-xs text-neutral-400 font-mono">
+              <p className="text-xs text-slate-600 dark:text-neutral-400 font-mono">
                 Interactive simulators for DOM auto-injection, offscreen canvas redactions, and live attack testbeds
               </p>
             </div>
@@ -581,15 +582,15 @@ export function HomePage({
             <button
               type="button"
               onClick={() => onNavigate && onNavigate('playground')}
-              className="p-4 rounded-2xl bg-[#111111] border border-neutral-800 hover:border-[#3DE2DD]/60 text-left transition group shadow-sm"
+              className="p-4 rounded-2xl bg-white dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 hover:border-cyan-500 dark:hover:border-[#3DE2DD]/60 text-left transition group shadow-sm"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-white group-hover:text-[#3DE2DD] transition-colors">
+                <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-[#3DE2DD] transition-colors">
                   Agentic Playground
                 </span>
-                <ArrowRight className="w-4 h-4 text-neutral-500 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-slate-400 dark:text-neutral-500 group-hover:translate-x-1 transition-transform" />
               </div>
-              <p className="text-xs text-neutral-400 font-mono">
+              <p className="text-xs text-slate-600 dark:text-neutral-400 font-mono">
                 Autonomous browser agent form autofill with volatile RAM secret injector.
               </p>
             </button>
@@ -597,15 +598,15 @@ export function HomePage({
             <button
               type="button"
               onClick={() => onNavigate && onNavigate('visual')}
-              className="p-4 rounded-2xl bg-[#111111] border border-neutral-800 hover:border-[#3DE2DD]/60 text-left transition group shadow-sm"
+              className="p-4 rounded-2xl bg-white dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 hover:border-cyan-500 dark:hover:border-[#3DE2DD]/60 text-left transition group shadow-sm"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-white group-hover:text-[#3DE2DD] transition-colors">
+                <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-[#3DE2DD] transition-colors">
                   Visual Redaction Studio
                 </span>
-                <ArrowRight className="w-4 h-4 text-neutral-500 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-slate-400 dark:text-neutral-500 group-hover:translate-x-1 transition-transform" />
               </div>
-              <p className="text-xs text-neutral-400 font-mono">
+              <p className="text-xs text-slate-600 dark:text-neutral-400 font-mono">
                 Canvas-based visual coordinate blackout for profile pictures & ID cards.
               </p>
             </button>
@@ -613,15 +614,15 @@ export function HomePage({
             <button
               type="button"
               onClick={() => onNavigate && onNavigate('shield')}
-              className="p-4 rounded-2xl bg-[#111111] border border-neutral-800 hover:border-[#3DE2DD]/60 text-left transition group shadow-sm"
+              className="p-4 rounded-2xl bg-white dark:bg-[#111111] border border-slate-200 dark:border-neutral-800 hover:border-cyan-500 dark:hover:border-[#3DE2DD]/60 text-left transition group shadow-sm"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-white group-hover:text-[#3DE2DD] transition-colors">
+                <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-[#3DE2DD] transition-colors">
                   Shield Cockpit & Attack Tester
                 </span>
-                <ArrowRight className="w-4 h-4 text-neutral-500 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-slate-400 dark:text-neutral-500 group-hover:translate-x-1 transition-transform" />
               </div>
-              <p className="text-xs text-neutral-400 font-mono">
+              <p className="text-xs text-slate-600 dark:text-neutral-400 font-mono">
                 Real-time attack simulator testing strict fail-closed & redact-and-forward defenses.
               </p>
             </button>
