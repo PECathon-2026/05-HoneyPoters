@@ -23,7 +23,9 @@ import {
   Zap, 
   Layers, 
   Terminal,
-  ExternalLink
+  ExternalLink,
+  Sliders,
+  SlidersHorizontal
 } from 'lucide-react';
 
 export function HomePage({
@@ -92,6 +94,27 @@ export function HomePage({
                 <CheckCircle2 className="w-4 h-4 text-cyan-500 shrink-0" />
                 <span>Fail-Closed Tripwire Abort</span>
               </div>
+            </div>
+
+            {/* Primary Action Buttons Connecting into Shield Cockpit */}
+            <div className="flex flex-wrap items-center gap-3 pt-4">
+              <button
+                type="button"
+                onClick={() => onNavigate && onNavigate('shield')}
+                className="px-5 py-3 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/20 hover:scale-[1.02] transition-all"
+              >
+                <Sliders className="w-4 h-4" />
+                <span>Launch Shield Cockpit</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onNavigate && onNavigate('scenarios')}
+                className="px-5 py-3 rounded-2xl bg-slate-200/80 dark:bg-neutral-900 hover:bg-slate-300 dark:hover:bg-neutral-800 text-slate-800 dark:text-neutral-200 font-bold text-sm border border-slate-300 dark:border-neutral-800 flex items-center gap-2 transition-all"
+              >
+                <FlaskConical className="w-4 h-4 text-emerald-500" />
+                <span>5 Evaluation Scenarios</span>
+              </button>
             </div>
           </div>
 
@@ -388,7 +411,7 @@ export function HomePage({
         </div>
       </section>
 
-      {/* 3. SECONDARY LAB SHORTCUTS (PLAYGROUND, VISUAL STUDIO, SHIELD COCKPIT) */}
+      {/* 3. LAB SHORTCUTS (PLAYGROUND, VISUAL STUDIO, SHIELD COCKPIT) */}
       <section className="rounded-3xl bg-slate-100/70 dark:bg-[#080808] border border-slate-200 dark:border-neutral-800 p-6 sm:p-8 space-y-4 transition-colors">
         <div className="flex items-center justify-between">
           <div>

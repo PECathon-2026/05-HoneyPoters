@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PrivacyLens Shield</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrivacyLens Shield — Browser AI Safety Guard</title>
   <style>
     :root {
       --bg-app: #000000;
@@ -12,6 +13,7 @@
       --text-muted: #a3a3a3;
       --stat-label: #737373;
       --brand-color: #38bdf8;
+      --brand-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
       --badge-bg: #111111;
       --badge-border: #262626;
       --badge-text: #38bdf8;
@@ -19,7 +21,8 @@
       --theme-btn-border: #262626;
       --theme-btn-color: #fbbf24;
       --toggle-inactive: #262626;
-      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      --btn-glow: 0 0 15px rgba(6, 182, 212, 0.35);
     }
 
     body.light {
@@ -30,6 +33,7 @@
       --text-muted: #64748b;
       --stat-label: #94a3b8;
       --brand-color: #0284c7;
+      --brand-gradient: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
       --badge-bg: #f1f5f9;
       --badge-border: #cbd5e1;
       --badge-text: #0284c7;
@@ -37,7 +41,8 @@
       --theme-btn-border: #e2e8f0;
       --theme-btn-color: #0284c7;
       --toggle-inactive: #cbd5e1;
-      --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      --btn-glow: 0 0 12px rgba(2, 132, 199, 0.25);
     }
 
     body.dark {
@@ -48,6 +53,7 @@
       --text-muted: #a3a3a3;
       --stat-label: #737373;
       --brand-color: #38bdf8;
+      --brand-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
       --badge-bg: #111111;
       --badge-border: #262626;
       --badge-text: #38bdf8;
@@ -55,23 +61,27 @@
       --theme-btn-border: #262626;
       --theme-btn-color: #fbbf24;
       --toggle-inactive: #262626;
-      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      --btn-glow: 0 0 15px rgba(6, 182, 212, 0.35);
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      width: 320px;
-      margin: 0;
+      width: 360px;
       padding: 16px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: var(--bg-app);
       color: var(--text-main);
       transition: background 0.2s ease, color 0.2s ease;
+      line-height: 1.4;
     }
 
+    /* HEADER */
     .header {
       display: flex;
       align-items: center;
@@ -84,11 +94,29 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
       font-weight: 800;
-      font-size: 14px;
+      font-size: 15px;
       color: var(--text-main);
       letter-spacing: -0.01em;
+    }
+
+    .brand-logo {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      border: 1px solid var(--border-app);
+    }
+
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .header-actions {
@@ -110,7 +138,6 @@
       justify-content: center;
       transition: all 0.2s ease;
       font-size: 13px;
-      line-height: 1;
     }
 
     .theme-btn:hover {
@@ -129,6 +156,7 @@
       color: var(--badge-text);
     }
 
+    /* MASTER SHIELD TOGGLE CARD */
     .toggle-row {
       display: flex;
       align-items: center;
@@ -138,18 +166,21 @@
       box-shadow: var(--card-shadow);
       padding: 12px 14px;
       border-radius: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       transition: background 0.2s ease, border-color 0.2s ease;
     }
 
     .toggle-label {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .toggle-desc {
-      font-size: 10px;
+      font-size: 10.5px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       color: var(--text-muted);
       margin-top: 2px;
@@ -200,32 +231,33 @@
       transform: translateX(20px);
     }
 
+    /* STATS GRID */
     .stats-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .stat-card {
       background: var(--bg-card);
       border: 1px solid var(--border-app);
       box-shadow: var(--card-shadow);
-      padding: 10px 12px;
+      padding: 9px 8px;
       border-radius: 10px;
       text-align: center;
       transition: background 0.2s ease, border-color 0.2s ease;
     }
 
     .stat-val {
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 800;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       color: var(--brand-color);
     }
 
     .stat-label {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 600;
       color: var(--stat-label);
       text-transform: uppercase;
@@ -233,13 +265,15 @@
       margin-top: 2px;
     }
 
+    /* STATUS PILL */
     .status-pill {
       font-size: 11px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-weight: 700;
       text-align: center;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 7px 10px;
+      border-radius: 9px;
+      margin-bottom: 10px;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
@@ -271,8 +305,92 @@
       border: 1px solid rgba(220, 38, 38, 0.3);
     }
 
+    /* ACTIVE PROTECTION SCOPE TAGS */
+    .scope-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-app);
+      border-radius: 10px;
+      padding: 9px 10px;
+      margin-bottom: 12px;
+    }
+
+    .scope-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .scope-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--stat-label);
+      letter-spacing: 0.05em;
+    }
+
+    .scope-status {
+      font-size: 9.5px;
+      color: #10b981;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-weight: 600;
+    }
+
+    .scope-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .scope-tag {
+      font-size: 9px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--text-muted);
+    }
+
+    /* PRIMARY CTA LAUNCH BUTTON (MAIN PRODUCT BRIDGE TO WEBAPP) */
+    .cta-container {
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    .launch-btn {
+      width: 100%;
+      background: var(--brand-gradient);
+      color: #000000;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      box-shadow: var(--btn-glow);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .launch-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+    }
+
+    .launch-btn:active {
+      transform: translateY(0);
+    }
+
+    /* FOOTER LINK */
     .footer-link {
-      margin-top: 10px;
       text-align: center;
       display: block;
       font-size: 10px;
@@ -281,6 +399,7 @@
       text-decoration: none;
       transition: color 0.2s ease;
       cursor: pointer;
+      padding-top: 4px;
     }
 
     .footer-link:hover {
@@ -289,9 +408,12 @@
   </style>
 </head>
 <body class="dark">
+  <!-- EXTENSION HEADER -->
   <div class="header">
     <div class="brand">
-      <img src="icons/icon48.png" width="20" height="20" alt="PrivacyLens Logo" style="vertical-align: middle; border-radius: 4px;">
+      <div class="brand-logo">
+        <img src="icons/icon48.png" width="20" height="20" alt="PrivacyLens Logo">
+      </div>
       <span>PrivacyLens</span>
     </div>
     <div class="header-actions">
@@ -302,9 +424,12 @@
     </div>
   </div>
 
+  <!-- MASTER PRIVACY SHIELD CONTROLLER -->
   <div class="toggle-row">
     <div>
-      <div class="toggle-label">Privacy Shield</div>
+      <div class="toggle-label">
+        <span>Privacy Shield</span>
+      </div>
       <div class="toggle-desc" id="shield-mode-desc">Intercepting Outbound AI</div>
     </div>
     <label class="toggle-switch">
@@ -313,6 +438,7 @@
     </label>
   </div>
 
+  <!-- TELEMETRY KPI METRICS -->
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-val" id="stat-intercepted">0</div>
@@ -320,14 +446,44 @@
     </div>
     <div class="stat-card">
       <div class="stat-val" id="stat-threats" style="color: #ef4444;">0</div>
-      <div class="stat-label">Threats Blocked</div>
+      <div class="stat-label">Neutralized</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color: #10b981;">0.0ms</div>
+      <div class="stat-label">Edge Latency</div>
     </div>
   </div>
 
+  <!-- LIVE STATUS INDICATOR -->
   <div class="status-pill active" id="status-pill">
     🟢 Shield Active: Zero Cloud Leakage
   </div>
 
+  <!-- ACTIVE DEFENSE ENGINE SCOPE -->
+  <div class="scope-box">
+    <div class="scope-header">
+      <span class="scope-title">Active Protection Layers</span>
+      <span class="scope-status">● Real-Time Filtering</span>
+    </div>
+    <div class="scope-tags">
+      <span class="scope-tag">Aadhaar (Verhoeff)</span>
+      <span class="scope-tag">Cards (Luhn)</span>
+      <span class="scope-tag">PAN Tax ID</span>
+      <span class="scope-tag">Passwords & OTP</span>
+      <span class="scope-tag">Cloud API Keys</span>
+      <span class="scope-tag">Visual Faces</span>
+    </div>
+  </div>
+
+  <!-- PRIMARY LAUNCH ACTION (WEBAPP GATEWAY) -->
+  <div class="cta-container">
+    <button type="button" class="launch-btn" id="launch-webapp-btn">
+      <span>Launch Shield Cockpit</span>
+      <span>↗</span>
+    </button>
+  </div>
+
+  <!-- SECONDARY DIRECT LINK -->
   <a class="footer-link" id="open-webapp-link">
     Open PrivacyLens Cockpit ↗
   </a>

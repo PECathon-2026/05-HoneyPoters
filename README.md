@@ -311,23 +311,35 @@ node tests/benchmark_evaluation_criteria.mjs
 
 ## 7. Chrome Extension Gateway & Web App UI
 
-PrivacyLens delivers both a standalone edge-extension gateway and an interactive React 19 cockpit:
+PrivacyLens delivers an **extension-first architecture**: the browser extension is the primary frontline product, with the WebApp serving as the deep diagnostic and forensic cockpit accessed directly through the extension:
+
+### Manifest V3 Chrome Extension — Primary Flagship Product (`extension/`)
+
+- **Primary Edge Gatekeeper**: Runs directly at the browser edge to intercept DOM events, web requests, and outbound AI payloads.
+- **Active Protection Scope**: Live status indicator for Aadhaar (Verhoeff), Cards (Luhn), PAN, Passwords/OTP, Cloud API Keys, and Visual Faces.
+- **`popup.html` / `popup.js`**:
+  - Full theme alignment: Pure Z-Black (`#000000`) and Warm Beige (`#fdfbf7`) with instant Sun/Moon toggle.
+  - Master Shield switch persisted via `chrome.storage.local` with real-time neutralized threat counters.
+  - **Launch Shield Cockpit Button**: 1-click gateway button to launch/focus the WebApp Home page directly from the extension.
+- **`background.js`**: Service Worker gateway intercepting outbound prompts, executing local sanitization, and broadcasting events over `BroadcastChannel('privacylens_channel')`.
+- **`contentScript.js`**: In-page inspector running `scanDOM()`, attaching floating badges above sensitive inputs, intercepting form submits, and executing local AI DOM actions.
 
 ### Interactive React Web App Modules (`src/components/`)
 
-- **HomePage (`HomePage.jsx`)**: Value proposition hero, live Master Shield controller, KPI metrics bar, and dedicated navigation cards (`/analytics`, `/diff`, `/scenarios`, `/audit`).
+- **HomePage (`HomePage.jsx`)**: 
+  - Value proposition hero with direct `Launch Shield Cockpit` action button.
+  - Live Master Shield controller, KPI metrics bar, and 4 dedicated navigation cards (`/analytics`, `/diff`, `/scenarios`, `/audit`).
+  - **Top-Right 3 Buttons**: Exactly 3 buttons on the Home page header: **Shield Cockpit**, **Theme Toggle**, and **Auth Session**.
+- **Cockpit Operational Tab Navigation (`App.jsx`)**:
+  - Once inside Shield Cockpit or operational sub-pages, the tab navbar connects all operational tools with **zero Home button on the tab navbar**, eliminating navigation clutter.
+- **SecOps Authentication Modal (`AuthModal.jsx`)**:
+  - In-memory role-based session switcher (SecOps Administrator, PECathon Evaluator, DPDP Privacy Auditor) with zero-storage ephemeral RAM security boundaries.
 - **Shield Dashboard (`ShieldDashboard.jsx`)**: Glassmorphic cyber-cockpit with real-time KPI counters, attack benchmark tester, and live event ticker.
 - **Privacy Analytics (`PrivacyAnalytics.jsx`)**: Recharts gradient area charts, PII threat category bars, and SVG Privacy Health Index radial gauge (0–100).
 - **Payload Diff Inspector (`PayloadDiffInspector.jsx`)**: Side-by-side terminal diff (Raw Intercepted vs Sanitized Safe), character count deltas, and Fail-Closed Hard Abort visual alert banner.
 - **Visual Redaction Studio (`VisualRedactionStudio.jsx`)**: Dual-canvas visual studio comparing raw documents with permanently masked `#000000` blackout canvases.
 - **Agentic Playground (`AgenticPlayground.jsx`)**: Simulated banking portal demonstrating real-time input badges (`🛡️ Protected [AADHAAR]`) and Direct Leak vs Shield comparisons.
 - **Audit Forensics (`AuditForensics.jsx`)**: Forensic audit ledger with search, filtering, and 1-click CSV and DPDP Act 2023 JSON compliance exporters.
-
-### Manifest V3 Chrome Extension (`extension/`)
-
-- **`background.js`**: Service Worker gateway intercepting outbound prompts, executing local sanitization, and broadcasting events over `BroadcastChannel('privacylens_channel')`.
-- **`contentScript.js`**: In-page inspector running `scanDOM()`, attaching floating badges above sensitive inputs, intercepting form submits, and executing local AI DOM actions.
-- **`popup.html` / `popup.js`**: Quick-toggle popup persisting state to `chrome.storage.local` with real-time telemetry counters.
 
 ---
 

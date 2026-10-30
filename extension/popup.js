@@ -12,6 +12,7 @@ const shieldModeDesc = document.getElementById('shield-mode-desc');
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const themeIcon = document.getElementById('theme-icon');
 const openWebappLink = document.getElementById('open-webapp-link');
+const launchWebappBtn = document.getElementById('launch-webapp-btn');
 
 let currentTheme = 'dark';
 
@@ -231,15 +232,39 @@ try {
 } catch (e) {}
 
 /**
- * 6. Open WebApp Cockpit Link
+ * 6. Open WebApp Cockpit Link & Primary Launch Button
+ * Opens http://localhost:5173/ in the browser tab or focuses existing WebApp tab.
  */
+function openWebappHome() {
+  const targetUrl = 'http://localhost:5173/';
+  if (typeof chrome !== 'undefined' && chrome.tabs?.query) {
+    chrome.tabs.query({ url: '*://localhost:5173/*' }, (tabs) => {
+      if (tabs && tabs.length > 0 && tabs[0].id) {
+        chrome.tabs.update(tabs[0].id, { active: true });
+        if (chrome.windows?.update && tabs[0].windowId) {
+          chrome.windows.update(tabs[0].windowId, { focused: true });
+        }
+      } else if (chrome.tabs?.create) {
+        chrome.tabs.create({ url: targetUrl });
+      } else {
+        window.open(targetUrl, '_blank');
+      }
+    });
+  } else {
+    window.open(targetUrl, '_blank');
+  }
+}
+
 if (openWebappLink) {
   openWebappLink.addEventListener('click', (e) => {
     e.preventDefault();
-    if (typeof chrome !== 'undefined' && chrome.tabs?.create) {
-      chrome.tabs.create({ url: 'http://localhost:5173/' });
-    } else {
-      window.open('http://localhost:5173/', '_blank');
-    }
+    openWebappHome();
+  });
+}
+
+if (launchWebappBtn) {
+  launchWebappBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openWebappHome();
   });
 }

@@ -672,3 +672,46 @@ The complete Phase 1-4 double-verification loop ran cleanly:
   - Dedicated page routing eliminating the crowded single-page layout.
   - Mobile & multi-aspect ratio responsiveness from 320px mobile to 4K desktop with responsive Tailwind breakpoints (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`, `w-full overflow-x-auto` for tables and charts).
 - **Full Engine Test Suite**: `npm test` and all verification suites passed with 100% zero-leakage confirmation across all 5 evaluation scenarios, canary honeypot probes, and DOM secret injection tests.
+
+
+---
+
+### [Architecture Update]: Extension-First Product Design, WebApp Gateway & Cockpit Navigation Refactor
+
+#### 1. What is it? (Kya Hai)
+This refactor establishes the **Browser Extension as the primary flagship product** of PrivacyLens, serving as the frontline edge defense gatekeeper in user browsing sessions. The WebApp operates as the deep diagnostic and forensic cockpit, accessed directly through the extension's primary launcher. The WebApp navigation flow has been streamlined:
+1. **Extension-First Gateway**: The extension popup is customized with live PII protection layers, real-time edge telemetry, and a prominent **"Launch Shield Cockpit"** gateway button targeting the WebApp.
+2. **Home Page 3-Button Header**: When landing on the WebApp Home page, the top-right navbar contains **exactly 3 buttons**:
+   - `Shield Cockpit`: Transitions directly into the Shield Cockpit and operational tools.
+   - `Theme`: Instant toggle between Pure Z-Black (`#000000`) and Warm Beige (`#fdfbf7`).
+   - `Auth`: Opens the SecOps Authentication & Identity session modal.
+3. **Cockpit Operational Tab Navbar (Zero Home Button)**: Inside Shield Cockpit and the operational views, the central tab navbar connects the sub-pages (`Shield Cockpit`, `5 Scenarios`, `Diff Inspector`, `Forensics`, `Analytics`, `Agent Lab`, `Visual Studio`) with **no Home button cluttering the tab navbar**. The brand logo and subtle breadcrumb allow clean return to Home when needed.
+4. **SecOps Ephemeral Authentication Modal (`AuthModal.jsx`)**: In-memory role-based session manager for SecOps Administrators, PECathon Evaluators, and Compliance Auditors, enforcing zero persistent token leakage to cloud storage.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Product Hierarchy Clarity**: In real-world enterprise deployments, users and security teams interact directly with the browser extension for real-time protection, and jump to the cockpit dashboard only when deep forensic audit, scenario benchmarking, or payload inspection is required.
+- **Uncluttered Navigation UX**: The operational tools belong inside the Cockpit workflow. Having a "Home" button tab mixed among technical evaluation and forensic tools creates cognitive dissonance. Moving the Home page to an overview landing and dedicating the tab navbar exclusively to Cockpit operations ensures a focused, professional workspace.
+- **Role-Based Audit Verification**: Hackathon evaluators and security compliance officers need simulated role switching to verify that different security clearance levels (Level 3 Root Forensics vs Level 2 Audit) strictly respect ephemeral in-memory trust boundaries.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Extension Popup UI & Gateway (`extension/popup.html`, `popup.js`)**:
+   - Expanded popup canvas to 360px with dedicated "Active Protection Layers" badge section (Aadhaar, Cards, PAN, Passwords, Cloud Keys, Visual Faces).
+   - Wired `openWebappHome()`: Evaluates existing tabs for `*://localhost:5173/*` and focuses the active tab or launches a new tab to `http://localhost:5173/`.
+2. **Dynamic Header in `App.jsx`**:
+   - Condition `isHomePage = activeTab === 'home'`:
+     - If `true`: Center tab bar is hidden; top right displays exactly 3 buttons: `[Shield Cockpit]`, `[Theme Toggle]`, and `[Auth]`.
+     - If `false`: Center tab bar renders `navLinks` (`shield`, `scenarios`, `diff`, `audit`, `analytics`, `playground`, `visual`), without a `home` tab button.
+3. **Hero Connection to Cockpit (`HomePage.jsx`)**:
+   - Added primary Hero CTA `Launch Shield Cockpit` alongside `5 Evaluation Scenarios`, providing 1-click entry into the operational suite.
+4. **SecOps Session Modal (`AuthModal.jsx`)**:
+   - Renders animated modal with predefined authorized profiles: `Pranav Pushya (SecOps Lead)`, `PECathon 2026 Evaluator`, and `DPDP Privacy Auditor`.
+   - Generates volatile in-memory session tokens (`privacylens_session_ram_...`) and displays the Zero-Storage Trust Boundary guarantee.
+
+#### 4. Verification & Testing Evidence
+- **Dedicated Automated Verification**: `node tests/verify_extension_product_and_auth_flow.mjs` passed 100% (2x verified):
+  - ✓ Step 1: Verified extension popup customization and WebApp launch gateway.
+  - ✓ Step 2: Verified Home Page top-right header with exactly 3 buttons (`Shield Cockpit`, `Theme`, `Auth`).
+  - ✓ Step 3: Verified Cockpit tab navbar connects operational sub-pages with zero Home button.
+  - ✓ Step 4: Verified AuthModal component with role switching and zero-storage ephemeral memory compliance.
+  - ✓ Step 5: Verified HomePage hero CTA connecting to Shield Cockpit.
+- **Regression Pass**: `npm test` and `npm run build` executed cleanly with zero warnings.
