@@ -89,16 +89,15 @@ assert.strictEqual(verifySessionToken(null), null, 'Null token must return null'
 console.log('  ✓ Invalid and malformed tokens safely rejected');
 
 // --------------------------------------------------------------------------
-// TEST 4: UI Glassmorphic Auth Modal & Role Switcher
+// TEST 4: UI Glassmorphic Auth Modal & Firebase Auth
 // --------------------------------------------------------------------------
 console.log('\n[TEST 4/4]: Verifying Glassmorphic AuthModal Component...');
 const modalCode = fs.readFileSync('src/components/AuthModal.jsx', 'utf-8');
-assert(modalCode.includes('1-Click Role Switcher'), 'AuthModal must feature 1-Click Role Switcher tab');
-assert(modalCode.includes('Firebase Login & Register'), 'AuthModal must feature Firebase login tab');
+assert(modalCode.includes('Sign In with Email'), 'AuthModal must feature email login');
 assert(modalCode.includes('Sign In with Google'), 'AuthModal must include Google Sign-In button');
 assert(modalCode.includes('Zero-Storage Trust Boundary'), 'AuthModal must enforce zero-storage trust boundary');
 assert(modalCode.includes('USER_ROLES'), 'AuthModal must link to USER_ROLES');
-console.log('  ✓ AuthModal component verified with 1-click role switcher & Firebase Auth UI');
+console.log('  ✓ AuthModal component verified with clean Firebase Auth UI');
 
 console.log('\n================================================================');
 console.log('🎉 ALL STEP 2 FIREBASE AUTH & RBAC CHECKS PASSED (2x VERIFIED)');
