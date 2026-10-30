@@ -97,7 +97,11 @@ assert(modalCode.includes('Sign In with Email'), 'AuthModal must feature email l
 assert(modalCode.includes('Sign In with Google'), 'AuthModal must include Google Sign-In button');
 assert(modalCode.includes('Zero-Storage Trust Boundary'), 'AuthModal must enforce zero-storage trust boundary');
 assert(modalCode.includes('USER_ROLES'), 'AuthModal must link to USER_ROLES');
-console.log('  ✓ AuthModal component verified with clean Firebase Auth UI');
+assert(modalCode.includes('showLogoutConfirm'), 'AuthModal must feature mandatory sign out confirmation state');
+assert(modalCode.includes('Confirm Sign Out'), 'AuthModal must include sign out confirmation dialog');
+assert(modalCode.includes('Yes, Sign Out'), 'AuthModal must require explicit user confirmation to log out');
+assert(modalCode.includes('Active Session Telemetry'), 'AuthModal must show active session telemetry when signed in');
+console.log('  ✓ AuthModal component verified with clean Firebase Auth UI and mandatory sign-out confirmation');
 
 console.log('\n================================================================');
 console.log('🎉 ALL STEP 2 FIREBASE AUTH & RBAC CHECKS PASSED (2x VERIFIED)');
