@@ -15,6 +15,7 @@ import AgenticPlayground from './components/AgenticPlayground';
 import AuditForensics from './components/AuditForensics';
 import EvaluationScenarios from './components/EvaluationScenarios';
 import AuthModal from './components/AuthModal';
+import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
 import { usePrivacyLensIPC } from './hooks/usePrivacyLensIPC';
 import { useTheme } from './context/ThemeContext';
@@ -442,52 +443,13 @@ export function App() {
         )}
       </main>
 
-      {/* FOOTER */}
-      <footer className={`relative z-10 border-t py-6 px-4 sm:px-8 text-center text-xs font-mono transition-colors ${
-        isDark 
-          ? 'bg-black border-neutral-800 text-neutral-500' 
-          : 'bg-white/80 border-slate-200/90 text-slate-500'
-      }`}>
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-700 dark:text-neutral-300">PrivacyLens (PS-004)</span>
-            <span>•</span>
-            <span>Team 05-HoneyPoters</span>
-            <span>•</span>
-            <span>PECathon 2026</span>
-          </div>
-          <div className="flex items-center gap-4 text-[11px]">
-            <button 
-              type="button" 
-              onClick={() => handleNavClick('shield')}
-              className="hover:text-[#3DE2DD] transition-colors"
-            >
-              Shield Cockpit
-            </button>
-            <button 
-              type="button" 
-              onClick={() => handleNavClick('scenarios')}
-              className="hover:text-[#3DE2DD] transition-colors"
-            >
-              5 Evaluation Scenarios
-            </button>
-            <button 
-              type="button" 
-              onClick={() => handleNavClick('diff')}
-              className="hover:text-[#3DE2DD] transition-colors"
-            >
-              Payload Diff
-            </button>
-            <button 
-              type="button" 
-              onClick={() => handleNavClick('audit')}
-              className="hover:text-[#3DE2DD] transition-colors"
-            >
-              Audit Forensics
-            </button>
-          </div>
-        </div>
-      </footer>
+      {/* PROFESSIONAL ENTERPRISE FOOTER */}
+      <Footer
+        onNavigate={handleNavClick}
+        onOpenAuth={() => setAuthModalOpen(true)}
+        isDark={isDark}
+        stats={stats}
+      />
 
       {/* SecOps Authentication & Identity Modal */}
       <AuthModal
