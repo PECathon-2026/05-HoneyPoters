@@ -715,3 +715,40 @@ This refactor establishes the **Browser Extension as the primary flagship produc
   - ✓ Step 4: Verified AuthModal component with role switching and zero-storage ephemeral memory compliance.
   - ✓ Step 5: Verified HomePage hero CTA connecting to Shield Cockpit.
 - **Regression Pass**: `npm test` and `npm run build` executed cleanly with zero warnings.
+
+
+---
+
+### [Roadmap Step 1]: Secure Backend API Gateway, Gemini Proxy & Tamper-Proof Audit Persistence
+
+#### 1. What is it? (Kya Hai)
+Step 1 establishes the **PrivacyLens Secure Backend API Gateway (`server/index.js`)** and **Client Connector (`src/lib/apiClient.js`)**. It acts as a server-side privacy proxy that completely conceals the `GEMINI_API_KEY` from client-side network inspectors and web bundles. It introduces server-side secondary threat inspection, Fail-Closed strict tripwires, role-based SecOps authentication, and a centralized tamper-proof audit ledger secured with SHA-256 cryptographic hash chaining.
+
+#### 2. Why is it used? (Kyu Hai)
+- **API Key Leakage Prevention**: In frontend-only architectures, developers inadvertently embed LLM API keys in Vite client bundles (`VITE_GEMINI_API_KEY`) where any browser user or malicious script can extract them. The backend gateway holds `GEMINI_API_KEY` in environment memory (`dotenv`), ensuring zero credential exposure.
+- **Defense in Depth (Secondary Server-Side Guardrail)**: Even if a compromised client or adversarial script attempts to bypass local extension filters, the backend proxy runs a secondary `scanText(prompt)` verification pass before any bytes leave for Google Gemini servers.
+- **Fail-Closed Policy Enforcement**: In `FAIL_CLOSED_STRICT` mode, any prompt containing raw unredacted PII is immediately hard-aborted with an HTTP 403 Forbidden status, enforcing a permanent zero-cloud-leakage guarantee.
+- **Tamper-Proof Audit Forensics**: Client-side audit logs can be cleared by refreshing localStorage. The backend persists audit entries linked by cryptographic SHA-256 hash chains (`sha256 = SHA256(id|timestamp|action|details|prevHash)`), preventing log alteration or unauthorized tampering.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Express Server Architecture (`server/index.js`)**:
+   - Listens on `PORT` (default: 3001) with permissive CORS for localhost, Chrome extension origins (`chrome-extension://*`), and production webapp domains.
+   - Body parsing with a 15MB payload limit to handle base64 screenshots and visual redaction payloads.
+2. **Endpoints**:
+   - `GET /api/health`: Exposes real-time server health, active guardrail capabilities (`FAIL_CLOSED_GATEKEEPER`, `VERHOEFF_CHECKSUM`, `LUHN_CHECKSUM`, `SHA256_TAMPER_PROOF_AUDIT`), and Gemini configuration status.
+   - `POST /api/auth/login`: Issues HMAC-SHA256 signed session tokens for authorized roles (`SecOps Lead`, `PECathon Evaluator`, `DPDP Privacy Auditor`).
+   - `POST /api/auth/verify`: Validates bearer token signature and expiration.
+   - `POST /api/gemini/sanitize-proxy`: The primary gateway. Scans the prompt with `scanText()`. If in `FAIL_CLOSED_STRICT` and threats exist, returns HTTP 403 abort. If in `REDACT_AND_FORWARD`, executes `sanitizeText()` and verifies zero residual leaks before dispatching to Google Gemini 1.5 Flash (or mock simulation engine in offline/demo mode).
+   - `GET /api/audit/logs` & `POST /api/audit/logs`: Cryptographically persists and serves audit records with SHA-256 integrity hashes and previous-block hash links.
+3. **Client Connector (`src/lib/apiClient.js`)**:
+   - Automatically detects environment: resolves to `http://localhost:3001` in dev, or relative `/api` in production.
+   - Provides turnkey methods: `checkBackendHealth()`, `loginUser()`, `verifyToken()`, `sendToGeminiProxy()`, `fetchAuditLogs()`, and `postAuditEntry()`.
+
+#### 4. Verification & Testing Evidence
+- **Automated Verification Suite (`tests/verify_step1_backend.mjs`)**: Verified twice (100% pass):
+  - ✓ Test 1: `/api/health` returned 200 OK with PS-004 guardrails.
+  - ✓ Test 2: `/api/auth/login` issued HMAC session token; verified signature and rejected tampered token with 401.
+  - ✓ Test 3a: `/api/gemini/sanitize-proxy` strict mode caught 5 raw threats and hard-aborted with HTTP 403.
+  - ✓ Test 3b: `/api/gemini/sanitize-proxy` redact-and-forward sanitized raw card, Aadhaar, PAN, and passwords with confirmed zero cloud leakage.
+  - ✓ Test 4: `/api/audit/logs` recorded entries with SHA-256 integrity hash chains and returned filtered logs.
+- **Production Build**: `npm run build` completed in **533ms** with zero errors.

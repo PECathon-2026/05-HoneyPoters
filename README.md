@@ -125,7 +125,10 @@ cd 05-HoneyPoters
 # 2. Install dependencies
 npm install
 
-# 3. Start Vite Development Server
+# 3. Start Secure Backend API Gateway (Port 3001)
+npm run server
+
+# 4. Start Vite Frontend WebApp (Port 5173)
 npm run dev
 # Open http://localhost:5173 to access the Shield Dashboard & Evaluation Scenarios Lab
 ```
@@ -305,6 +308,9 @@ node tests/verify_ui_refactor.mjs
 
 # 7. Run criteria benchmark directly
 node tests/benchmark_evaluation_criteria.mjs
+
+# 8. Run Step 1 Secure Backend Gateway verification suite
+node tests/verify_step1_backend.mjs
 ```
 
 ---
