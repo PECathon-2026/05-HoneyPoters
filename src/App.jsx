@@ -14,7 +14,7 @@ import VisualRedactionStudio from './components/VisualRedactionStudio';
 import AgenticPlayground from './components/AgenticPlayground';
 import AuditForensics from './components/AuditForensics';
 import EvaluationScenarios from './components/EvaluationScenarios';
-import AuthModal, { DEFAULT_PROFILES } from './components/AuthModal';
+import AuthModal from './components/AuthModal';
 import { useAuth } from './context/AuthContext';
 import { usePrivacyLensIPC } from './hooks/usePrivacyLensIPC';
 import { useTheme } from './context/ThemeContext';
@@ -41,17 +41,17 @@ export function App() {
   const [activeTab, setActiveTab] = useState('home'); // 'home' | 'shield' | 'scenarios' | 'diff' | 'audit' | 'analytics' | 'playground' | 'visual'
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [localAuthUser, setLocalAuthUser] = useState(DEFAULT_PROFILES[0]);
+  const [localAuthUser, setLocalAuthUser] = useState(null);
   const { theme, isDark, toggleTheme } = useTheme();
 
-  // Connect Firebase / RBAC Auth Context with local fallback
+  // Connect Firebase / RBAC Auth Context with local fallback (Option 1: Default Guest Mode)
   let authContext = {};
   try {
     authContext = useAuth();
   } catch (e) {}
   const authUser = authContext.currentUser || localAuthUser;
   const authUserName = authUser?.displayName || authUser?.name || authUser?.email?.split('@')[0] || '';
-  const authButtonLabel = authUserName ? (authUserName.split(' ')[0] || 'SecOps') : 'Auth';
+  const authButtonLabel = authUserName ? (authUserName.split(' ')[0] || 'SecOps') : 'Sign In';
 
   const {
     shieldActive,
@@ -212,10 +212,10 @@ export function App() {
                       ? 'bg-[#111111] border-neutral-800 text-neutral-300 hover:bg-neutral-800 hover:text-white' 
                       : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
-                title="SecOps Authentication & Identity Session"
+                title={authUser ? `Signed in as ${authUserName || 'SecOps'}` : 'Sign In to PrivacyLens'}
               >
-                <User className="w-3.5 h-3.5 text-cyan-500" />
-                <span>{authUser ? authButtonLabel : 'Auth'}</span>
+                <User className={`w-3.5 h-3.5 ${authUser ? 'text-emerald-500' : 'text-slate-400 dark:text-neutral-400'}`} />
+                <span>{authUser ? authButtonLabel : 'Sign In'}</span>
               </button>
 
               {/* Mobile Hamburger (Home view) */}
@@ -265,14 +265,17 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setAuthModalOpen(true)}
-                className={`p-2 rounded-xl border transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-mono font-semibold transition-all duration-200 ${
                   authUser 
-                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30' 
-                    : isDark ? 'bg-[#111111] border-neutral-800 text-neutral-300' : 'bg-slate-100 border-slate-200 text-slate-700'
+                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20' 
+                    : isDark 
+                      ? 'bg-[#111111] border-neutral-800 text-neutral-300 hover:bg-neutral-800 hover:text-white' 
+                      : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
                 title={authUser ? `Signed in as ${authUserName || 'SecOps'}` : 'Sign In'}
               >
-                <User className="w-4 h-4 text-cyan-500" />
+                <User className={`w-3.5 h-3.5 ${authUser ? 'text-emerald-500' : 'text-slate-400 dark:text-neutral-400'}`} />
+                <span className="hidden sm:inline">{authUser ? authButtonLabel : 'Sign In'}</span>
               </button>
 
               {/* Mobile Menu Hamburger Button */}

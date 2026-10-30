@@ -34,7 +34,7 @@ export const useAuth = () => {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userRole, setUserRole] = useState(USER_ROLES.SECOPS_LEAD);
+  const [userRole, setUserRole] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
@@ -80,11 +80,11 @@ export function AuthProvider({ children }) {
     } catch (e) {}
   };
 
-  // 1. Initial State Restoration
+  // 1. Initial State Restoration (Option 1: Default Guest Mode)
   useEffect(() => {
     const restoreSession = async () => {
       let savedUser = null;
-      let savedRole = USER_ROLES.SECOPS_LEAD;
+      let savedRole = null;
       let savedToken = null;
 
       try {
@@ -98,24 +98,24 @@ export function AuthProvider({ children }) {
         }
       } catch (e) {}
 
-      // Default demo initial user if none saved
-      if (!savedUser) {
-        savedUser = {
-          uid: 'secops-lead',
-          name: USER_ROLES.SECOPS_LEAD.name,
-          displayName: USER_ROLES.SECOPS_LEAD.name,
-          email: USER_ROLES.SECOPS_LEAD.email,
-          isAnonymous: false,
-          role: USER_ROLES.SECOPS_LEAD.role,
-          clearance: USER_ROLES.SECOPS_LEAD.clearance
-        };
-        savedToken = `privacylens_ram_token_${Date.now()}`;
+      // Cleanse any legacy auto-injected dummy demo sessions from localStorage
+      if (savedUser && savedUser.uid === 'secops-lead' && (!savedToken || savedToken.startsWith('privacylens_ram_token_'))) {
+        savedUser = null;
+        savedRole = null;
+        savedToken = null;
+        clearAuthSession();
       }
 
-      setCurrentUser(savedUser);
-      setUserRole(savedRole);
-      setToken(savedToken);
-      saveAuthSession(savedUser, savedRole, savedToken);
+      // Default state: True Guest Mode (Logged out)
+      if (savedUser) {
+        setCurrentUser(savedUser);
+        setUserRole(savedRole || USER_ROLES.SECOPS_LEAD);
+        setToken(savedToken);
+      } else {
+        setCurrentUser(null);
+        setUserRole(null);
+        setToken(null);
+      }
       setLoading(false);
     };
 
@@ -129,18 +129,21 @@ export function AuthProvider({ children }) {
             if (firebaseUser) {
               const idToken = await firebaseUser.getIdToken().catch(() => null);
               const displayName = firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Authenticated User';
+              const targetRole = userRole || USER_ROLES.SECOPS_LEAD;
               const userPayload = {
                 uid: firebaseUser.uid,
                 name: displayName,
                 displayName: displayName,
                 email: firebaseUser.email,
                 photoURL: firebaseUser.photoURL,
-                role: userRole?.role || 'SecOps Lead'
+                role: targetRole.role,
+                clearance: targetRole.clearance
               };
               setCurrentUser(userPayload);
+              setUserRole(targetRole);
               if (idToken) {
                 setToken(idToken);
-                saveAuthSession(userPayload, userRole, idToken);
+                saveAuthSession(userPayload, targetRole, idToken);
               }
             }
           } catch (callbackErr) {
@@ -165,15 +168,18 @@ export function AuthProvider({ children }) {
       if (!auth) throw new Error('Firebase Auth is in offline mode');
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const idToken = await userCredential.user.getIdToken();
+      const targetRole = userRole || USER_ROLES.SECOPS_LEAD;
       const userPayload = {
         uid: userCredential.user.uid,
         displayName: userCredential.user.displayName || email.split('@')[0],
         email: userCredential.user.email,
-        role: userRole.role
+        role: targetRole.role,
+        clearance: targetRole.clearance
       };
       setCurrentUser(userPayload);
+      setUserRole(targetRole);
       setToken(idToken);
-      saveAuthSession(userPayload, userRole, idToken);
+      saveAuthSession(userPayload, targetRole, idToken);
       return { success: true, user: userPayload };
     } catch (err) {
       setAuthError(err.message);
@@ -198,7 +204,8 @@ export function AuthProvider({ children }) {
         uid: userCredential.user.uid,
         displayName: displayName || email.split('@')[0],
         email: userCredential.user.email,
-        role: targetRole.role
+        role: targetRole.role,
+        clearance: targetRole.clearance
       };
       setCurrentUser(userPayload);
       setUserRole(targetRole);
@@ -220,16 +227,19 @@ export function AuthProvider({ children }) {
       if (!auth || !googleProvider) throw new Error('Google Auth is unavailable in this environment');
       const result = await signInWithPopup(auth, googleProvider);
       const idToken = await result.user.getIdToken();
+      const targetRole = userRole || USER_ROLES.SECOPS_LEAD;
       const userPayload = {
         uid: result.user.uid,
         displayName: result.user.displayName || 'Google User',
         email: result.user.email,
         photoURL: result.user.photoURL,
-        role: userRole.role
+        role: targetRole.role,
+        clearance: targetRole.clearance
       };
       setCurrentUser(userPayload);
+      setUserRole(targetRole);
       setToken(idToken);
-      saveAuthSession(userPayload, userRole, idToken);
+      saveAuthSession(userPayload, targetRole, idToken);
       return { success: true, user: userPayload };
     } catch (err) {
       setAuthError(err.message);
