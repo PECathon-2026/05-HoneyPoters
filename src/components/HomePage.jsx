@@ -38,6 +38,7 @@ import {
   FileCheck
 } from 'lucide-react';
 import ShieldLens3D from './ShieldLens3D';
+import Hero54 from './originkit/hero-54';
 
 export function HomePage({
   shieldActive = true,
@@ -79,123 +80,42 @@ export function HomePage({
   return (
     <div className="w-full font-sans pb-16 selection:bg-[#3DE2DD] selection:text-black">
       {/* ========================================================================= */}
-      {/* 1. FULL-SCREEN INTERACTIVE THREE.JS (R186) HERO SECTION (SCREEN 1)        */}
+      {/* 1. FULL-SCREEN INTERACTIVE MECHANICAL CIPHER HERO SECTION (SCREEN 1)     */}
       {/* ========================================================================= */}
-      <section className="relative w-full min-h-[calc(100vh-105px)] flex flex-col justify-between items-center rounded-3xl overflow-hidden border border-[#1f1f1f] bg-[#000000] shadow-2xl p-5 sm:p-8 lg:p-12 mb-16">
+      <section className="relative w-full rounded-3xl overflow-hidden border border-neutral-800 bg-[#000000] shadow-[0_0_50px_rgba(0,0,0,0.95)] p-5 sm:p-8 lg:p-12 mb-16">
         {/* Ambient subtle backdrops */}
-        <div className="absolute inset-0 bg-radial-[circle_at_top_center,rgba(61,226,221,0.06)_0%,transparent_70%] pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(61,226,221,0.08)_0%,transparent_70%)] pointer-events-none" />
 
         {/* Top Operational Status Badges */}
-        <div className="relative z-10 w-full flex items-center justify-between">
+        <div className="relative z-10 w-full flex items-center justify-between mb-4">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="px-3.5 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-[#3DE2DD]/10 text-[#3DE2DD] border border-[#3DE2DD]/30 shadow-sm shadow-[#3DE2DD]/10 flex items-center gap-1.5">
+            <span className="px-3.5 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-[#3DE2DD]/10 text-[#3DE2DD] border border-[#3DE2DD]/30 shadow-sm shadow-[#3DE2DD]/15 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#3DE2DD] animate-ping" />
               PS-004 • PRIVACYLENS
             </span>
-            <span className="px-3.5 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="px-3.5 py-1 text-xs font-mono font-bold tracking-wider rounded-full bg-white/5 text-white border border-neutral-700 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#3DE2DD] animate-pulse" />
               ZERO CLOUD LEAKAGE
             </span>
           </div>
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1 text-xs font-mono text-neutral-400 border border-neutral-800 rounded-full bg-black/80 backdrop-blur-md">
-            <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-            <span>PECATHON 2026 BENCHMARK</span>
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 text-xs font-mono text-neutral-300 border border-neutral-800 rounded-full bg-black/90 backdrop-blur-md">
+            <Radio className="w-3.5 h-3.5 text-[#3DE2DD] animate-pulse" />
+            <span>PECATHON 2026 // PS-004</span>
           </div>
         </div>
 
-        {/* Center Content & 3D Three.js Stage */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-4 pb-6">
-          {/* Left Column: Authentic Typography, Real Technical Definition & Actions */}
-          <div className="lg:col-span-6 space-y-6 text-left pointer-events-auto">
-            {/* BIG WEBSITE NAME */}
-            <div className="inline-block transform hover:scale-[1.01] transition-transform duration-300">
-              <h1 className="text-5xl sm:text-7xl xl:text-8xl font-black tracking-tight text-white drop-shadow-[0_0_40px_rgba(61,226,221,0.25)] select-none">
-                Privacy<span className="text-[#3DE2DD]">Lens</span>
-              </h1>
-            </div>
-
-            {/* SHORT TECHNICAL DEFINITION (NO AI MARKETING FLUFF) */}
-            <div className="space-y-2">
-              <p className="text-xl sm:text-2xl font-extrabold tracking-tight text-white leading-snug">
-                Zero Cloud Leakage Shield for{' '}
-                <span className="text-[#3DE2DD] underline decoration-[#3DE2DD]/40 underline-offset-4">
-                  AI Browser Agents
-                </span>
-              </p>
-              <p className="text-xs sm:text-sm text-neutral-400 font-mono leading-relaxed max-w-xl">
-                Deterministic, client-isolated egress gatekeeper. Intercepts, sanitizes, and eliminates sensitive PII locally before any DOM instruction, screenshot, or network packet reaches external cloud LLMs.
-              </p>
-            </div>
-
-            {/* Hardware & Cryptographic Telemetry Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1 text-xs font-mono">
-              <div className="p-2.5 rounded-xl bg-[#0d0d0d] border border-neutral-800">
-                <span className="text-neutral-500 text-[10px] block">INTERCEPTION LATENCY</span>
-                <span className="font-bold text-white">&lt;0.04 ms</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-[#0d0d0d] border border-neutral-800">
-                <span className="text-neutral-500 text-[10px] block">EPHEMERAL RAM</span>
-                <span className="font-bold text-[#3DE2DD]">0 Bytes Persisted</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-[#0d0d0d] border border-neutral-800 col-span-2 sm:col-span-1">
-                <span className="text-neutral-500 text-[10px] block">EGRESS BOUNDARY</span>
-                <span className="font-bold text-emerald-400">Fail-Closed Strict</span>
-              </div>
-            </div>
-
-            {/* Primary Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <a
-                href="/PrivacyLens-Extension-v2.0.0.zip"
-                download="PrivacyLens-Extension-v2.0.0.zip"
-                className="px-6 py-3.5 rounded-2xl bg-[#3DE2DD]/10 hover:bg-[#3DE2DD]/20 text-[#3DE2DD] font-extrabold text-sm border border-[#3DE2DD]/40 flex items-center gap-2.5 hover:scale-[1.02] transition-all shadow-lg shadow-[#3DE2DD]/10 backdrop-blur-md"
-                title="Download PrivacyLens Chrome Extension for local browser installation"
-              >
-                <Download className="w-4 h-4" />
-                <span>Download Extension (.zip)</span>
-              </a>
-
-              <button
-                type="button"
-                onClick={() => onNavigate && onNavigate('shield')}
-                className="px-6 py-3.5 rounded-2xl bg-[#3DE2DD] hover:bg-[#34c7c2] text-black font-extrabold text-sm flex items-center gap-2.5 shadow-xl shadow-[#3DE2DD]/30 hover:scale-[1.02] transition-all"
-              >
-                <Sliders className="w-4 h-4" />
-                <span>Launch Shield Cockpit</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Deflection alert notification toast */}
-            {activeDeflectionEvent && (
-              <div className="p-2.5 rounded-xl bg-[#3DE2DD]/15 border border-[#3DE2DD]/40 text-xs font-mono text-[#3DE2DD] flex items-center justify-between animate-fadeIn">
-                <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-amber-400 animate-bounce" />
-                  <span>Deflected: <strong>{activeDeflectionEvent.label}</strong></span>
-                </div>
-                <span className="text-[10px] text-emerald-400">HARD-ISOLATED</span>
-              </div>
-            )}
-          </div>
-
-          {/* Right Column: Interactive Three.js (r186) 3D Shield & Deflection Lens */}
-          <div className="lg:col-span-6 relative w-full h-[400px] sm:h-[480px] lg:h-[540px] rounded-3xl overflow-hidden border border-[#222222] bg-[#050505] shadow-2xl">
-            <ShieldLens3D 
-              active={shieldActive} 
-              onDeflectionTrigger={handleDeflectionTrigger} 
-              threatCount={stats.threatsDetected}
-            />
-          </div>
+        {/* Originkit CogTrain Mechanical Movement Hero: Zero Cloud Leakage Shield for AI Browser Agents */}
+        <div className="relative z-10 w-full" aria-label="Zero Cloud Leakage Shield for AI Browser Agents">
+          <Hero54 onNavigate={onNavigate} />
         </div>
 
         {/* Bottom Cue to Full Scroll */}
         <div 
           onClick={scrollToCockpit}
-          className="relative z-10 flex flex-col items-center gap-2 cursor-pointer text-xs font-mono text-neutral-400 hover:text-[#3DE2DD] transition-all animate-bounce select-none pt-2 group"
+          className="relative z-10 flex flex-col items-center gap-2 cursor-pointer text-xs font-mono text-neutral-400 hover:text-[#3DE2DD] transition-all animate-bounce select-none pt-4 group"
           title="Click or scroll down to explore operational cockpit"
         >
-          <span className="group-hover:tracking-wider transition-all">Scroll to Explore Operational Cockpit</span>
+          <span className="group-hover:tracking-wider text-neutral-300 group-hover:text-white transition-all">Scroll to Explore Operational Cockpit</span>
           <ChevronDown className="w-4 h-4 text-[#3DE2DD]" />
         </div>
       </section>
