@@ -15,6 +15,7 @@ import AgenticPlayground from './components/AgenticPlayground';
 import AuditForensics from './components/AuditForensics';
 import EvaluationScenarios from './components/EvaluationScenarios';
 import AuthModal, { DEFAULT_PROFILES } from './components/AuthModal';
+import { useAuth } from './context/AuthContext';
 import { usePrivacyLensIPC } from './hooks/usePrivacyLensIPC';
 import { useTheme } from './context/ThemeContext';
 import { 
@@ -40,8 +41,15 @@ export function App() {
   const [activeTab, setActiveTab] = useState('home'); // 'home' | 'shield' | 'scenarios' | 'diff' | 'audit' | 'analytics' | 'playground' | 'visual'
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authUser, setAuthUser] = useState(DEFAULT_PROFILES[0]);
+  const [localAuthUser, setLocalAuthUser] = useState(DEFAULT_PROFILES[0]);
   const { theme, isDark, toggleTheme } = useTheme();
+
+  // Connect Firebase / RBAC Auth Context with local fallback
+  let authContext = {};
+  try {
+    authContext = useAuth();
+  } catch (e) {}
+  const authUser = authContext.currentUser || localAuthUser;
 
   const {
     shieldActive,
@@ -457,8 +465,8 @@ export function App() {
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         currentUser={authUser}
-        onLogin={(profile) => setAuthUser(profile)}
-        onLogout={() => setAuthUser(null)}
+        onLogin={(profile) => setLocalAuthUser(profile)}
+        onLogout={() => setLocalAuthUser(null)}
       />
     </div>
   );

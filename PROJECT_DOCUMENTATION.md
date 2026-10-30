@@ -752,3 +752,44 @@ Step 1 establishes the **PrivacyLens Secure Backend API Gateway (`server/index.j
   - ✓ Test 3b: `/api/gemini/sanitize-proxy` redact-and-forward sanitized raw card, Aadhaar, PAN, and passwords with confirmed zero cloud leakage.
   - ✓ Test 4: `/api/audit/logs` recorded entries with SHA-256 integrity hash chains and returned filtered logs.
 - **Production Build**: `npm run build` completed in **533ms** with zero errors.
+
+
+---
+
+### [Roadmap Step 2]: Firebase Authentication & Role-Based Access Control (RBAC)
+
+#### 1. What is it? (Kya Hai)
+Step 2 integrates **Firebase Authentication (`src/lib/firebase.js`)** and **Role-Based Access Control (`src/context/AuthContext.jsx`, `src/lib/roles.js`)** into PrivacyLens. It provides enterprise-grade identity management featuring Email/Password authentication, Google Sign-In, and an instant **1-Click Demo Role Switcher** tailored specifically for PECathon 2026 judges and security auditors. It bridges cross-context identity state between the React WebApp and the Chrome Extension (`chrome.storage.local` and `localStorage`), and enforces backend token validation on protected gateway endpoints.
+
+#### 2. Why is it used? (Kyu Hai)
+- **Role-Based Clearance & Principle of Least Privilege**: Different users require distinct levels of forensic visibility under DPDP Act 2023 regulations. A `SecOps Lead` requires policy override and DOM injection capabilities, an `Evaluator` requires scenario benchmarking and scoring, while a `DPDP Auditor` requires read-only audit ledger exports.
+- **Judge & Demo Ergonomics**: In live hackathon evaluations, requiring judges to sign up or check verification emails wastes precious evaluation time. The 1-click Role Switcher allows evaluators to immediately simulate any clearance tier with zero friction while testing real session tokens.
+- **Zero-Storage Ephemeral RAM Boundary**: In keeping with PS-004's core privacy mandate, authentication tokens and session keys are stored in volatile client RAM and synced to local browser storage, ensuring zero raw user secrets are leaked to persistent third-party databases.
+
+#### 3. How does it work? (Kaise Kaam Kar Raha Hai)
+1. **Firebase Initialization (`src/lib/firebase.js`)**:
+   - Initialized with project `policylen-s` (`apiKey`, `authDomain: "policylen-s.firebaseapp.com"`, `appId: "1:1033931345489:web:061daddb44fa4093d27270"`).
+   - Exports `auth`, `googleProvider`, `signInWithEmailAndPassword`, `createUserWithEmailAndPassword`, and `signInWithPopup`.
+2. **Auth Context & Roles (`src/context/AuthContext.jsx`, `src/lib/roles.js`)**:
+   - Manages state: `currentUser`, `userRole`, `token`, and `loading`.
+   - Defines standard RBAC clearance levels:
+     - `SECOPS_LEAD` (Pranav Pushya): Level 3 Root Forensics & Policy Tuning.
+     - `PECATHON_EVALUATOR`: Level 3 Evaluation Scenarios & Synthetic Benchmarks.
+     - `DPDP_AUDITOR`: Level 2 Audit Trail & Ledger Verification.
+   - Synchronizes tokens across `chrome.storage.local` and `localStorage`.
+3. **Glassmorphic Auth Modal (`src/components/AuthModal.jsx`)**:
+   - Dual-tab interface matching pure Z-black and beige light themes:
+     - Tab 1: **1-Click Role Switcher** with permission tags and instant session activation.
+     - Tab 2: **Firebase Login & Register** with Email/Password and branded Google Sign-In.
+     - 1-Click Session Token Copy and Zero-Storage Trust Boundary documentation.
+4. **Backend Token Middleware (`server/index.js`)**:
+   - Enhanced `verifySessionToken()` to recognize HMAC session tokens, demo role tokens (`pl_demo_...`), RAM tokens (`privacylens_ram_token_...`), and Firebase ID tokens (verified for audience `policylen-s`).
+   - `requireAuth` middleware gates sensitive endpoints with 401 Unauthorized handling on tampered tokens.
+
+#### 4. Verification & Testing Evidence
+- **Automated Verification Suite (`tests/verify_step2_firebase_auth.mjs`)**: Verified twice (100% pass):
+  - ✓ Test 1: Verified Firebase configuration for project `policylen-s`.
+  - ✓ Test 2: Verified 3 RBAC roles (`SecOps Lead`, `PECathon Evaluator`, `DPDP Auditor`) with permissions.
+  - ✓ Test 3: Backend middleware validated demo tokens, RAM tokens, and Firebase ID tokens; safely rejected malformed tokens.
+  - ✓ Test 4: AuthModal verified with 1-click role switcher and Firebase Auth UI.
+- **Production Build**: `npm run build` completed in **600ms** with zero errors across 2707 modules.

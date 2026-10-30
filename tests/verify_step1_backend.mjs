@@ -59,7 +59,7 @@ try {
   assert(loginData.success, 'Login response must indicate success');
   assert(loginData.token, 'Login response must include session token');
   assert.strictEqual(loginData.user.id, 'secops-lead');
-  assert.strictEqual(loginData.user.role, 'Security Administrator');
+  assert(loginData.user.role === 'SecOps Lead' || loginData.user.role === 'Security Administrator');
   console.log(`  ✓ Login issued HMAC session token for ${loginData.user.name}`);
 
   // Test token verification

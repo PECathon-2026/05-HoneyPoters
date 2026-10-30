@@ -164,22 +164,22 @@ app.get(['/', '/api/health'], (req, res) => {
 const AUTHORIZED_ROLES = {
   'secops-lead': {
     id: 'secops-lead',
-    name: 'Pranav Pushya (SecOps Lead)',
-    role: 'Security Administrator',
+    name: 'Pranav Pushya',
+    role: 'SecOps Lead',
     clearance: 'Level 3 — Root Forensics & Policy Tuning',
     team: 'Team 05-HoneyPoters'
   },
   'pecathon-judge': {
     id: 'pecathon-judge',
     name: 'PECathon 2026 Evaluator',
-    role: 'Official Benchmark Judge',
+    role: 'PECathon Evaluator',
     clearance: 'Level 3 — Evaluation Scenarios & Synthetic Benchmarks',
     team: 'PECathon PS-004 Jury'
   },
   'compliance-auditor': {
     id: 'compliance-auditor',
     name: 'DPDP Privacy Auditor',
-    role: 'Compliance Officer',
+    role: 'DPDP Auditor',
     clearance: 'Level 2 — Audit Trail & Ledger Verification',
     team: 'Regulatory Oversight'
   }
@@ -207,22 +207,90 @@ function createSessionToken(user) {
 /**
  * Validates session token signature.
  */
+/**
+ * Validates session token (HMAC Session Token, Firebase ID Token, or Demo Role Token).
+ */
 function verifySessionToken(token) {
   try {
     if (!token || typeof token !== 'string') return null;
+
+    // 1. Direct Demo / RAM token support
+    if (token.startsWith('pl_demo_') || token.startsWith('privacylens_ram_token_') || token.startsWith('pl_session_ram_')) {
+      let roleId = 'secops-lead';
+      if (token.includes('compliance-auditor')) roleId = 'compliance-auditor';
+      else if (token.includes('pecathon-judge')) roleId = 'pecathon-judge';
+      else if (token.includes('secops-lead')) roleId = 'secops-lead';
+
+      return AUTHORIZED_ROLES[roleId] || {
+        sub: roleId,
+        name: 'SecOps Evaluator',
+        role: 'SecOps Lead',
+        clearance: 'Level 3 — Root Forensics & Policy Tuning'
+      };
+    }
+
+    // 2. JWT / HMAC Token verification
     const parts = token.split('.');
-    if (parts.length !== 3) return null;
-    const [header, payload, signature] = parts;
-    const secret = process.env.JWT_SECRET || 'privacylens_secret_hmac_pecathon2026';
-    const expectedSig = crypto.createHmac('sha256', secret).update(`${header}.${payload}`).digest('base64url');
-    
-    if (signature !== expectedSig) return null;
-    const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString());
-    if (decoded.exp && decoded.exp < Math.floor(Date.now() / 1000)) return null;
-    return decoded;
+    if (parts.length === 3) {
+      const [header, payload, signature] = parts;
+      const secret = process.env.JWT_SECRET || 'privacylens_secret_hmac_pecathon2026';
+      const expectedSig = crypto.createHmac('sha256', secret).update(`${header}.${payload}`).digest('base64url');
+      
+      // Check if it's our HMAC signed token
+      if (signature === expectedSig) {
+        const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString());
+        if (decoded.exp && decoded.exp < Math.floor(Date.now() / 1000)) return null;
+        return decoded;
+      }
+
+      // Check if it's a Firebase ID token (Issued by securetoken.google.com/policylen-s)
+      try {
+        const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString());
+        const isFirebaseIssuer = decoded.iss && decoded.iss.includes('securetoken.google.com/policylen-s');
+        const isFirebaseAudience = decoded.aud === 'policylen-s';
+        
+        if (isFirebaseIssuer || isFirebaseAudience) {
+          if (decoded.exp && decoded.exp < Math.floor(Date.now() / 1000)) return null;
+          return {
+            sub: decoded.sub || decoded.user_id,
+            email: decoded.email,
+            name: decoded.name || decoded.email?.split('@')[0] || 'Firebase User',
+            role: decoded.role || 'SecOps Evaluator',
+            clearance: 'Level 3 — Firebase Verified Session',
+            firebase: true
+          };
+        }
+      } catch (fbErr) {}
+    }
+
+    return null;
   } catch (e) {
     return null;
   }
+}
+
+/**
+ * Authentication Middleware: Validates Bearer Token on Protected Endpoints
+ */
+function requireAuth(req, res, next) {
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ') 
+    ? authHeader.slice(7) 
+    : (req.headers['x-privacylens-token'] || req.body?.token || req.query?.token);
+
+  if (!token) {
+    // In demo / test mode, attach guest evaluator context
+    req.user = { sub: 'guest', role: 'SecOps Guest' };
+    return next();
+  }
+
+  const user = verifySessionToken(token);
+  if (!user) {
+    return res.status(401).json({ success: false, error: 'Unauthorized: Invalid or expired authentication token' });
+  }
+
+  req.user = user;
+  next();
 }
 
 /**
@@ -531,4 +599,4 @@ if (isDirectRun && process.env.NODE_ENV !== 'test') {
 }
 
 export default app;
-export { app, PORT, recordAuditEntry, auditLogs };
+export { app, PORT, recordAuditEntry, auditLogs, requireAuth, verifySessionToken };

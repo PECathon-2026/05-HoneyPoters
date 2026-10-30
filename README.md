@@ -311,6 +311,9 @@ node tests/benchmark_evaluation_criteria.mjs
 
 # 8. Run Step 1 Secure Backend Gateway verification suite
 node tests/verify_step1_backend.mjs
+
+# 9. Run Step 2 Firebase Auth & RBAC verification suite
+node tests/verify_step2_firebase_auth.mjs
 ```
 
 ---
