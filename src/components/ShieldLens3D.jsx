@@ -1,18 +1,18 @@
 /**
- * PrivacyLens — Cinematic Three.js (r186) 3D Optical Holographic Lens
- * Award-winning cybernetic 3D experience designed in Pure Black (#000000), Electric Cyan (#3DE2DD), and Crisp White (#FFFFFF)
+ * PrivacyLens — Interactive 3D Cybernetic Shield & Optical Refraction Lens
+ * Built with Three.js (r186)
  * Features:
- *  - Infinite Perspective Cyber Grid with glowing cyan horizon fade
- *  - Central Faceted Icosahedron Holographic Lens with Cyan wireframe and White glowing vertices
- *  - Concentric Gyroscopic Optical Rings rotating on 3 axes
- *  - Swirling 450+ Cyber Vortex Particles in Pure White and Electric Cyan
- *  - Silky-Smooth Inertial Mouse Parallax and Click Shockwave Deflection Pulses
+ *  - Geodesic Icosahedron Security Shield with Electric Cyan (#3DE2DD) wireframe
+ *  - Floating Holographic Memory Vault Core with pulsating glow
+ *  - 3 Concentric Security Boundary Rings (DOM Inspector, Checksum Gate, WASM Egress)
+ *  - Threat Stream Particle System: Hostile data packets (crimson/amber) deflected into safe cyan/emerald tokens
+ *  - Interactive Mouse Parallax, Click Shockwave Deflection Pulse, and Evaluator Controls
  * Team 05-HoneyPoters — PECathon 2026 (PS-004)
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
-import { Zap, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Shield, Zap, Sparkles, RefreshCw, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 export function ShieldLens3D({
   className = '',
@@ -25,62 +25,52 @@ export function ShieldLens3D({
   const rendererRef = useRef(null);
   const cameraRef = useRef(null);
   const frameIdRef = useRef(null);
-
-  // 3D references
-  const lensGroupRef = useRef(null);
+  
+  // Interactive 3D Objects refs
+  const shieldMeshRef = useRef(null);
   const coreMeshRef = useRef(null);
   const ringsRef = useRef([]);
   const particlesRef = useRef(null);
-  const shockwavesRef = useRef([]);
-  const gridRef = useRef(null);
+  const shockwaveRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
-
+  
+  // Interactive UI state
   const [pulseActive, setPulseActive] = useState(false);
-  const [streamIntensity, setStreamIntensity] = useState('dense'); // 'standard' | 'dense'
+  const [streamSpeed, setStreamSpeed] = useState('normal'); // 'normal' | 'overload'
+  const [lastDeflectedThreat, setLastDeflectedThreat] = useState(null);
 
-  // Trigger interactive shockwave pulse
-  const triggerDeflectionPulse = useCallback((label = null) => {
+  // Trigger interactive shockwave deflection pulse
+  const triggerDeflectionPulse = useCallback((threatLabel = null) => {
     setPulseActive(true);
-
-    if (sceneRef.current) {
-      // Spawn a dynamic expanding shockwave ring
-      const ringGeom = new THREE.RingGeometry(0.3, 0.45, 64);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: 0x3de2dd,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.95,
-        blending: THREE.AdditiveBlending
-      });
-      const shockwave = new THREE.Mesh(ringGeom, ringMat);
-      shockwave.rotation.x = Math.PI / 2;
-      sceneRef.current.add(shockwave);
-      shockwavesRef.current.push({ mesh: shockwave, scale: 0.3, opacity: 0.95 });
+    if (threatLabel) {
+      setLastDeflectedThreat(threatLabel);
     }
-
+    if (shockwaveRef.current) {
+      shockwaveRef.current.scale.set(0.2, 0.2, 0.2);
+      shockwaveRef.current.material.opacity = 0.95;
+      shockwaveRef.current.visible = true;
+    }
     if (onDeflectionTrigger) {
-      onDeflectionTrigger(label || 'Security Boundary Wave');
+      onDeflectionTrigger(threatLabel);
     }
-
     setTimeout(() => {
       setPulseActive(false);
-    }, 900);
+    }, 1200);
   }, [onDeflectionTrigger]);
 
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
 
-    const width = container.clientWidth || 800;
-    const height = container.clientHeight || 600;
+    const width = container.clientWidth || 600;
+    const height = container.clientHeight || 500;
 
-    // 1. SCENE, CAMERA, RENDERER
+    // 1. Scene, Camera, Renderer
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.fog = new THREE.FogExp2(0x000000, 0.08);
 
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 1.2, 7.8);
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    camera.position.set(0, 0, 7.5);
     cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({
@@ -91,162 +81,160 @@ export function ShieldLens3D({
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.35;
+    renderer.toneMappingExposure = 1.2;
     rendererRef.current = renderer;
 
     container.replaceChildren(renderer.domElement);
 
-    // 2. LIGHTING (Black + Cyan + White palette)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    // 2. Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
-    const cyanLightTop = new THREE.PointLight(0x3de2dd, 4.5, 30);
-    cyanLightTop.position.set(0, 4, 3);
-    scene.add(cyanLightTop);
+    const cyanPointLight = new THREE.PointLight(0x3de2dd, 3, 20);
+    cyanPointLight.position.set(3, 4, 4);
+    scene.add(cyanPointLight);
 
-    const whiteLightFront = new THREE.PointLight(0xffffff, 3.0, 25);
-    whiteLightFront.position.set(0, 0, 5);
-    scene.add(whiteLightFront);
+    const emeraldPointLight = new THREE.PointLight(0x10b981, 2, 20);
+    emeraldPointLight.position.set(-4, -3, 3);
+    scene.add(emeraldPointLight);
 
-    const cyanLightBottom = new THREE.PointLight(0x3de2dd, 2.5, 20);
-    cyanLightBottom.position.set(0, -3, 2);
-    scene.add(cyanLightBottom);
-
-    // 3. PERSPECTIVE CYBER GRID FLOOR (Pure Black + Cyan Horizon)
-    const gridHelper = new THREE.GridHelper(30, 40, 0x3de2dd, 0x113333);
-    gridHelper.position.y = -2.4;
-    gridHelper.material.transparent = true;
-    gridHelper.material.opacity = 0.28;
-    scene.add(gridHelper);
-    gridRef.current = gridHelper;
-
-    // 4. MAIN LENS GROUP
-    const lensGroup = new THREE.Group();
-    scene.add(lensGroup);
-    lensGroupRef.current = lensGroup;
-
-    // 4a. Outer Faceted Holographic Shield (Icosahedron)
-    const shieldGeometry = new THREE.IcosahedronGeometry(1.9, 2);
-
-    // Cyan glowing wireframe
-    const wireMaterial = new THREE.MeshBasicMaterial({
+    // 3. Central 3D Geodesic Shield (Outer Protection Perimeter)
+    const shieldGeometry = new THREE.IcosahedronGeometry(1.8, 2);
+    
+    // Wireframe glowing layer
+    const wireframeMaterial = new THREE.MeshBasicMaterial({
       color: 0x3de2dd,
       wireframe: true,
       transparent: true,
-      opacity: 0.55,
-      blending: THREE.AdditiveBlending
+      opacity: 0.42,
     });
-    const shieldWire = new THREE.Mesh(shieldGeometry, wireMaterial);
-    lensGroup.add(shieldWire);
+    const shieldWireMesh = new THREE.Mesh(shieldGeometry, wireframeMaterial);
+    scene.add(shieldWireMesh);
+    shieldMeshRef.current = shieldWireMesh;
 
-    // Glass shell with cyan sheen
-    const glassMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x011b20,
+    // Faceted translucent glass shell
+    const shellMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x052e37,
       transparent: true,
-      opacity: 0.22,
-      roughness: 0.05,
-      metalness: 0.3,
-      transmission: 0.9,
-      ior: 1.52,
-      reflectivity: 0.9,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.1
+      opacity: 0.18,
+      roughness: 0.1,
+      metalness: 0.2,
+      transmission: 0.85,
+      ior: 1.5,
+      reflectivity: 0.7,
+      clearcoat: 0.5,
     });
-    const shieldGlass = new THREE.Mesh(shieldGeometry, glassMaterial);
-    lensGroup.add(shieldGlass);
+    const shieldShellMesh = new THREE.Mesh(shieldGeometry, shellMaterial);
+    shieldWireMesh.add(shieldShellMesh);
 
-    // White glowing vertex nodes
-    const vertexPointsMat = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 0.075,
+    // Vertex points glow
+    const pointsMat = new THREE.PointsMaterial({
+      color: 0x3de2dd,
+      size: 0.06,
       transparent: true,
-      opacity: 0.95,
-      blending: THREE.AdditiveBlending
+      opacity: 0.85,
     });
-    const vertexPoints = new THREE.Points(shieldGeometry, vertexPointsMat);
-    lensGroup.add(vertexPoints);
+    const vertexPoints = new THREE.Points(shieldGeometry, pointsMat);
+    shieldWireMesh.add(vertexPoints);
 
-    // 4b. Inner Refractive Crystal Core (Pure White & Cyan Pulse)
-    const coreGeometry = new THREE.OctahedronGeometry(0.85, 1);
+    // 4. Inner Holographic Core (Volatile RAM Vault)
+    const coreGeometry = new THREE.OctahedronGeometry(0.75, 1);
     const coreMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
-      emissive: 0x3de2dd,
-      emissiveIntensity: 0.9,
-      roughness: 0.2,
-      metalness: 0.9,
+      color: 0x3de2dd,
+      emissive: 0x147d79,
+      emissiveIntensity: 0.8,
+      roughness: 0.3,
+      metalness: 0.8,
       wireframe: true
     });
     const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
-    lensGroup.add(coreMesh);
+    scene.add(coreMesh);
     coreMeshRef.current = coreMesh;
 
-    // 4c. Gyroscopic Optical Rings (3 Axes in Pure Cyan & White)
+    // 5. Orbiting Concentric Security Boundary Rings
     const rings = [];
     const ringConfigs = [
-      { radius: 2.35, color: 0x3de2dd, width: 0.03, speedX: 0.009, speedY: 0.005, tiltX: 0.4 },
-      { radius: 2.75, color: 0xffffff, width: 0.02, speedX: -0.007, speedY: 0.008, tiltZ: 0.6 },
-      { radius: 3.15, color: 0x3de2dd, width: 0.035, speedX: 0.005, speedY: -0.006, tiltY: 0.8 },
+      { radius: 2.3, color: 0x3de2dd, tiltX: 0.4, tiltZ: 0.2, speed: 0.008, label: 'DOM_MUTATION' },
+      { radius: 2.7, color: 0x10b981, tiltX: -0.6, tiltZ: 0.5, speed: -0.006, label: 'CHECKSUM_GATE' },
+      { radius: 3.1, color: 0x38bdf8, tiltX: 0.8, tiltZ: -0.3, speed: 0.004, label: 'WASM_EGRESS' },
     ];
 
     ringConfigs.forEach((cfg) => {
-      const rGeom = new THREE.RingGeometry(cfg.radius, cfg.radius + cfg.width, 80);
-      const rMat = new THREE.MeshBasicMaterial({
+      const ringGeom = new THREE.RingGeometry(cfg.radius, cfg.radius + 0.02, 64);
+      const ringMat = new THREE.MeshBasicMaterial({
         color: cfg.color,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: cfg.color === 0xffffff ? 0.75 : 0.65,
-        blending: THREE.AdditiveBlending
+        opacity: 0.5,
       });
-      const rMesh = new THREE.Mesh(rGeom, rMat);
-      if (cfg.tiltX) rMesh.rotation.x = cfg.tiltX;
-      if (cfg.tiltY) rMesh.rotation.y = cfg.tiltY;
-      if (cfg.tiltZ) rMesh.rotation.z = cfg.tiltZ;
-      lensGroup.add(rMesh);
-      rings.push({ mesh: rMesh, ...cfg });
+      const ringMesh = new THREE.Mesh(ringGeom, ringMat);
+      ringMesh.rotation.x = cfg.tiltX;
+      ringMesh.rotation.z = cfg.tiltZ;
+      scene.add(ringMesh);
+      rings.push({ mesh: ringMesh, ...cfg });
     });
     ringsRef.current = rings;
 
-    // 5. SWIRLING CYBER VORTEX PARTICLES (Pure White + Electric Cyan)
-    const particleCount = 420;
-    const particlePositions = new Float32Array(particleCount * 3);
-    const particleColors = new Float32Array(particleCount * 3);
-    const particleAngles = new Float32Array(particleCount);
-    const particleSpeeds = new Float32Array(particleCount);
-    const particleRadii = new Float32Array(particleCount);
-    const particleHeights = new Float32Array(particleCount);
+    // 6. Expanding Deflection Pulse Shockwave
+    const shockwaveGeom = new THREE.RingGeometry(0.2, 0.35, 64);
+    const shockwaveMat = new THREE.MeshBasicMaterial({
+      color: 0x3de2dd,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.0,
+    });
+    const shockwaveMesh = new THREE.Mesh(shockwaveGeom, shockwaveMat);
+    shockwaveMesh.visible = false;
+    scene.add(shockwaveMesh);
+    shockwaveRef.current = shockwaveMesh;
 
-    const cyanColor = new THREE.Color(0x3de2dd);
-    const whiteColor = new THREE.Color(0xffffff);
+    // 7. Threat Stream Particle System
+    // Inbound packets (hostile crimson/amber outside, transformed to safe cyan/emerald inside shield)
+    const particleCount = 280;
+    const particleGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3);
+    const radii = new Float32Array(particleCount);
+
+    const colorSafeCyan = new THREE.Color(0x3de2dd);
+    const colorSafeEmerald = new THREE.Color(0x10b981);
+    const colorThreatAmber = new THREE.Color(0xf59e0b);
+    const colorThreatRed = new THREE.Color(0xef4444);
 
     for (let i = 0; i < particleCount; i++) {
-      const radius = 1.6 + Math.random() * 4.2;
-      const angle = Math.random() * Math.PI * 2;
-      const height = (Math.random() - 0.5) * 4.5;
-      const speed = (0.006 + Math.random() * 0.012) * (Math.random() > 0.5 ? 1 : -1);
+      // Spawn in a sphere outside the shield
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(Math.random() * 2 - 1);
+      const dist = 3.2 + Math.random() * 3.5;
+      
+      const x = dist * Math.sin(phi) * Math.cos(theta);
+      const y = dist * Math.sin(phi) * Math.sin(theta);
+      const z = dist * Math.cos(phi);
 
-      particleAngles[i] = angle;
-      particleSpeeds[i] = speed;
-      particleRadii[i] = radius;
-      particleHeights[i] = height;
+      positions[i * 3] = x;
+      positions[i * 3 + 1] = y;
+      positions[i * 3 + 2] = z;
 
-      particlePositions[i * 3] = Math.cos(angle) * radius;
-      particlePositions[i * 3 + 1] = height;
-      particlePositions[i * 3 + 2] = Math.sin(angle) * radius;
+      // Inward velocity towards shield core
+      velocities[i * 3] = -x * (0.003 + Math.random() * 0.005);
+      velocities[i * 3 + 1] = -y * (0.003 + Math.random() * 0.005);
+      velocities[i * 3 + 2] = -z * (0.003 + Math.random() * 0.005);
 
-      // 60% Electric Cyan, 40% Crisp White
-      const isWhite = Math.random() > 0.6;
-      const chosenColor = isWhite ? whiteColor : cyanColor;
-      particleColors[i * 3] = chosenColor.r;
-      particleColors[i * 3 + 1] = chosenColor.g;
-      particleColors[i * 3 + 2] = chosenColor.b;
+      radii[i] = dist;
+
+      // Colors based on radius: outside = threat, inside = safe
+      const baseColor = dist > 2.0 ? (Math.random() > 0.4 ? colorThreatAmber : colorThreatRed) : colorSafeCyan;
+      colors[i * 3] = baseColor.r;
+      colors[i * 3 + 1] = baseColor.g;
+      colors[i * 3 + 2] = baseColor.b;
     }
 
-    const particleGeometry = new THREE.BufferGeometry();
-    particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-    particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const particleMaterial = new THREE.PointsMaterial({
-      size: 0.065,
+      size: 0.075,
       vertexColors: true,
       transparent: true,
       opacity: 0.9,
@@ -257,115 +245,140 @@ export function ShieldLens3D({
     scene.add(particleSystem);
     particlesRef.current = {
       system: particleSystem,
-      positions: particlePositions,
-      angles: particleAngles,
-      speeds: particleSpeeds,
-      radii: particleRadii,
-      heights: particleHeights,
+      positions,
+      colors,
+      velocities,
+      radii,
       count: particleCount
     };
 
-    // 6. MOUSE POINTER TRACKING (Silky-Smooth Inertia)
+    // 8. Mouse Pointer Interaction
     const handlePointerMove = (e) => {
       const rect = container.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
-      mouseRef.current.targetX = x * 0.55;
+      mouseRef.current.targetX = x * 0.45;
       mouseRef.current.targetY = y * 0.45;
     };
 
-    const handleClick = () => {
-      triggerDeflectionPulse('Holographic Wave Trigger');
+    const handlePointerClick = () => {
+      triggerDeflectionPulse('Interactive User Probe');
     };
 
     container.addEventListener('pointermove', handlePointerMove);
-    container.addEventListener('click', handleClick);
+    container.addEventListener('click', handlePointerClick);
 
-    // 7. RESIZE LISTENER
+    // 9. Resize Handling
     const handleResize = () => {
       if (!container || !renderer || !camera) return;
-      const w = container.clientWidth || 800;
-      const h = container.clientHeight || 600;
-      camera.aspect = w / h;
+      const newWidth = container.clientWidth || 600;
+      const newHeight = container.clientHeight || 500;
+      camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      renderer.setSize(newWidth, newHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     };
 
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(container);
 
-    // 8. ANIMATION LOOP
-    const clock = new THREE.Clock();
+    // 10. Animation Loop
+    let clock = new THREE.Clock();
 
     const animate = () => {
       frameIdRef.current = requestAnimationFrame(animate);
+
       const delta = clock.getDelta();
       const time = clock.getElapsedTime();
 
-      // Silky mouse damping
-      mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.045;
-      mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.045;
+      // Smooth mouse damping
+      mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.05;
+      mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.05;
 
-      // Lens Group Rotation & Parallax Tilt
-      if (lensGroup) {
-        lensGroup.rotation.y = time * 0.25 + mouseRef.current.x * 0.8;
-        lensGroup.rotation.x = Math.sin(time * 0.4) * 0.08 + mouseRef.current.y * 0.7;
-        lensGroup.position.y = Math.sin(time * 0.8) * 0.12;
+      // Shield rotation & tilt
+      if (shieldWireMesh) {
+        shieldWireMesh.rotation.y += 0.005;
+        shieldWireMesh.rotation.x = mouseRef.current.y * 0.8 + Math.sin(time * 0.5) * 0.05;
+        shieldWireMesh.rotation.z = -mouseRef.current.x * 0.8;
       }
 
-      // Core pulsating
+      // Core rotation & pulse
       if (coreMesh) {
-        coreMesh.rotation.y = -time * 0.6;
-        coreMesh.rotation.z = time * 0.4;
-        const scale = 0.85 + Math.sin(time * 3.5) * 0.08;
+        coreMesh.rotation.y -= 0.012;
+        coreMesh.rotation.x += 0.008;
+        const scale = 0.75 + Math.sin(time * 3) * 0.06;
         coreMesh.scale.set(scale, scale, scale);
       }
 
-      // Gyroscopic Rings rotation
+      // Security rings rotation
       rings.forEach((ring) => {
-        ring.mesh.rotation.z += ring.speedX;
-        ring.mesh.rotation.y += ring.speedY;
+        ring.mesh.rotation.z += ring.speed;
+        ring.mesh.rotation.y += ring.speed * 0.5;
       });
 
-      // Cyber Grid subtle movement
-      if (gridHelper) {
-        gridHelper.rotation.y = time * 0.015;
+      // Expanding shockwave pulse
+      if (shockwaveMesh && shockwaveMesh.visible) {
+        const swScale = shockwaveMesh.scale.x + delta * 4.5;
+        shockwaveMesh.scale.set(swScale, swScale, swScale);
+        shockwaveMesh.material.opacity = Math.max(0, shockwaveMesh.material.opacity - delta * 1.2);
+        if (shockwaveMesh.material.opacity <= 0.01 || swScale > 4.5) {
+          shockwaveMesh.visible = false;
+        }
       }
 
-      // Particle Vortex Update
+      // Animate threat stream particles
       if (particlesRef.current) {
-        const { positions, angles, speeds, radii, heights, count } = particlesRef.current;
-        const speedFactor = streamIntensity === 'dense' ? 1.5 : 1.0;
+        const { positions, colors, velocities, count } = particlesRef.current;
+        const speedMultiplier = streamSpeed === 'overload' ? 2.5 : 1.0;
 
         for (let i = 0; i < count; i++) {
-          angles[i] += speeds[i] * speedFactor;
-          const r = radii[i];
-          const a = angles[i];
-          const h = heights[i] + Math.sin(time * 1.5 + i) * 0.15;
+          positions[i * 3] += velocities[i * 3] * speedMultiplier;
+          positions[i * 3 + 1] += velocities[i * 3 + 1] * speedMultiplier;
+          positions[i * 3 + 2] += velocities[i * 3 + 2] * speedMultiplier;
 
-          positions[i * 3] = Math.cos(a) * r;
-          positions[i * 3 + 1] = h;
-          positions[i * 3 + 2] = Math.sin(a) * r;
+          const px = positions[i * 3];
+          const py = positions[i * 3 + 1];
+          const pz = positions[i * 3 + 2];
+          const currentDist = Math.sqrt(px * px + py * py + pz * pz);
+
+          // As particle hits shield boundary (r ≈ 1.8), deflect and sanitize into cyan/emerald
+          if (currentDist < 1.8) {
+            // Deflection: reverse direction or fling tangent
+            velocities[i * 3] = (Math.random() - 0.5) * 0.02;
+            velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.02;
+            velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.02;
+
+            // Transformed into sanitized clean packet
+            const safeColor = Math.random() > 0.5 ? colorSafeCyan : colorSafeEmerald;
+            colors[i * 3] = safeColor.r;
+            colors[i * 3 + 1] = safeColor.g;
+            colors[i * 3 + 2] = safeColor.b;
+          }
+
+          // Reset if too close to core or drifted too far
+          if (currentDist < 0.6 || currentDist > 7.5) {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(Math.random() * 2 - 1);
+            const dist = 4.2 + Math.random() * 2.5;
+
+            positions[i * 3] = dist * Math.sin(phi) * Math.cos(theta);
+            positions[i * 3 + 1] = dist * Math.sin(phi) * Math.sin(theta);
+            positions[i * 3 + 2] = dist * Math.cos(phi);
+
+            velocities[i * 3] = -positions[i * 3] * (0.003 + Math.random() * 0.004);
+            velocities[i * 3 + 1] = -positions[i * 3 + 1] * (0.003 + Math.random() * 0.004);
+            velocities[i * 3 + 2] = -positions[i * 3 + 2] * (0.003 + Math.random() * 0.004);
+
+            // Hostile unredacted threat outside
+            const baseColor = Math.random() > 0.4 ? colorThreatAmber : colorThreatRed;
+            colors[i * 3] = baseColor.r;
+            colors[i * 3 + 1] = baseColor.g;
+            colors[i * 3 + 2] = baseColor.b;
+          }
         }
+
         particleGeometry.attributes.position.needsUpdate = true;
-      }
-
-      // Animate shockwaves
-      const activeShockwaves = shockwavesRef.current;
-      for (let i = activeShockwaves.length - 1; i >= 0; i--) {
-        const sw = activeShockwaves[i];
-        sw.scale += delta * 4.8;
-        sw.opacity -= delta * 1.1;
-        sw.mesh.scale.set(sw.scale, sw.scale, sw.scale);
-        sw.mesh.material.opacity = Math.max(0, sw.opacity);
-
-        if (sw.opacity <= 0.01 || sw.scale > 6.0) {
-          scene.remove(sw.mesh);
-          sw.mesh.geometry.dispose();
-          sw.mesh.material.dispose();
-          activeShockwaves.splice(i, 1);
-        }
+        particleGeometry.attributes.color.needsUpdate = true;
       }
 
       renderer.render(scene, camera);
@@ -373,81 +386,94 @@ export function ShieldLens3D({
 
     animate();
 
-    // 9. CLEANUP
+    // 11. Cleanup
     return () => {
       cancelAnimationFrame(frameIdRef.current);
       resizeObserver.disconnect();
       container.removeEventListener('pointermove', handlePointerMove);
-      container.removeEventListener('click', handleClick);
+      container.removeEventListener('click', handlePointerClick);
 
       try {
         shieldGeometry.dispose();
-        wireMaterial.dispose();
-        glassMaterial.dispose();
-        vertexPointsMat.dispose();
+        wireframeMaterial.dispose();
+        shellMaterial.dispose();
+        pointsMat.dispose();
         coreGeometry.dispose();
         coreMaterial.dispose();
+        shockwaveGeom.dispose();
+        shockwaveMat.dispose();
         particleGeometry.dispose();
         particleMaterial.dispose();
-        gridHelper.geometry.dispose();
-        gridHelper.material.dispose();
-        rings.forEach((r) => {
-          r.mesh.geometry.dispose();
-          r.mesh.material.dispose();
-        });
         renderer.dispose();
-      } catch (e) {}
+      } catch (e) {
+        console.warn('Three.js cleanup note:', e);
+      }
     };
-  }, [triggerDeflectionPulse, streamIntensity]);
+  }, [triggerDeflectionPulse, streamSpeed]);
 
   return (
     <div className={`relative w-full h-full select-none ${className}`}>
-      {/* 3D WebGL Canvas */}
+      {/* 3D Canvas Mount Point */}
       <div 
         ref={mountRef} 
-        className="w-full h-full min-h-[460px] cursor-grab active:cursor-grabbing"
-        title="Interactive 3D PrivacyLens — Click to pulse deflection shockwave, move cursor to tilt"
+        className="w-full h-full min-h-[420px] sm:min-h-[500px] cursor-crosshair"
+        title="Interactive Three.js Shield — Move pointer to rotate, click to trigger deflection pulse"
       />
 
-      {/* Floating Cyber HUD Pill (Black + Cyan + White) */}
-      <div className="absolute top-4 left-4 z-20 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/90 border border-[#3DE2DD]/30 backdrop-blur-md text-[11px] font-mono text-white shadow-[0_0_20px_rgba(61,226,221,0.2)]">
-        <span className="w-2 h-2 rounded-full bg-[#3DE2DD] animate-ping" />
-        <span className="font-bold text-[#3DE2DD]">PRIVACYLENS 3D</span>
-        <span className="text-neutral-500">•</span>
-        <span className="text-neutral-300">OPTICAL CYBER SHIELD</span>
+      {/* Floating HUD Telemetry Overlay on the 3D Scene */}
+      <div className="absolute top-4 left-4 z-20 pointer-events-none space-y-2">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/85 border border-[#3DE2DD]/30 backdrop-blur-md text-[11px] font-mono text-[#3DE2DD] shadow-lg">
+          <span className="w-2 h-2 rounded-full bg-[#3DE2DD] animate-ping" />
+          <span>THREE.JS R186 • DEFLECTION LENS</span>
+        </div>
+        <div className="hidden sm:block text-[10px] font-mono text-neutral-400 bg-black/70 px-2.5 py-1 rounded-lg border border-neutral-800 backdrop-blur-sm">
+          POLYGONS: 3,240 | PARTICLES: 280 PKTS
+        </div>
       </div>
 
-      {/* Interactive Floating Action Controls (Bottom of 3D Scene) */}
+      {/* Bottom Floating Evaluator Controls */}
       <div className="absolute bottom-4 inset-x-4 z-20 flex flex-wrap items-center justify-between gap-3 pointer-events-auto">
-        <div className="flex items-center gap-2 bg-black/90 border border-neutral-800 p-1.5 rounded-2xl backdrop-blur-md shadow-2xl text-xs font-mono">
+        {/* Left: Quick Deflection Triggers */}
+        <div className="flex items-center gap-2 bg-black/90 border border-neutral-800 p-1.5 rounded-2xl backdrop-blur-md shadow-xl text-xs font-mono">
           <button
             type="button"
-            onClick={() => triggerDeflectionPulse('Interactive Shockwave Pulse')}
-            className={`px-3.5 py-1.5 rounded-xl border transition-all flex items-center gap-2 ${
+            onClick={() => triggerDeflectionPulse('Aadhaar Verhoeff Wave')}
+            className={`px-3 py-1.5 rounded-xl border transition-all flex items-center gap-1.5 ${
               pulseActive
-                ? 'bg-[#3DE2DD] text-black font-extrabold border-[#3DE2DD] shadow-[0_0_20px_rgba(61,226,221,0.5)]'
-                : 'bg-neutral-900 text-white border-neutral-700 hover:border-[#3DE2DD] hover:text-[#3DE2DD]'
+                ? 'bg-[#3DE2DD] text-black font-extrabold border-[#3DE2DD]'
+                : 'bg-neutral-900/80 text-neutral-300 border-neutral-700 hover:text-white hover:border-[#3DE2DD]/50'
             }`}
-            title="Pulse interactive deflection wave through the 3D lens"
+            title="Fire a simulated PII packet deflection pulse across the 3D lens"
           >
-            <Zap className={`w-3.5 h-3.5 ${pulseActive ? 'text-black' : 'text-[#3DE2DD]'}`} />
-            <span>Pulse Shield</span>
+            <Zap className="w-3.5 h-3.5 text-amber-400" />
+            <span>Deflect Wave</span>
           </button>
 
           <button
             type="button"
-            onClick={() => setStreamIntensity(streamIntensity === 'dense' ? 'standard' : 'dense')}
-            className="px-3 py-1.5 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white transition flex items-center gap-1.5"
-            title="Toggle particle vortex density"
+            onClick={() => setStreamSpeed(streamSpeed === 'normal' ? 'overload' : 'normal')}
+            className={`px-3 py-1.5 rounded-xl border transition-all flex items-center gap-1.5 ${
+              streamSpeed === 'overload'
+                ? 'bg-red-500/20 text-red-400 border-red-500/50 font-bold'
+                : 'bg-neutral-900/80 text-neutral-400 border-neutral-800 hover:text-neutral-200'
+            }`}
+            title="Toggle packet stream density"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#3DE2DD]" />
-            <span>{streamIntensity === 'dense' ? 'Vortex: Dense' : 'Vortex: Standard'}</span>
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>{streamSpeed === 'overload' ? 'Stream: Heavy' : 'Stream: Standard'}</span>
           </button>
         </div>
 
-        <div className="bg-black/90 border border-neutral-800 px-3.5 py-1.5 rounded-2xl backdrop-blur-md text-xs font-mono text-white flex items-center gap-2 shadow-xl">
-          <CheckCircle2 className="w-3.5 h-3.5 text-[#3DE2DD]" />
-          <span>Zero Cloud Egress: <strong className="text-[#3DE2DD]">100.0%</strong></span>
+        {/* Right: Live Deflection Status Pill */}
+        <div className="bg-black/90 border border-neutral-800 px-3.5 py-1.5 rounded-2xl backdrop-blur-md shadow-xl text-xs font-mono flex items-center gap-2">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <span className="text-neutral-300">
+            {lastDeflectedThreat ? (
+              <>Deflected: <strong className="text-[#3DE2DD]">{lastDeflectedThreat}</strong></>
+            ) : (
+              'Guard: 100% Client-Side Isolated'
+            )}
+          </span>
         </div>
       </div>
     </div>

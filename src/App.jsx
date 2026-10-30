@@ -206,13 +206,13 @@ export function App() {
                 onClick={toggleTheme}
                 className={`p-2 rounded-xl border transition-all duration-200 ${
                   isDark 
-                    ? 'bg-[#111111] border-neutral-800 text-[#3DE2DD] hover:bg-neutral-800 hover:text-white shadow-sm' 
+                    ? 'bg-[#111111] border-neutral-800 text-amber-400 hover:bg-neutral-800 hover:text-amber-300 shadow-sm' 
                     : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200 hover:text-slate-900 shadow-sm'
                 }`}
                 title={isDark ? 'Switch to Beige Light Mode' : 'Switch to Z-Black Dark Mode'}
                 aria-label="Toggle theme"
               >
-                {isDark ? <Sun className="w-4 h-4 text-[#3DE2DD]" /> : <Moon className="w-4 h-4" />}
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
 
               {/* Button 3: Auth Session Trigger */}
@@ -221,14 +221,14 @@ export function App() {
                 onClick={() => setAuthModalOpen(true)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-mono font-semibold transition-all ${
                   authUser 
-                    ? 'bg-[#3DE2DD]/10 text-[#3DE2DD] border-[#3DE2DD]/40 hover:bg-[#3DE2DD]/20'
+                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
                     : isDark 
                       ? 'bg-[#111111] border-neutral-800 text-neutral-300 hover:bg-neutral-800 hover:text-white' 
                       : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
                 title={authUser ? `Signed in as ${authUserName || 'SecOps'}` : 'Sign In to PrivacyLens'}
               >
-                <User className={`w-3.5 h-3.5 ${authUser ? 'text-[#3DE2DD]' : 'text-slate-400 dark:text-neutral-400'}`} />
+                <User className={`w-3.5 h-3.5 ${authUser ? 'text-emerald-500' : 'text-slate-400 dark:text-neutral-400'}`} />
                 <span>{authUser ? authButtonLabel : 'Sign In'}</span>
               </button>
 
@@ -262,12 +262,12 @@ export function App() {
                 onClick={() => toggleShield(!shieldActive)}
                 className={`hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono font-bold border transition-all ${
                   shieldActive
-                    ? 'bg-[#3DE2DD]/10 text-[#3DE2DD] border-[#3DE2DD]/40 hover:bg-[#3DE2DD]/20'
-                    : 'bg-neutral-900 text-neutral-300 border-neutral-700 hover:border-[#3DE2DD]/40'
+                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                    : 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:bg-red-500/20'
                 }`}
                 title={shieldActive ? 'Master Shield is ENGAGED. Click to disable.' : 'Master Shield is BYPASSED. Click to engage.'}
               >
-                <span className={`w-2 h-2 rounded-full ${shieldActive ? 'bg-[#3DE2DD] animate-ping' : 'bg-neutral-600'}`} />
+                <span className={`w-2 h-2 rounded-full ${shieldActive ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
                 <span className="hidden md:inline">{shieldActive ? 'Zero Leakage' : 'Bypassed'}</span>
               </button>
 
